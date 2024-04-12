@@ -22,3 +22,6 @@ class ExampleInstrumentedTest {
         assertEquals("com.example.gittest", appContext.packageName)
     }
 }
+
+//TEST
+>>>>>>> f6b0d953db5085f1f8de2e8aee6a0dc3d9548445
