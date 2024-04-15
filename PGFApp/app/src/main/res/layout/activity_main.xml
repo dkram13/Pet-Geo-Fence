@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:hint="@string/usernameField"
+            android:hint="@string/emailField"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
             android:textSize="20sp"
@@ -62,7 +62,7 @@
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Login"
+            android:text="@string/logintxt"
             android:backgroundTint="@color/black"
             android:textColor="@color/white"
             android:textSize="20sp"
