@@ -12,9 +12,9 @@ import androidx.core.view.WindowInsetsCompat
 class MainActivity : AppCompatActivity() {
 
 
-    lateinit var usrnameInput: EditText
-    lateinit var pwdInput: EditText
-    lateinit var loginButton: Button
+    private lateinit var usrnameInput: EditText
+    private lateinit var pwdInput: EditText
+    private lateinit var loginButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

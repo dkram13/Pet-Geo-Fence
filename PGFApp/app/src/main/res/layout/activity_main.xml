@@ -14,8 +14,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="vertical">
-        
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="-10dp"
+            android:text="@string/PGF"
+            android:textAlignment="center"
+            android:textSize="60sp"
+            android:fontFamily="sans-serif-condensed"
+            />
+
+
         <ImageView
             android:layout_width="160dp"
             android:layout_height="160dp"

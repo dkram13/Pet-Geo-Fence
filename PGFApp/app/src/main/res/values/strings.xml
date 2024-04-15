@@ -2,4 +2,8 @@
     <string name="app_name">PGF App</string>
     <string name="usernameField">username</string>
     <string name="passwordField">password</string>
+    <string name="PGF">PET GEOFENCE</string>
+    <string name="title_activity_current_map">CurrentMap</string>
+    <string name="APIkey">AIzaSyBFDXgDfvHM2FZaH8EHzG79OrHfnzfmhgo</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>
