@@ -7,4 +7,5 @@
     <string name="APIkey">AIzaSyBFDXgDfvHM2FZaH8EHzG79OrHfnzfmhgo</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="logintxt">Login</string>
+    <string name="Next">Next</string>
 </resources>

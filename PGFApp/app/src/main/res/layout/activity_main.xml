@@ -66,9 +66,22 @@
             android:backgroundTint="@color/black"
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:id="@+id/login_button"
-            />
+            android:id="@+id/login_button"/>
+            <!--android:onClick="gotoMaps"/>-->
+            <!--Keep this for now, delete later-->
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Next"
+            android:backgroundTint="@color/black"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:id="@+id/next_button"
+            android:onClick="gotoMaps"/>
 
     </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
