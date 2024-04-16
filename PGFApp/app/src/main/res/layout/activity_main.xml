@@ -44,7 +44,7 @@
             android:background="@drawable/rounded_corner"
             android:padding="18dp"
             android:inputType="text"
-            android:id="@+id/username_input"/>
+            android:id="@+id/email_input"/>
 
         <EditText
             android:layout_width="match_parent"
@@ -79,6 +79,15 @@
             android:textSize="20sp"
             android:id="@+id/next_button"
             android:onClick="gotoMaps"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/signout"
+            android:backgroundTint="@color/black"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:id="@+id/signout_button"/>
 
     </LinearLayout>
 

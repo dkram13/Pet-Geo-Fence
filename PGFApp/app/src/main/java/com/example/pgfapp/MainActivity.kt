@@ -22,11 +22,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var emailInput: EditText
     private lateinit var pwdInput: EditText
     private lateinit var loginButton: Button
+    private lateinit var signedOut: Button
     private lateinit var auth: FirebaseAuth
-    private lateinit var nextBtn: Button
 
 
 
+    /*TO DO:
+    * MAKE SURE TO INCLUDE A SIGN OUT BUTTON ONCE THE SIGN IN FUNCTIONALITY
+    * HAS BEEN COMPLETED
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -37,9 +41,10 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        emailInput = findViewById(R.id.username_input)
+        emailInput = findViewById(R.id.email_input)
         pwdInput = findViewById(R.id.password_input)
         loginButton = findViewById(R.id.login_button)
+        signedOut = findViewById(R.id.signout_button)
         auth = Firebase.auth
 
         loginButton.setOnClickListener{
@@ -50,9 +55,8 @@ class MainActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.d("@id/email", "success")
+                        Log.d("@id/email" + "@id/pwd", "success")
                         val user = auth.currentUser
-                        //updateUI(user)
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w("", "failure", task.exception)
@@ -61,22 +65,26 @@ class MainActivity : AppCompatActivity() {
                             "Authentication failed.",
                             Toast.LENGTH_SHORT,
                         ).show()
-                        //updateUI(null)
                     }
                 }
 
             /* remove this for the final build */
             Log.i("Test Credentials","Username: $email and Password: $pwd")
         }
+
+        signedOut.setOnClickListener{
+            Firebase.auth.signOut()
+        }
     }
 
+    //checks if a log-in session is active
     public override fun onStart(){
         super.onStart()
         //checks to see if the user is signed in
         val currentUser = auth.currentUser
-        if(currentUser != null) {
-            recreate()
-        }
+        //if(currentUser != null) {
+            //recreate() //recreate() RECREATES the instance of this page
+        //}
 
     }
 
@@ -84,5 +92,6 @@ class MainActivity : AppCompatActivity() {
     fun gotoMaps(v: View?) {
         startActivity(Intent(this@MainActivity, MapsActivity::class.java))
     }
+
 
 }
