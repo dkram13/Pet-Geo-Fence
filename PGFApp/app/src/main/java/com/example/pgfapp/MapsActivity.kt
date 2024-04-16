@@ -39,7 +39,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
+        // Add a marker in KU and move the camera
         val KU = LatLng(40.5101, -75.7834)
         mMap.addMarker(MarkerOptions().position(KU).title("Kutztown University of Pennsylvania"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(KU))
