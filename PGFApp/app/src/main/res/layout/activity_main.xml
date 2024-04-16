@@ -43,7 +43,7 @@
             android:textSize="20sp"
             android:background="@drawable/rounded_corner"
             android:padding="18dp"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:id="@+id/email_input"/>
 
         <EditText
