@@ -9,4 +9,7 @@
     <string name="logintxt">Login</string>
     <string name="Next">Next</string>
     <string name="signout">Sign Out</string>
+    <string name="montserrat">Montserrat</string>
+    <string name="emailtxt">Email</string>
+    <string name="pwdtxt">Password</string>
 </resources>

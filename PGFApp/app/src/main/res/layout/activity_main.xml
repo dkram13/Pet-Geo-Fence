@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#FFFFFF"
     android:layout_gravity="center"
-    android:padding="16dp"
+    android:padding="20dp"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -17,34 +17,41 @@
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
 
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="-10dp"
+            android:fontFamily="@font/montserratbold"
             android:text="@string/PGF"
             android:textAlignment="center"
-            android:textSize="60sp"
-            android:fontFamily="sans-serif-condensed"
-            />
-
-
-        <ImageView
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:src="@drawable/icon_acc_circle"/>
+            android:textSize="40sp" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text = "@string/emailtxt"
+            android:fontFamily="@font/montserrat"/>
+
+        <EditText
+            android:id="@+id/email_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:background="@drawable/rounded_corner"
+            android:fontFamily="@font/montserrat"
             android:hint="@string/emailField"
+            android:inputType="textEmailAddress"
+            android:padding="18dp"
             android:textColor="@color/black"
             android:textColorHint="@color/black"
-            android:textSize="20sp"
-            android:background="@drawable/rounded_corner"
-            android:padding="18dp"
-            android:inputType="textEmailAddress"
-            android:id="@+id/email_input"/>
+            android:textSize="20sp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text = "@string/pwdtxt"
+            android:fontFamily="@font/montserratvariable"/>
 
         <EditText
             android:layout_width="match_parent"
@@ -54,6 +61,7 @@
             android:textColor="@color/black"
             android:textColorHint="@color/black"
             android:textSize="20sp"
+            android:fontFamily="@font/montserrat"
             android:background="@drawable/rounded_corner"
             android:padding="18dp"
             android:inputType="textPassword"
@@ -67,27 +75,6 @@
             android:textColor="@color/white"
             android:textSize="20sp"
             android:id="@+id/login_button"/>
-            <!--android:onClick="gotoMaps"/>-->
-            <!--Keep this for now, delete later-->
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/Next"
-            android:backgroundTint="@color/black"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:id="@+id/next_button"
-            android:onClick="gotoMaps"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/signout"
-            android:backgroundTint="@color/black"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:id="@+id/signout_button"/>
 
     </LinearLayout>
 
