@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="700dp"
+    android:fitsSystemWindows="true"
+    tools:context=".HubActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="60dp"
+            android:background="@null"
+            android:onClick="backToMaps"
+            android:src="@drawable/backbutton"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="343dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserratbold"
+            android:text="@string/utilities_hub"
+            android:textAlignment="center"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="-20dp"/>
+
+        <!--Location History-->
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="-360dp"
+            android:layout_marginTop="150dp"
+            android:contentDescription="@string/contentDescrLocHist"
+            android:src="@drawable/baseline_location_pin_24"
+            android:text="@string/location_history"
+            android:onClick="goToLocHist"/>
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="150dp"
+            android:text="@string/locHist"/>
+
+        <!--Device History-->
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="-350dp"
+            android:layout_marginTop="250dp"
+            android:contentDescription="@string/devices"
+            android:src="@drawable/baseline_phonelink_24"/>
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="250dp"
+            android:text="@string/device_management"/>
+
+        <!--Data Usage-->
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="-350dp"
+            android:layout_marginTop="350dp"
+            android:contentDescription="@string/data_usages"
+            android:src="@drawable/baseline_cloud_24"/>
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="350dp"
+            android:text="@string/data_usage"/>
+
+        <!--Settings-->
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="-350dp"
+            android:layout_marginTop="450dp"
+            android:contentDescription="@string/settings"
+            android:src="@drawable/baseline_settings_24"/>
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="450dp"
+            android:text="@string/settingstxt"/>
+
+        <!--LogOut-->
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="-350dp"
+            android:layout_marginTop="550dp"
+            android:contentDescription="@string/logouttheheck"
+            android:onClick="logout"
+            android:src="@drawable/baseline_logout_24"/>
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="550dp"
+            android:text="@string/logout"/>
+
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "907293119007",
+    "project_id": "petgeofencelogin",
+    "storage_bucket": "petgeofencelogin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:907293119007:android:81b4e03d0ec0ef86b83b2a",
+        "android_client_info": {
+          "package_name": "com.example.pgfapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAW_2lfVZaa7z73u0lCV7DMmMEMq3aavGw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

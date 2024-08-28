@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <fragment
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MapsActivity">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/contentDescrHamburger"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:padding="8dp"
+            android:background="@null"
+            android:layout_margin="5dp"
+            android:src="@drawable/hamburger"
+            android:id="@+id/settings_button"
+            android:onClick="gotoHub"/>
+    </fragment>
+</RelativeLayout>

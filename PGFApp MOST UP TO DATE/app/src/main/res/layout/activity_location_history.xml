@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LocationHistory">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="16dp">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="0dp"
+            android:background="@drawable/rounded_corner"
+            android:fontFamily="@font/montserratbold"
+            android:text="@string/locHist"
+            android:textAlignment="center" />
+
+
+        <ImageButton
+            android:id="@+id/settings_button"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="-400dp"
+            android:layout_marginTop="50dp"
+            android:background="@null"
+            android:contentDescription="@string/contentDescrHamburger"
+            android:onClick="gotoHub"
+            android:src="@drawable/backbutton" />
+
+        <TextView
+            android:layout_width="410dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="90dp"
+            android:layout_marginStart="-50dp"
+            android:fontFamily="@font/montserratbold"
+            android:text="Yesterday"
+            android:background="@drawable/rounded_corner"
+            android:textAlignment="center" />
+
+        <RelativeLayout
+            android:layout_width="414dp"
+            android:layout_height="300dp"
+            android:background="@drawable/rounded_corner"
+            android:layout_marginLeft="-415dp"
+            android:layout_marginTop="140dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/group2" />
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="120dp"
+                android:src="@drawable/happy_trail" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="350dp"
+            android:layout_marginTop="450dp"
+            android:layout_marginStart="-380dp"
+            android:layout_height="wrap_content"
+            android:text="Recent History"
+            android:textAlignment="center"
+            android:background="@drawable/rounded_corner"/>
+        <TextView
+            android:layout_width="350dp"
+            android:layout_marginTop="500dp"
+            android:layout_marginStart="-350dp"
+            android:layout_height="wrap_content"
+            android:text="@string/monday_april_24th_2024" />
+
+        <TextView
+        android:layout_width="350dp"
+        android:layout_marginTop="550dp"
+        android:layout_marginStart="-350dp"
+        android:layout_height="wrap_content"
+        android:text="Sunday April 23rd 2024 | 11:40am-5:03pm" />
+
+        <TextView
+            android:layout_width="350dp"
+            android:layout_marginTop="600dp"
+            android:layout_marginStart="-350dp"
+            android:layout_height="wrap_content"
+            android:text="Friday April 21st 2024 | 1:55pm-5:43pm" />
+
+
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

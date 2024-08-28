@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">PGF App</string>
+    <string name="emailField">email@site.com</string>
+    <string name="passwordField">password</string>
+    <string name="PGF">PET GEOFENCE</string>
+    <string name="title_activity_current_map">CurrentMap</string>
+    <string name="APIkey">AIzaSyBFDXgDfvHM2FZaH8EHzG79OrHfnzfmhgo</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="logintxt">Login</string>
+    <string name="Next">Next</string>
+    <string name="signout">Sign Out</string>
+    <string name="montserrat">Montserrat</string>
+    <string name="emailtxt">Email</string>
+    <string name="pwdtxt">Password</string>
+    <string name="contentDescrHamburger">Settings Button</string>
+    <string name="title_activity_hub">HubActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="locHist">Location History</string>
+    <string name="contentDescrLocHist">Location History</string>
+    <string name="location_history">location history</string>
+    <string name="utilities_hub">Utilities Hub</string>
+    <string name="device_management">Device Management</string>
+    <string name="data_usage">Data Usage</string>
+    <string name="devices">Devices</string>
+    <string name="data_usages">Data Usage</string>
+    <string name="settings">settings</string>
+    <string name="settingstxt">Settings</string>
+    <string name="logouttheheck">Logout</string>
+    <string name="logout">Logout</string>
+    <string name="temp_times"> 12:05pm-3:45pm</string>
+    <string name="monday_april_24th_2024">Monday April 24th 2024 | 2:05pm-3:45pm</string>
+    <string name="today">Today</string>
+
+</resources>
