@@ -14,9 +14,12 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolygonOptions
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.json.JSONObject
+import android.graphics.Color
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -24,10 +27,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
-    val Loc1 = LatLng(39.7625334, -75.9705679)
-    val Loc2 = LatLng(39.7624790, -75.9704892)
-    val Loc3 = LatLng(39.7624839, -75.9706199)
-
 
     /*
     Function Name: onCreate
@@ -49,153 +48,22 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     //
     //Function Name: onMapReady
     //Parameters: GoogleMap googleMap
-    //Description: This function displays the map and the markers
+    //Description: This function displays the map
     //
+    //not sure if we will need this for now, keep it as is
     override fun onMapReady(googleMap: GoogleMap){
         mMap = googleMap
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc1))
-        mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
 
-        //first run
-        val handler = Handler()
-        handler.postDelayed({
-            mMap.clear()
-            mMap.addMarker(MarkerOptions().position(Loc1).title("Location 1"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc1))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 5000)
+        /*this bit of code here just zooms in on the sample location we're using*/
+        /*if you want, you can change it to be your backyard or another area*/
+        //sample placement of the yard
+        val sampleYard = LatLng(39.7625051, -75.9706618)
+        //focuses the camera on a single area
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sampleYard, 20f))
 
-
-        handler.postDelayed({
-            mMap.clear()
-            mMap.addMarker(MarkerOptions().position(Loc2).title("Location 2"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc2))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 10000)
-
-
-        handler.postDelayed({
-            mMap.clear()
-            mMap.addMarker(MarkerOptions().position(Loc3).title("Location 3"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc3))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 15000)
-
-
-        handler.postDelayed({
-            mMap.clear()
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc3))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 20000)
-
-
-        //second run
-        handler.postDelayed({
-            mMap.clear()
-            mMap.addMarker(MarkerOptions().position(Loc1).title("Location 1"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc1))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 25000)
-
-        handler.postDelayed({
-            mMap.clear()
-            mMap.addMarker(MarkerOptions().position(Loc2).title("Location 2"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc2))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 30000)
-
-        handler.postDelayed({
-            mMap.clear()
-            mMap.addMarker(MarkerOptions().position(Loc3).title("Location 3"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc3))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 35000)
-
-        handler.postDelayed({
-            mMap.clear()
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc3))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 40000)
-
-        //third run
-        handler.postDelayed({
-            mMap.clear()
-            mMap.addMarker(MarkerOptions().position(Loc1).title("Location 1"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc1))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 45000)
-
-        handler.postDelayed({
-            mMap.clear()
-            mMap.addMarker(MarkerOptions().position(Loc2).title("Location 2"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc2))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 50000)
-
-        handler.postDelayed({
-            mMap.clear()
-            mMap.addMarker(MarkerOptions().position(Loc3).title("Location 3"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc3))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 55000)
-
-        handler.postDelayed({
-            mMap.clear()
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc3))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 60000)
-
-        //fourth run
-        handler.postDelayed({
-            mMap.clear()
-            mMap.addMarker(MarkerOptions().position(Loc1).title("Location 1"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc1))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 65000)
-
-        handler.postDelayed({
-            mMap.clear()
-            mMap.addMarker(MarkerOptions().position(Loc2).title("Location 2"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc2))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 70000)
-
-        handler.postDelayed({
-            mMap.clear()
-            mMap.addMarker(MarkerOptions().position(Loc3).title("Location 3"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc3))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 75000)
-
-        handler.postDelayed({
-            mMap.clear()
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc3))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 80000)
-
-        //fifth run
-        handler.postDelayed({
-            mMap.clear()
-            mMap.addMarker(MarkerOptions().position(Loc1).title("Location 1"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc1))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 85000)
-
-        handler.postDelayed({
-            mMap.clear()
-            mMap.addMarker(MarkerOptions().position(Loc2).title("Location 2"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc2))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 90000)
-
-        handler.postDelayed({
-            mMap.clear()
-            mMap.addMarker(MarkerOptions().position(Loc3).title("Location 3"))
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(Loc3))
-            mMap.moveCamera(CameraUpdateFactory.zoomTo(100.0f))
-        }, 95000)
-
+        //keep map in place when pet is within boundaries
+        //when pet gets out of the boundaries, allow the user to scroll through the map
 
     }
 
@@ -209,4 +77,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     fun gotoHub(v: View?) {
         startActivity(Intent(this@MapsActivity, HubActivity::class.java))
     }
+
+    /*
+    Function Name: gotoDrawBounds
+    Parameters: View v
+    Description: Sends the user to the draw boundaries activity
+    */
+    fun gotoDrawBounds(v: View?){
+        startActivity(Intent(this@MapsActivity, BoundsActivity::class.java))
+    }
+
 }

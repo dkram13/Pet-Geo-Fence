@@ -34,5 +34,8 @@
     <string name="temp_times"> 12:05pm-3:45pm</string>
     <string name="monday_april_24th_2024">Monday April 24th 2024 | 2:05pm-3:45pm</string>
     <string name="today">Today</string>
+    <string name="Add_Button">Add Button</string>
+    <string name="title_activity_bounds">BoundsActivity</string>
+    <string name="draw_a_boundary">PLOT 5 POINTS\n TO DRAW YOUR BOUNDARY</string>
 
 </resources>

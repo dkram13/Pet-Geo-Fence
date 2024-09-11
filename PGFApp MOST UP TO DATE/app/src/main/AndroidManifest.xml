@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PGFApp"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/APIkey" />
+
+        <activity
+            android:name=".BoundsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_bounds" />
         <activity
             android:name=".LocationHistory"
             android:exported="true" />
@@ -20,11 +29,6 @@
             android:exported="true"
             android:label="@string/title_activity_hub"
             android:theme="@style/Theme.PGFApp" />
-
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/APIkey" />
-
         <activity
             android:name=".MapsActivity"
             android:exported="true"

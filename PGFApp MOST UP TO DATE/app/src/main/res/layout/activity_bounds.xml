@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".BoundsActivity"/>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@null"
+        android:onClick="backToMaps"
+        android:src="@drawable/backbutton"
+        tools:ignore="ContentDescription" />
+
+    <ImageView
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="0dp"
+        android:src="@drawable/rectangle"/>
+
+    <!--Update this text later-->
+    <TextView
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:fontFamily="@font/montserratbold"
+        android:text="@string/draw_a_boundary"
+        android:textAlignment="center"
+        android:layout_marginTop="60dp"
+        android:layout_marginLeft="0dp"/>
+
+
+</RelativeLayout>
