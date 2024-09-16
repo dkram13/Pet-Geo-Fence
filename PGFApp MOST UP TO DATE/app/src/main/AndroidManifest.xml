@@ -19,7 +19,7 @@
 
         <activity
             android:name=".BoundsActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_bounds" />
         <activity
             android:name=".LocationHistory"

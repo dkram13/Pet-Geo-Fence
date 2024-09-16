@@ -19,6 +19,11 @@ class HubActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityHubBinding
 
+    /*
+    Function Name: onCreate
+    Parameters: Bundle savedInstanceState
+    Purpose: Creates the layout of a page upon start-up
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,7 +51,11 @@ class HubActivity : AppCompatActivity() {
     }
 
 
-    //logs out the user
+    /*
+    Function Name: logout
+    Parameters: View v
+    Description: Logs out the user and sends them back to the login page
+     */
     fun logout(v: View?){
         startActivity(Intent(this@HubActivity, MainActivity::class.java))
     }

@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 import android.graphics.Color
+import com.example.pgfapp.databinding.ActivityBoundsBinding
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -31,7 +32,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     /*
     Function Name: onCreate
     Parameters: Bundle savedInstanceState
-    Description: This function makes the page elements viewable
+    Description: Creates the page layout on start-up
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,15 +46,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
     }
 
-    //
-    //Function Name: onMapReady
-    //Parameters: GoogleMap googleMap
-    //Description: This function displays the map
-    //
-    //not sure if we will need this for now, keep it as is
+    /*
+    Function Name: onMapReady
+    Parameters: GoogleMap googleMap
+    Description: Creates and displays the map to the user
+    */
     override fun onMapReady(googleMap: GoogleMap){
         mMap = googleMap
-
 
         /*this bit of code here just zooms in on the sample location we're using*/
         /*if you want, you can change it to be your backyard or another area*/
@@ -62,11 +61,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         //focuses the camera on a single area
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sampleYard, 20f))
 
-        //keep map in place when pet is within boundaries
+        //keep map in place when pet is within boundaries by disabling gesture controls
+        mMap.getUiSettings().setScrollGesturesEnabled(false)
+        mMap.getUiSettings().setZoomGesturesEnabled(false)
+        mMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(false)
+
         //when pet gets out of the boundaries, allow the user to scroll through the map
+        // ->code for that goes here
 
+        //display the boundary
+        
     }
-
 
 
     /*

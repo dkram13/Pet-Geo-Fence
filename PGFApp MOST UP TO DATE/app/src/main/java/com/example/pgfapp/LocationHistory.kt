@@ -10,6 +10,11 @@ class LocationHistory : AppCompatActivity() {
 
     //PURPOSE: Allow the user to view their location history
 
+    /*
+    Function Name: onCreate
+    Parameters: Bundle savedInstanceState
+    Purpose: Creates the layout of a page upon start-up
+    */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
