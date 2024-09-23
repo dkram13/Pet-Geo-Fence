@@ -37,5 +37,8 @@
     <string name="Add_Button">Add Button</string>
     <string name="title_activity_bounds">BoundsActivity</string>
     <string name="draw_a_boundary">PLOT 5 POINTS\n TO DRAW YOUR BOUNDARY</string>
+    <string name="redo_boundary">Redo Boundary</string>
+    <string name="im_done_with_the_boundary">Im Done With the Boundary</string>
+    <string name="go_back_to_the_main_page">Go Back To The Main Page</string>
 
 </resources>

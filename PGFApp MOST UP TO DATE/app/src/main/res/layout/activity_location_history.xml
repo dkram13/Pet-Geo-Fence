@@ -37,7 +37,7 @@
             android:background="@null"
             android:contentDescription="@string/contentDescrHamburger"
             android:onClick="gotoHub"
-            android:src="@drawable/backbutton" />
+            android:src="@drawable/back_button" />
 
         <TextView
             android:layout_width="410dp"

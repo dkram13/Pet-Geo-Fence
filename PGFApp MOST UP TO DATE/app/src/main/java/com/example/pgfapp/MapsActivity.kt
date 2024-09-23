@@ -2,25 +2,15 @@ package com.example.pgfapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
 import com.example.pgfapp.databinding.ActivityMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolygonOptions
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import org.json.JSONObject
-import android.graphics.Color
-import com.example.pgfapp.databinding.ActivityBoundsBinding
+import com.google.android.gms.maps.model.Polygon
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -28,6 +18,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
+    public var boundaryPts = mutableListOf<LatLng>() //array of boundary points [size 5]
+    public var polygonDraw: Polygon? = null //polygon object
 
     /*
     Function Name: onCreate
@@ -52,7 +44,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     Description: Creates and displays the map to the user
     */
     override fun onMapReady(googleMap: GoogleMap){
+        //initialize variables
         mMap = googleMap
+        var boundsAct = BoundsActivity()
+
+        //populate boundaryPts
+
 
         /*this bit of code here just zooms in on the sample location we're using*/
         /*if you want, you can change it to be your backyard or another area*/
@@ -65,12 +62,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.getUiSettings().setScrollGesturesEnabled(false)
         mMap.getUiSettings().setZoomGesturesEnabled(false)
         mMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(false)
+        mMap.getUiSettings().setMapToolbarEnabled(false)
 
         //when pet gets out of the boundaries, allow the user to scroll through the map
         // ->code for that goes here
 
-        //display the boundary
-        
+        //display the boundary if it exists
+        if(boundaryPts != emptyList<LatLng>()) {
+            //Toast.makeText(this, "There are 5 points in this array", Toast.LENGTH_SHORT).show()
+        }
+
+
     }
 
 

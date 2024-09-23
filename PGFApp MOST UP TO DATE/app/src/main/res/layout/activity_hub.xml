@@ -18,7 +18,7 @@
             android:layout_marginTop="60dp"
             android:background="@null"
             android:onClick="backToMaps"
-            android:src="@drawable/backbutton"
+            android:src="@drawable/back_button"
             tools:ignore="ContentDescription" />
 
         <TextView

@@ -1,38 +1,35 @@
 package com.example.pgfapp
 
-import android.graphics.Color
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pgfapp.databinding.ActivityBoundsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMap.OnMapClickListener
-import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PointOfInterest
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.PolygonOptions
-import org.checkerframework.common.returnsreceiver.qual.This
-import java.security.AccessController.getContext
 
-    //PURPOSE: Allows the User to draw a boundary and save it
+//PURPOSE: Allows the User to draw a boundary and save it
 
 class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap //google map object
     private lateinit var binding: ActivityBoundsBinding //view binding object
-    public val bounds = mutableListOf<LatLng>() //array of boundary points [size 5]
-    public var polygon: Polygon? = null //polygon object
+    var bounds = mutableListOf<LatLng>() //array of boundary points [size 5]
+    var polygon: Polygon? = null //polygon object
+    private var index: Int = 1
 
     /*
-    Function Name: onCreate
-    Parameters: Bundle savedInstanceState
-    Purpose: Creates the layout of a page upon start-up
+    Function Name : onCreate
+    Parameters    : Bundle savedInstanceState
+    Purpose       : Creates the layout of a page upon start-up
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,9 +46,9 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
     /*
-    Function Name: onMapReady
-    Parameters: GoogleMap googleMap
-    Purpose: Display the map to the user
+    Function Name : onMapReady
+    Parameters    : GoogleMap googleMap
+    Purpose       : Display the map to the user
     */
     override fun onMapReady(googleMap: GoogleMap) {
         //initialize the object
@@ -59,9 +56,10 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         //disable gesture controls for a smoother experience
         //->we wouldn't want the user to accidentally move the camera
-        mMap.getUiSettings().setScrollGesturesEnabled(false);
-        mMap.getUiSettings().setZoomGesturesEnabled(false);
-        mMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(false);
+        mMap.getUiSettings().setScrollGesturesEnabled(false)
+        mMap.getUiSettings().setZoomGesturesEnabled(false)
+        mMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(false)
+        mMap.getUiSettings().setMapToolbarEnabled(false)
 
         /*this bit of code here just zooms in on the sample location we're using*/
         /*if you want, you can change it to be your backyard or another area*/
@@ -73,16 +71,20 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sampleYard, 20f))
 
 
-        //When the user "clicks" or "taps" the screen
-        mMap.setOnMapClickListener { latLng ->
-            if (bounds.size < 5) {
-                bounds.add(latLng)
-                mMap.addMarker(MarkerOptions().position(latLng))
-                if (bounds.size == 5) {
-                    drawPolygon()
+        //if there are no bounds present
+        if(bounds == emptyList<LatLng>()) {
+            //When the user "clicks" or "taps" the screen
+            mMap.setOnMapClickListener { latLng ->
+                if (bounds.size < 5) {
+                    bounds.add(latLng)
+                    mMap.addMarker(MarkerOptions().position(latLng).title("Boundary Point: $index"))
+                    index += 1
+                    if (bounds.size == 5) {
+                        drawPolygon()
+                    }
+                } else {
+                    Toast.makeText(this, "Only 5 Points Allowed", Toast.LENGTH_SHORT).show()
                 }
-            } else {
-                Toast.makeText(this, "Only 5 Points Allowed", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -116,11 +118,11 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     /*
-    Function Name: fitBounds
-    Parameters: N/A
-    Purpose: Make sure that the boundary fits properly
+    Function Name : fitBounds
+    Parameters    : N/A
+    Purpose       : Make sure that the boundary fits properly
      */
-    private fun fitBounds() {
+    public fun fitBounds() {
 
         //if the bounds array is not empty
         if (bounds.isNotEmpty()) {
@@ -136,6 +138,27 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    /*
+    Function Name : onRedo
+    Parameters    : View v
+    Description   : Removes all the markers from the map
+                    and resets the boundary made by the user
+    */
+    fun onRedo(v: View?){
+        mMap.clear()
+        bounds.clear()
+        index = 1
+    }
+
+    /*
+    Function Name : checkToMaps
+    Parameters    : View v
+    Description   : Sends the user to the maps page after when they're done
+    */
+    fun checkToMaps(v: View?){
+        
+        startActivity(Intent(this@BoundsActivity, MapsActivity::class.java))
+    }
 
 }
 
