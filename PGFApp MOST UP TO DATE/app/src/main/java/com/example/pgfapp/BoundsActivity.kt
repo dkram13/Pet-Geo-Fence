@@ -56,10 +56,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         //disable gesture controls for a smoother experience
         //->we wouldn't want the user to accidentally move the camera
-        mMap.getUiSettings().setScrollGesturesEnabled(false)
-        mMap.getUiSettings().setZoomGesturesEnabled(false)
-        mMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(false)
-        mMap.getUiSettings().setMapToolbarEnabled(false)
+        mMap.getUiSettings().setAllGesturesEnabled(false)
 
         /*this bit of code here just zooms in on the sample location we're using*/
         /*if you want, you can change it to be your backyard or another area*/

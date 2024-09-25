@@ -59,10 +59,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sampleYard, 20f))
 
         //keep map in place when pet is within boundaries by disabling gesture controls
-        mMap.getUiSettings().setScrollGesturesEnabled(false)
-        mMap.getUiSettings().setZoomGesturesEnabled(false)
-        mMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(false)
-        mMap.getUiSettings().setMapToolbarEnabled(false)
+        mMap.getUiSettings().setZoomControlsEnabled(false)
+
 
         //when pet gets out of the boundaries, allow the user to scroll through the map
         // ->code for that goes here
