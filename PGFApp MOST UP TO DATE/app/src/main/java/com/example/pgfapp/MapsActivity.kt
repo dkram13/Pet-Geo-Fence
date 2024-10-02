@@ -12,14 +12,14 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Polygon
 
+
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     //Purpose: Allows user to view maps
 
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
-    public var boundaryPts = mutableListOf<LatLng>() //array of boundary points [size 5]
-    public var polygonDraw: Polygon? = null //polygon object
+    private lateinit var boundsAct: BoundsActivity
 
     /*
     Function Name: onCreate
@@ -44,11 +44,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     Description: Creates and displays the map to the user
     */
     override fun onMapReady(googleMap: GoogleMap){
-        //initialize variables
+        //initialize the google map
         mMap = googleMap
-        var boundsAct = BoundsActivity()
+        //initialize boundaries
+        boundsAct = BoundsActivity()
+        //initialize the boundaries
 
-        //populate boundaryPts
+
 
 
         /*this bit of code here just zooms in on the sample location we're using*/
@@ -59,17 +61,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sampleYard, 20f))
 
         //keep map in place when pet is within boundaries by disabling gesture controls
-        mMap.getUiSettings().setZoomControlsEnabled(false)
+        mMap.getUiSettings().setScrollGesturesEnabled(false)
+        mMap.getUiSettings().setZoomGesturesEnabled(false)
+        mMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(false)
+        mMap.getUiSettings().setMapToolbarEnabled(false)
 
 
         //when pet gets out of the boundaries, allow the user to scroll through the map
         // ->code for that goes here
 
         //display the boundary if it exists
-        if(boundaryPts != emptyList<LatLng>()) {
+        /*if(myBounds != emptyList<LatLng>()) {
             //Toast.makeText(this, "There are 5 points in this array", Toast.LENGTH_SHORT).show()
-        }
 
+            boundsAct.drawPolygon()
+        }*/
+
+        //IDEA: MAYBE PASS THE OVER THE POLYGON OBJECT DRAWN
 
     }
 
