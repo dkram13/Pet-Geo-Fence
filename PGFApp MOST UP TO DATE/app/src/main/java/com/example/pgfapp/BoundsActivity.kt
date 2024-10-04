@@ -24,8 +24,8 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap //google map object
     private lateinit var binding: ActivityBoundsBinding //view binding object
-    var bounds = ArrayList<LatLng>() //mutable list of latitude longitude points
-    var polygon: Polygon? = null //polygon object
+    private var bounds = ArrayList<LatLng>() //array list of latitude longitude points
+    private var polygon: Polygon? = null //polygon object
     private var index: Int = 1
 
     /*
@@ -143,6 +143,20 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
             val bounds = boundsBuilder.build()
         }
     }
+
+    /*
+    Function Name : saveToDB
+    Parameters    : View v
+    Description   : Saves the latitude and longitude coordinates to the database
+    */
+    fun saveToDB(v: View?){
+        //save to boundaries
+        
+
+        //go to the maps page
+        checkToMaps(v)
+    }
+
 
     /*
     Function Name : onRedo
