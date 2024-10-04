@@ -1,5 +1,6 @@
 package com.example.pgfapp
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,11 +14,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-
 class MainActivity : AppCompatActivity() {
-
+    val db = Firebase.firestore
     //PURPOSE:  Allow the user to sign in and/or sign up.
     //          If the sign in is successful,
     //              ->the user is taken to the maps page
@@ -63,6 +64,19 @@ class MainActivity : AppCompatActivity() {
                         // Sign in is successful
                         Log.d("@id/email" + "@id/pwd", "success")
                         val user = auth.currentUser
+                        val usertg = hashMapOf(
+                            "first" to "Ada",
+                            "last" to "Lovelace",
+                            "born" to 1815
+                        )
+                        db.collection("userstg")
+                            .add(usertg)
+                            .addOnSuccessListener { documentReference ->
+                                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(TAG, "Error adding document", e)
+                            }
                         gotoMaps() //sends the user to the maps page
                     } else {
                         // If sign in fails, display a message to the user.
