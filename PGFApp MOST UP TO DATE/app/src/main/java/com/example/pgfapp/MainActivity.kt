@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         // Sign in is successful
                         Log.d("@id/email" + "@id/pwd", "success")
-                        val user = auth.currentUser
+                        /*val user = auth.currentUser
                         val usertg = hashMapOf(
                             "first" to "Ada",
                             "last" to "Lovelace",
@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
                             }
                             .addOnFailureListener { e ->
                                 Log.w(TAG, "Error adding document", e)
-                            }
+                            }*/
                         gotoMaps() //sends the user to the maps page
                     } else {
                         // If sign in fails, display a message to the user.

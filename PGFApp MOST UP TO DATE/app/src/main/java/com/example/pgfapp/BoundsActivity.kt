@@ -148,6 +148,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     Function Name : saveToDB
     Parameters    : View v
     Description   : Saves the latitude and longitude coordinates to the database
+    bounds is the list of coordiants
     */
     fun saveToDB(v: View?){
         //save to boundaries
