@@ -10,11 +10,13 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.PolygonOptions
+
 
 //PURPOSE: Allows the User to draw a boundary and save it
 
@@ -22,8 +24,8 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap //google map object
     private lateinit var binding: ActivityBoundsBinding //view binding object
-    var bounds = mutableListOf<LatLng>() //array of boundary points [size 5]
-    var polygon: Polygon? = null //polygon object
+    private var bounds = ArrayList<LatLng>() //array list of latitude longitude points
+    private var polygon: Polygon? = null //polygon object
     private var index: Int = 1
 
     /*
@@ -56,7 +58,10 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         //disable gesture controls for a smoother experience
         //->we wouldn't want the user to accidentally move the camera
-        mMap.getUiSettings().setAllGesturesEnabled(false)
+        mMap.getUiSettings().setScrollGesturesEnabled(false)
+        mMap.getUiSettings().setZoomGesturesEnabled(false)
+        mMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(false)
+        mMap.getUiSettings().setMapToolbarEnabled(false)
 
         /*this bit of code here just zooms in on the sample location we're using*/
         /*if you want, you can change it to be your backyard or another area*/
@@ -72,15 +77,19 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         if(bounds == emptyList<LatLng>()) {
             //When the user "clicks" or "taps" the screen
             mMap.setOnMapClickListener { latLng ->
-                if (bounds.size < 5) {
+                if (bounds.size < 4) {
                     bounds.add(latLng)
-                    mMap.addMarker(MarkerOptions().position(latLng).title("Boundary Point: $index"))
+                    mMap.addMarker(MarkerOptions()
+                        .position(latLng).
+                        title("Boundary Point: $index").
+                        icon(BitmapDescriptorFactory.
+                        fromResource(R.drawable.custom_marker)))
                     index += 1
-                    if (bounds.size == 5) {
+                    if (bounds.size == 4) {
                         drawPolygon()
                     }
                 } else {
-                    Toast.makeText(this, "Only 5 Points Allowed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Only 4 Points Allowed", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -136,6 +145,20 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     /*
+    Function Name : saveToDB
+    Parameters    : View v
+    Description   : Saves the latitude and longitude coordinates to the database
+    */
+    fun saveToDB(v: View?){
+        //save to boundaries
+        
+
+        //go to the maps page
+        checkToMaps(v)
+    }
+
+
+    /*
     Function Name : onRedo
     Parameters    : View v
     Description   : Removes all the markers from the map
@@ -153,7 +176,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     Description   : Sends the user to the maps page after when they're done
     */
     fun checkToMaps(v: View?){
-        
+        //don't forget to pass over the list of coordinates
         startActivity(Intent(this@BoundsActivity, MapsActivity::class.java))
     }
 
