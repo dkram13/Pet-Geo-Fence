@@ -204,8 +204,15 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
                 Log.w(TAG, "Error adding document", e)
             }
         */
-        //go to the maps page
-        checkToMaps(v)
+
+        if(bounds.size != 4){
+            Toast.makeText(this, "Boundary Must Be 4 Points", Toast.LENGTH_SHORT).show()
+        }
+
+        if(bounds.size == 4) {
+            //go to the maps page
+            checkToMaps(v)
+        }
     }
 
 
