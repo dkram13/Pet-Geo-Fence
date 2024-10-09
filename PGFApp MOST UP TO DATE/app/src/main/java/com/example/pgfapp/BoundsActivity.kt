@@ -1,7 +1,9 @@
 package com.example.pgfapp
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +18,10 @@ import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.PolygonOptions
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.firestore.ktx.*
+import com.google.firebase.ktx.Firebase
 
 
 //PURPOSE: Allows the User to draw a boundary and save it
@@ -152,8 +158,52 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     */
     fun saveToDB(v: View?){
         //save to boundaries
-        
+        //bounds is the varial list of latitude and longitude
+        val db = Firebase.firestore
+        val user = Firebase.auth.currentUser
+        //val geoPoints = listOf(GeoPoint(bounds))
 
+        if (user != null) {
+            val uid = user?.uid
+            val geoPoints = bounds.map { latLng ->
+                GeoPoint(latLng.latitude, latLng.longitude)}
+            
+            val usertg = hashMapOf(
+                "UUID" to uid,
+                "last" to "this is test 2 of getting uid",
+                "GeoFence Points" to geoPoints
+            )
+            db.collection("userstg")
+                .add(usertg)
+                .addOnSuccessListener { documentReference ->
+                    Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Error adding document", e)
+                }// User is signed in
+        } else {
+            // No user is signed in
+        }
+
+        /*
+        val saveBoarder = hashMapOf(
+            "Name" to       // need to find a way to change name based on the boarders a user has
+            "point 1" to bounds[0]      // need to find a way to iterate over a list of tuples of geopoint locations
+            "point 2" to bounds[1]
+            "point 3" to bounds[2]
+            "point 4" to bounds[3]
+            "point 5" to bounds[4]
+            "UUID" to                   // need to find a way to get uuid for user based on who is logged in.
+        )
+        db.collection("Boarder")
+            .add(saveBoarder)
+            .addOnSuccessListener { documentReference ->
+                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+            }
+            .addOnFailureListener { e ->
+                Log.w(TAG, "Error adding document", e)
+            }
+        */
         //go to the maps page
         checkToMaps(v)
     }

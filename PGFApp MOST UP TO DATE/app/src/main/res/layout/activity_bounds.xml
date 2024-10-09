@@ -30,7 +30,7 @@
         android:layout_marginStart="350dp"
         android:layout_marginTop="5dp"
         android:background="@null"
-        android:onClick="checkToMaps"
+        android:onClick="saveToDB"
         android:src="@drawable/check_button"
         tools:contentDescription="@string/im_done_with_the_boundary" />
 

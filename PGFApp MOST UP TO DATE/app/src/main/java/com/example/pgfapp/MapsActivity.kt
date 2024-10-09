@@ -1,7 +1,9 @@
 package com.example.pgfapp
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pgfapp.databinding.ActivityMapsBinding
@@ -11,6 +13,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Polygon
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -97,6 +102,28 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     Description: Sends the user to the draw boundaries activity
     */
     fun gotoDrawBounds(v: View?){
+       /* val db = Firebase.firestore
+        val user = Firebase.auth.currentUser
+        if (user != null) {
+            val uid = user?.uid
+
+            val usertg = hashMapOf(
+                "first" to uid,
+                "last" to "this is test 2 of getting uid",
+                "born" to 1815
+            )
+            db.collection("userstg")
+                .add(usertg)
+                .addOnSuccessListener { documentReference ->
+                    Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                }
+                .addOnFailureListener { e ->
+                    Log.w(TAG, "Error adding document", e)
+                }// User is signed in
+        } else {
+            // No user is signed in
+        }
+*/
         startActivity(Intent(this@MapsActivity, BoundsActivity::class.java))
     }
 

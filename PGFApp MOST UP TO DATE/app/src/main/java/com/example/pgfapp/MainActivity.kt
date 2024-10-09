@@ -63,9 +63,12 @@ class MainActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         // Sign in is successful
                         Log.d("@id/email" + "@id/pwd", "success")
+
                         /*val user = auth.currentUser
+                        val uid = user?.uid
+
                         val usertg = hashMapOf(
-                            "first" to "Ada",
+                            "first" to uid,
                             "last" to "Lovelace",
                             "born" to 1815
                         )
