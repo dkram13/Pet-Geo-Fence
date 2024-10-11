@@ -83,25 +83,20 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         if(bounds == emptyList<LatLng>()) {
             //When the user "clicks" or "taps" the screen
             mMap.setOnMapClickListener { latLng ->
-                if (bounds.size < 4) {
-                    bounds.add(latLng)
-                    mMap.addMarker(MarkerOptions()
-                        .position(latLng).
-                        title("Boundary Point: $index").
-                        icon(BitmapDescriptorFactory.
-                        fromResource(R.drawable.custom_marker)))
-                    index += 1
-                    if (bounds.size == 4) {
-                        drawPolygon()
-                    }
-                } else {
-                    Toast.makeText(this, "Only 4 Points Allowed", Toast.LENGTH_SHORT).show()
+                bounds.add(latLng)
+                mMap.addMarker(MarkerOptions()
+                    .position(latLng).
+                    title("Boundary Point: $index").
+                    icon(BitmapDescriptorFactory.
+                    fromResource(R.drawable.custom_marker)))
+                index += 1
+                if (bounds.size >= 3) {
+                    drawPolygon()
                 }
             }
         }
 
     }
-
 
     /*
     Function Name : drawPolygon
@@ -154,11 +149,11 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     Function Name : saveToDB
     Parameters    : View v
     Description   : Saves the latitude and longitude coordinates to the database
-    bounds is the list of coordiants
+    bounds is the array list of the plotted coordinates
     */
     fun saveToDB(v: View?){
         //save to boundaries
-        //bounds is the varial list of latitude and longitude
+        //bounds is the variable arraylist of latitude and longitude
         val db = Firebase.firestore
         val user = Firebase.auth.currentUser
         //val geoPoints = listOf(GeoPoint(bounds))
@@ -205,11 +200,10 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         */
 
-        if(bounds.size != 4){
-            Toast.makeText(this, "Boundary Must Be 4 Points", Toast.LENGTH_SHORT).show()
+        if(bounds.size != 3){
+            Toast.makeText(this, "Boundary Must Be 3 or more Points", Toast.LENGTH_SHORT).show()
         }
-
-        if(bounds.size == 4) {
+        else{
             //go to the maps page
             checkToMaps(v)
         }
@@ -233,8 +227,17 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     Parameters    : View v
     Description   : Sends the user to the maps page after when they're done
     */
-    fun checkToMaps(v: View?){
+    private fun checkToMaps(v: View?){
         //don't forget to pass over the list of coordinates
+        startActivity(Intent(this@BoundsActivity, MapsActivity::class.java))
+    }
+
+    /*
+    Function Name: backToMaps
+    Parameters: View v
+    Description: Sends the user back to the maps page
+    */
+    fun backToMaps(v: View?){
         startActivity(Intent(this@BoundsActivity, MapsActivity::class.java))
     }
 
