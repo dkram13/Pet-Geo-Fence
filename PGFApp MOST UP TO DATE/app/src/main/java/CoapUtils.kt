@@ -19,7 +19,7 @@ class CoapUtils {
     }
 
     @Composable
-    fun MyButton() {
+    fun onSendCoapGetRq() {
         val coroutineScope = rememberCoroutineScope()
 
         Button(onClick = {

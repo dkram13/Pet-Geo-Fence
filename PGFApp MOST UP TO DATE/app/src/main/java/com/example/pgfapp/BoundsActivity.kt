@@ -1,11 +1,16 @@
 package com.example.pgfapp
 
 import android.content.ContentValues.TAG
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pgfapp.databinding.ActivityBoundsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -147,11 +152,12 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     /*
     Function Name : saveToDB
-    Parameters    : View v
+    Parameters    : View v - the current activity view
+                    EditText name - the name of the boundary provided by the user
     Description   : Saves the latitude and longitude coordinates to the database
     bounds is the array list of the plotted coordinates
     */
-    fun saveToDB(v: View?){
+    fun saveToDB(v: View?, name: EditText?){
         //save to boundaries
         //bounds is the variable arraylist of latitude and longitude
         val db = Firebase.firestore
@@ -200,7 +206,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         */
 
-        if(bounds.size != 3){
+        if(bounds.size <= 3){
             Toast.makeText(this, "Boundary Must Be 3 or more Points", Toast.LENGTH_SHORT).show()
         }
         else{
@@ -241,6 +247,39 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         startActivity(Intent(this@BoundsActivity, MapsActivity::class.java))
     }
 
-}
+    /*
+    Function Name : onCheck
+    Parameters    : View v
+    Description   : Prompts the user for a boundary name via an AlertDialog
+                    If user selects OK:
+                        ->saveToDB()
+                    If user selects CANCEL:
+                        ->AlertDialog closes and nothing is changed
+    */
+    fun onCheck(v: View?){
+        // Create an alert builder
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Name The Boundary You Just Created")
+
+        // set the custom layout
+        val customLayout: View = layoutInflater.inflate(R.layout.custom_layout, null)
+        builder.setView(customLayout)
+
+        // add a button
+        builder.setPositiveButton("OK") { dialog: DialogInterface?, which: Int ->
+            // send data from the AlertDialog to the Activity
+            val editText = customLayout.findViewById<EditText>(R.id.editText)
+            saveToDB(v, editText)
+        }
+        builder.setNegativeButton("Cancel"){ dialog: DialogInterface?, which: Int ->
+        //close the alertdialog
+
+        }
+        // create and show the alert dialog
+        val dialog = builder.create()
+        dialog.show()
+        }
+
+    }
 
 
