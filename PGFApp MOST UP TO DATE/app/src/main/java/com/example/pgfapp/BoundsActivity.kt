@@ -163,19 +163,19 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         val db = Firebase.firestore
         val user = Firebase.auth.currentUser
         //val geoPoints = listOf(GeoPoint(bounds))
-
+        val boarderName = name?.text.toString()
         if (user != null) {
             val uid = user?.uid
             val geoPoints = bounds.map { latLng ->
                 GeoPoint(latLng.latitude, latLng.longitude)}
             
-            val usertg = hashMapOf(
+            val boarders = hashMapOf(
                 "UUID" to uid,
-                "last" to "this is test 2 of getting uid",
+                "Boarder Name" to boarderName,
                 "GeoFence Points" to geoPoints
             )
-            db.collection("userstg")
-                .add(usertg)
+            db.collection("Boarder")
+                .add(boarders)
                 .addOnSuccessListener { documentReference ->
                     Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
                 }
@@ -185,26 +185,6 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         } else {
             // No user is signed in
         }
-
-        /*
-        val saveBoarder = hashMapOf(
-            "Name" to       // need to find a way to change name based on the boarders a user has
-            "point 1" to bounds[0]      // need to find a way to iterate over a list of tuples of geopoint locations
-            "point 2" to bounds[1]
-            "point 3" to bounds[2]
-            "point 4" to bounds[3]
-            "point 5" to bounds[4]
-            "UUID" to                   // need to find a way to get uuid for user based on who is logged in.
-        )
-        db.collection("Boarder")
-            .add(saveBoarder)
-            .addOnSuccessListener { documentReference ->
-                Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-            }
-            .addOnFailureListener { e ->
-                Log.w(TAG, "Error adding document", e)
-            }
-        */
 
         if(bounds.size <= 3){
             Toast.makeText(this, "Boundary Must Be 3 or more Points", Toast.LENGTH_SHORT).show()
