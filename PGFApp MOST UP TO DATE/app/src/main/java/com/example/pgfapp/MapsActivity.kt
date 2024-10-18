@@ -57,6 +57,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap){
         //initialize the google map
         mMap = googleMap
+        //initialize boundaries
+        boundsAct = BoundsActivity()
+        //initialize the boundaries
+
+
+
 
         /*this bit of code here just zooms in on the sample location we're using*/
         /*if you want, you can change it to be your backyard or another area*/
@@ -101,30 +107,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     Description: Sends the user to the draw boundaries activity
     */
     fun gotoDrawBounds(v: View?){
-       /* val db = Firebase.firestore
-        val user = Firebase.auth.currentUser
-        if (user != null) {
-            val uid = user?.uid
-
-            val usertg = hashMapOf(
-                "first" to uid,
-                "last" to "this is test 2 of getting uid",
-                "born" to 1815
-            )
-            db.collection("userstg")
-                .add(usertg)
-                .addOnSuccessListener { documentReference ->
-                    Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "Error adding document", e)
-                }// User is signed in
-        } else {
-            // No user is signed in
-        }
-*/
         startActivity(Intent(this@MapsActivity, BoundsActivity::class.java))
     }
+
 
     //function to test coap get request
     @Composable
