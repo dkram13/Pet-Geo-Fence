@@ -1,11 +1,13 @@
 package com.example.pgfapp
 
+import CoapUtils
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
 import com.example.pgfapp.databinding.ActivityMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -55,12 +57,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap){
         //initialize the google map
         mMap = googleMap
-        //initialize boundaries
-        boundsAct = BoundsActivity()
-        //initialize the boundaries
-
-
-
 
         /*this bit of code here just zooms in on the sample location we're using*/
         /*if you want, you can change it to be your backyard or another area*/
@@ -86,7 +82,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             boundsAct.drawPolygon()
         }*/
 
-        //IDEA: MAYBE PASS THE OVER THE POLYGON OBJECT DRAWN
 
     }
 
@@ -129,6 +124,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 */
         startActivity(Intent(this@MapsActivity, BoundsActivity::class.java))
+    }
+
+    //function to test coap get request
+    @Composable
+    fun testGetCoapReq(v: View?){
+        val coap = CoapUtils()
+        var send = coap.OnSendCoapGetRq()
+
+        return send
     }
 
 }

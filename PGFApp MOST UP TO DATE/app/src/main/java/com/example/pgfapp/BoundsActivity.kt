@@ -93,7 +93,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .position(latLng).
                     title("Boundary Point: $index").
                     icon(BitmapDescriptorFactory.
-                    fromResource(R.drawable.custom_marker)))
+                    fromResource(R.mipmap.cust_mark)))
                 index += 1
                 if (bounds.size >= 3) {
                     drawPolygon()
@@ -267,7 +267,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // add a button
         builder.setPositiveButton("OK") { dialog: DialogInterface?, which: Int ->
-            // send data from the AlertDialog to the Activity
+            // send data from the AlertDialog to the database
             val editText = customLayout.findViewById<EditText>(R.id.editText)
             saveToDB(v, editText)
         }
