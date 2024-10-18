@@ -16,7 +16,7 @@ import com.google.android.gms.maps.model.Polygon
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-//import org.eclipse.californium.core.CoapClient
+import org.eclipse.californium.core.CoapClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
