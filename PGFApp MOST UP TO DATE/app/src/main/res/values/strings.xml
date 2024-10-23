@@ -40,5 +40,11 @@
     <string name="redo_boundary">Redo Boundary</string>
     <string name="im_done_with_the_boundary">Im Done With the Boundary</string>
     <string name="go_back_to_the_main_page">Go Back To The Main Page</string>
+    <string name="testing_coap_stuff_button">testing coap stuff button</string>
+    <string name="boundary_info_tab">Boundary Info Tab</string>
+    <string name="some_text">some text</string>
+    <string name="boundary_1_active_n_boundary_2_inactive_n_boundary_3_inactive">Boundary 1 | Pets | Active\nBoundary 2 | Pets | Inactive \nBoundary 3 | Pets | Inactive</string>
+    <string name="boundaries">Boundaries</string>
+    <string name="dashed_line">----------------------------</string>
 
 </resources>

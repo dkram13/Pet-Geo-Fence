@@ -1,36 +1,35 @@
 import android.util.Log
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import org.eclipse.californium.core.CoapClient
+import org.eclipse.californium.core.CoapHandler
+import org.eclipse.californium.core.CoapResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.CoroutineScope
+
 
 class CoapUtils {
     companion object {
-        suspend fun sendCoapGetRequest(uri: String): String = withContext(Dispatchers.IO) {
-            val client = CoapClient(uri)
-            val response = client.get()
-            response.responseText
-        }
-    }
+        private const val TAG = "CoapUtils"
 
-    @Composable
-    fun OnSendCoapGetRq() {
-        //get the coroutine scope
-        val coroutineScope = rememberCoroutineScope()
-
-        //launch the coroutine scope
-        LaunchedEffect(coroutineScope) {
+        // Function to observe a CoAP resource
+        fun observeCoapResource(uri: String, coroutineScope: CoroutineScope) {
             coroutineScope.launch {
-                //obtain the uri
-                val uri = "coap://californium.eclipseprojects.io/echo/cali.Ahzio.nRF9160"
-                //send a get request to the coap server
-                val response = CoapUtils.sendCoapGetRequest(uri)
-                Log.d("MainActivity", "Response: $response") //keep this for now, remove later
+                withContext(Dispatchers.IO) {
+                    val client = CoapClient(uri)
+                    client.observe(object : CoapHandler {
+                        override fun onLoad(response: CoapResponse?) {
+                            response?.let {
+                                val responseText = it.responseText
+                                Log.d(TAG, "Observed Response: $responseText")
+                            }
+                        }
+
+                        override fun onError() {
+                            Log.e(TAG, "Observation failed")
+                        }
+                    })
+                }
             }
         }
     }

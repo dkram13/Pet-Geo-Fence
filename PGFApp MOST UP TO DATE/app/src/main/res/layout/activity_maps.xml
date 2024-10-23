@@ -7,11 +7,13 @@
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!--Default layout_height is match parent-->
+    <!-- what we want is 500dp for layout_height-->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="500dp"
         tools:context=".MapsActivity"/>
 
 
@@ -52,16 +54,48 @@
         android:layout_marginEnd="100dp"
         android:layout_marginBottom="100dp"
         android:background="@null"
-        android:contentDescription="testing coap stuff button"
+        android:contentDescription="@string/testing_coap_stuff_button"
         android:onClick="testGetCoapReq"
         android:src="@drawable/check_button"/>
 
     <!--Boundary Info Tab-->
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="600"
-        android:layout_marginTop="500"
-        android:src="@drawable/rectangle" />
+        android:layout_height="900dp"
+        android:layout_marginTop="450dp"
+        android:src="@drawable/rectangle"
+        android:contentDescription="@string/boundary_info_tab"
+        />
+
+    <!-- Remove this later -->
+    <!-- Just some stuff to test out how the UI should look-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/boundaries"
+        android:textSize="34sp"
+        android:textAlignment="center"
+        android:fontFamily="@font/montserratbold"
+        android:paddingTop="520dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/dashed_line"
+        android:textSize="34sp"
+        android:textAlignment="center"
+        android:fontFamily="@font/montserratbold"
+        android:paddingTop="550dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/boundary_1_active_n_boundary_2_inactive_n_boundary_3_inactive"
+        android:textSize="24sp"
+        android:paddingTop="600dp"
+        android:fontFamily="@font/montserratbold"
+        android:textAlignment="center
+"/>
 
 
 </RelativeLayout>

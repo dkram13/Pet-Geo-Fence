@@ -1,6 +1,7 @@
 package com.example.pgfapp
 
 import CoapUtils
+import androidx.lifecycle.lifecycleScope
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
@@ -47,6 +48,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        //coap server stuff
+        Log.d("CoapUtils", "Starting Observed Stuff")
+        val uri = "coap://californium.eclipseprojects.io/obs-pumping-non"
+        CoapUtils.observeCoapResource(uri, lifecycleScope)
     }
 
     /*
@@ -57,11 +63,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap){
         //initialize the google map
         mMap = googleMap
-        //initialize boundaries
-        boundsAct = BoundsActivity()
-        //initialize the boundaries
-
-
+        //pull boundaries from the database
+        // ->code for that goes here
 
 
         /*this bit of code here just zooms in on the sample location we're using*/
@@ -82,15 +85,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         // ->code for that goes here
 
         //display the boundary if it exists
-        /*if(myBounds != emptyList<LatLng>()) {
-            //Toast.makeText(this, "There are 5 points in this array", Toast.LENGTH_SHORT).show()
-
-            boundsAct.drawPolygon()
-        }*/
-
+        // ->code for that goes here
 
     }
-
 
     /*
     Function Name: gotoHub
@@ -110,14 +107,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         startActivity(Intent(this@MapsActivity, BoundsActivity::class.java))
     }
 
-
-    //function to test coap get request
-    @Composable
-    fun testGetCoapReq(v: View?){
-        val coap = CoapUtils()
-        var send = coap.OnSendCoapGetRq()
-
-        return send
+    /*
+    Function Name: testGetCoapReq
+    Parameters: View v
+    Description: tests getting the coap request
+     */
+    fun testGetCoapReq(v: View?) {
+        //CoapUtils.onSendCoapGetRq(lifecycleScope)
+        Log.d("Ignore", "ignore")
     }
-
 }
