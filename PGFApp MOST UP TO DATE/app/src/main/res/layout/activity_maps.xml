@@ -45,19 +45,6 @@
         android:padding="8dp"
         android:src="@drawable/rectangle_1" />
 
-    <!--Remove this later!! Only Use when sending coap get request-->
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="200dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginBottom="100dp"
-        android:background="@null"
-        android:contentDescription="@string/testing_coap_stuff_button"
-        android:onClick="testGetCoapReq"
-        android:src="@drawable/check_button"/>
-
     <!--Boundary Info Tab-->
     <ImageView
         android:layout_width="match_parent"
@@ -94,8 +81,7 @@
         android:textSize="24sp"
         android:paddingTop="600dp"
         android:fontFamily="@font/montserratbold"
-        android:textAlignment="center
-"/>
+        android:textAlignment="center"/>
 
 
 </RelativeLayout>

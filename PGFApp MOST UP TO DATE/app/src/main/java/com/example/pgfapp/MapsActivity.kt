@@ -141,6 +141,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.d("Ignore", "ignore")
     }
 
+    /*
+    Function Name: updateMarker
+    Parameters: LatLng newLocation
+     */
     private fun updateMarker(newLocation: LatLng) {
         try {
             // Remove the previous marker, if it exists

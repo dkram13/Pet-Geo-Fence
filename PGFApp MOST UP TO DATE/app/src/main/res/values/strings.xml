@@ -46,5 +46,6 @@
     <string name="boundary_1_active_n_boundary_2_inactive_n_boundary_3_inactive">Boundary 1 | Pets | Active\nBoundary 2 | Pets | Inactive \nBoundary 3 | Pets | Inactive</string>
     <string name="boundaries">Boundaries</string>
     <string name="dashed_line">----------------------------</string>
+    <string name="title_activity_edit_bounds">EditBoundsActivity</string>
 
 </resources>
