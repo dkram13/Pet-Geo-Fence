@@ -12,8 +12,11 @@ import androidx.compose.runtime.Composable
 import com.example.pgfapp.databinding.ActivityMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Polygon
 import com.google.firebase.auth.ktx.auth
@@ -24,6 +27,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+import org.json.JSONObject
+
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -32,6 +37,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var binding: ActivityMapsBinding
     private lateinit var boundsAct: BoundsActivity
+    private var currentMarker: Marker? = null
 
     /*
     Function Name: onCreate
@@ -49,10 +55,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        //coap server stuff
+        /*//coap server stuff
         Log.d("CoapUtils", "Starting Observed Stuff")
         val uri = "coap://californium.eclipseprojects.io/obs-pumping-non"
-        CoapUtils.observeCoapResource(uri, lifecycleScope)
+        CoapUtils.observeCoapResource(uri, lifecycleScope)*/
     }
 
     /*
@@ -80,6 +86,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(false)
         mMap.getUiSettings().setMapToolbarEnabled(false)
 
+        // Get updated location
+        Log.d("CoapUtils", "Starting Observed Stuff")
+        val uri = "coap://15.204.232.135:5683/batch"
+        CoapUtils.observeCoapResource(uri, lifecycleScope) { newLocation ->
+            Log.d("MainActivity", "New Location Observed!")
+            Log.d("MainActivity", newLocation)
+            // Update the UI or handle the new location as needed
+
+            val jsonObject = JSONObject(newLocation)
+            val latitude = jsonObject.getDouble("latitude")
+            val longitude = jsonObject.getDouble("longitude")
+            val newLatLng = LatLng(latitude, longitude)
+
+            // Update marker on map
+            runOnUiThread {
+                updateMarker(newLatLng)
+            }
+        }
 
         //when pet gets out of the boundaries, allow the user to scroll through the map
         // ->code for that goes here
@@ -115,5 +139,25 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     fun testGetCoapReq(v: View?) {
         //CoapUtils.onSendCoapGetRq(lifecycleScope)
         Log.d("Ignore", "ignore")
+    }
+
+    private fun updateMarker(newLocation: LatLng) {
+        try {
+            // Remove the previous marker, if it exists
+            currentMarker?.remove()
+
+            // Add a new marker at the updated location
+            currentMarker = mMap.addMarker(
+                MarkerOptions()
+                    .position(newLocation)
+                    .title("Observed Location")
+                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.cust_mark))
+            )
+
+            // Move the camera to the new marker location
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(newLocation))
+        } catch (e: Exception) {
+            Log.e("MapError", "Error creating marker: ${e.message}", e)
+        }
     }
 }
