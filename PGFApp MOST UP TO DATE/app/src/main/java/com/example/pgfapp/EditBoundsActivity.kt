@@ -132,6 +132,11 @@ class EditBoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         polygon = mMap.addPolygon(polygonOptions)
     }
 
+    /*
+    Function Name: updatePolygon
+    Description: Clears the boundary point arraylist and then
+                 repopulates it with the updated boundary points.
+     */
     private fun updatePolygon(){
         // Update polygon points with current marker positions
         bounds.clear()
