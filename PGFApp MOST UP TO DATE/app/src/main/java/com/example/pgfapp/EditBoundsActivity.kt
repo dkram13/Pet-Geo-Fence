@@ -1,6 +1,11 @@
 package com.example.pgfapp
 
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.pgfapp.databinding.ActivityEditBoundsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -75,9 +80,6 @@ class EditBoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         var p4 = LatLng(39.76278934043762, -75.970548838377)
         val mark4 = mMap.addMarker(MarkerOptions().position(p4).title("Point 4").icon(BitmapDescriptorFactory.fromResource(R.mipmap.cust_mark)).draggable(true))
 
-        //ANYTHING BELOW THIS LINE IS TEMPORARY
-        bounds = ArrayList<LatLng>()
-
         bounds.add(0, p1)
         bounds.add(1, p2)
         bounds.add(2, p3)
@@ -89,6 +91,11 @@ class EditBoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         markers.add(3, mark4)
         //ANYTHING BEYOND THIS LINE IS NOT TEMPORARY
 
+        //FOR PULLING STUFF FROM THE BOUNDARY
+        // ->read each point into the bounds array
+        // ->read each marker into a mutableListOf<Markers?>
+
+        //the initial boundary drawing
         drawBounds()
 
         mMap.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
@@ -165,9 +172,30 @@ class EditBoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     Description: Sends the updated boundary coordinates to the database
      */
     private fun updateDB(){
-
+        //send the coordinates to the database
     }
 
+    fun onEditCheck(v: View?) {
+        // Create an alert builder
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Do You Want To Save Your Edits To This Boundary?")
+
+        // set the custom layout
+        val customLayout: View = layoutInflater.inflate(R.layout.custome_layout_2, null)
+        builder.setView(customLayout)
+
+        // add a button
+        builder.setPositiveButton("Yes") { dialog: DialogInterface?, which: Int ->
+            // send data from the AlertDialog to the database
+            startActivity(Intent(this@EditBoundsActivity, MapsActivity::class.java))
+        }
+        builder.setNegativeButton("No") { dialog: DialogInterface?, which: Int ->
+            //close the alertdialog
+        }
+        // create and show the alert dialog
+        val dialog = builder.create()
+        dialog.show()
+    }
 
 }
 

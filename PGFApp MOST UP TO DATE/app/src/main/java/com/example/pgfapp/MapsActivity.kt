@@ -144,6 +144,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     /*
     Function Name: updateMarker
     Parameters: LatLng newLocation
+    Description: updates the marker in terms of the current location
      */
     private fun updateMarker(newLocation: LatLng) {
         try {
@@ -155,7 +156,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 MarkerOptions()
                     .position(newLocation)
                     .title("Observed Location")
-                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.cust_mark))
+                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.logo_launcher))
             )
 
             // Move the camera to the new marker location
@@ -163,5 +164,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         } catch (e: Exception) {
             Log.e("MapError", "Error creating marker: ${e.message}", e)
         }
+    }
+
+    fun toEditBounds(v: View?){
+        startActivity(Intent(this@MapsActivity, EditBoundsActivity::class.java))
     }
 }
