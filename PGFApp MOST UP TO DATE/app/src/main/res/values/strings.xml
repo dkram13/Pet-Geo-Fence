@@ -50,5 +50,6 @@
     <string name="test_1">test 1 |</string>
     <string name="list_pets">List Pets</string>
     <string name="bar">|</string>
+    <string name="edit_boundary">Edit Boundary</string>
 
 </resources>

@@ -13,7 +13,7 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="match_parent"
         tools:context=".MapsActivity"/>
 
 
@@ -48,7 +48,7 @@
     <!--Boundary Info Tab-->
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="900dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="450dp"
         android:src="@drawable/rectangle"
         android:contentDescription="@string/boundary_info_tab"
@@ -63,7 +63,7 @@
         android:textSize="34sp"
         android:textAlignment="center"
         android:fontFamily="@font/montserratbold"
-        android:paddingTop="520dp"/>
+        android:paddingTop="550dp"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -72,58 +72,58 @@
         android:textSize="34sp"
         android:textAlignment="center"
         android:fontFamily="@font/montserratbold"
-        android:paddingTop="550dp"/>
+        android:paddingTop="580dp"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
         android:text="@string/test_1"
         android:textSize="30sp"
-        android:paddingTop="600dp"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="630dp"
         android:fontFamily="@font/montserratbold"/>
 
     <Switch
         android:id="@+id/simpleSwitch"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:paddingTop="615dp"
-        android:textAlignment="center"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="130dp"
+        android:layout_marginTop="630dp"
         android:checked="true"
         tools:ignore="UseSwitchCompatOrMaterialXml"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/bar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:fontFamily="@font/montserratbold"
-        android:textSize="30sp"
-        android:paddingTop="600dp"
-        android:layout_marginStart="200dp"/>
+        android:layout_marginStart="200dp"
+        android:layout_marginTop="630dp"
+        android:text="@string/bar"
+        android:textSize="30sp" />
 
     <ImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:contentDescription="@string/list_pets"
-        android:layout_marginTop="600dp"
+        android:layout_marginTop="630dp"
         android:layout_marginStart="230dp"
         android:src="@drawable/baseline_pets_24"/>
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/bar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:fontFamily="@font/montserratbold"
-        android:textSize="30sp"
-        android:paddingTop="600dp"
-        android:layout_marginStart="300dp"/>
+        android:layout_marginStart="300dp"
+        android:layout_marginTop="630dp"
+        android:text="@string/bar"
+        android:textSize="30sp" />
 
     <ImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:onClick="toEditBounds"
-        android:contentDescription="@string/list_pets"
-        android:layout_marginTop="600dp"
+        android:contentDescription="@string/edit_boundary"
+        android:layout_marginTop="630dp"
         android:layout_marginStart="330dp"
         android:src="@drawable/edit_button"/>
 
