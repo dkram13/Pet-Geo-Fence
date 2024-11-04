@@ -156,7 +156,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 MarkerOptions()
                     .position(newLocation)
                     .title("Observed Location")
-                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.logo_launcher))
+                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.cust_mark))
             )
 
             // Move the camera to the new marker location
