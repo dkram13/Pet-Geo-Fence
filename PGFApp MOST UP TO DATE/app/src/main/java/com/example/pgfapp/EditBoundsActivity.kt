@@ -152,7 +152,6 @@ class EditBoundsActivity : AppCompatActivity(), OnMapReadyCallback {
                 bounds.add(marker.position)
             }
         }
-
     }
 
     /*
