@@ -68,18 +68,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         // ->code for that goes here
         grabBoarder()
 
-        /*this bit of code here just zooms in on the sample location we're using*/
-        /*if you want, you can change it to be your backyard or another area*/
-        //sample placement of the yard
+        /*Sample location
         val sampleYard = LatLng(39.7625051, -75.9706618)
-        //focuses the camera on a single area
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sampleYard, 20f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sampleYard, 20f))*/
 
         //keep map in place when pet is within boundaries by disabling gesture controls
-        mMap.getUiSettings().setScrollGesturesEnabled(false)
-        mMap.getUiSettings().setZoomGesturesEnabled(false)
-        mMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(false)
-        mMap.getUiSettings().setMapToolbarEnabled(false)
+        mMap.getUiSettings().setScrollGesturesEnabled(true) //allows for scrolling
+        mMap.getUiSettings().setZoomGesturesEnabled(false) //does not allow for zooming
+        mMap.getUiSettings().setMapToolbarEnabled(true) //map toolbar enabled for accessibility
 
         // Get updated location
         Log.d("CoapUtils", "Starting Observed Stuff")
@@ -238,7 +234,7 @@ Purpose       : Draw the boundary based on the user-input
             )
 
             // Move the camera to the new marker location
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(newLocation))
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 20f))
         } catch (e: Exception) {
             Log.e("MapError", "Error creating marker: ${e.message}", e)
         }
