@@ -1,10 +1,12 @@
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.googleAndroidLibrariesMapsplatformSecretsGradlePlugin)
     id("com.google.gms.google-services")
+    id("kotlin-kapt")
 }
-
+//def room_version = "2.5.2" // Check for the latest version
 android {
     namespace = "com.example.pgfapp"
     compileSdk = 34
@@ -86,5 +88,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
     implementation("org.eclipse.californium:californium-core:3.12.0")
+    implementation("androidx.room:room-runtime:2.5.2")
+    kapt("androidx.room:room-compiler:2.5.2")
 }
 
