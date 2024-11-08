@@ -1,32 +1,21 @@
 package com.example.pgfapp
 
 import CoapUtils
-import androidx.lifecycle.lifecycleScope
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.Composable
+import androidx.lifecycle.lifecycleScope
 import com.example.pgfapp.databinding.ActivityMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Polygon
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
-import org.eclipse.californium.core.CoapClient
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import org.json.JSONObject
 
 
@@ -59,6 +48,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.d("CoapUtils", "Starting Observed Stuff")
         val uri = "coap://californium.eclipseprojects.io/obs-pumping-non"
         CoapUtils.observeCoapResource(uri, lifecycleScope)*/
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Your custom code here
+        // For example, pause a video, save data, or release resource
+        Log.d("ActivityLifecycle", "onPause called")
+        CoapUtils.cancelObserveCoapResource()
     }
 
     /*
@@ -156,7 +153,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 MarkerOptions()
                     .position(newLocation)
                     .title("Observed Location")
-                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.logo_launcher))
+                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.cust_mark))
             )
 
             // Move the camera to the new marker location
