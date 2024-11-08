@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.pgfapp.databinding.ActivityBoundsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -163,6 +164,11 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         //val geoPoints = listOf(GeoPoint(bounds))
         val boarderName = name?.text.toString()
         if (user != null) {
+
+            // Send to CoAP TEST
+            val uri = "coap://15.204.232.135:5683/boundary"
+            CoapUtils.sendCoordinates(uri, bounds, lifecycleScope)
+
             val uid = user?.uid
             val geoPoints = bounds.map { latLng ->
                 GeoPoint(latLng.latitude, latLng.longitude)}
@@ -249,6 +255,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
             val editText = customLayout.findViewById<EditText>(R.id.editText)
             saveToDB(v, editText)
         }
+
         builder.setNegativeButton("Cancel"){ dialog: DialogInterface?, which: Int ->
         //close the alertdialog
 

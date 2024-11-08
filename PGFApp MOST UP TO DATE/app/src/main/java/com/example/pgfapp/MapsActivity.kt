@@ -14,6 +14,8 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -54,6 +56,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.d("CoapUtils", "Starting Observed Stuff")
         val uri = "coap://californium.eclipseprojects.io/obs-pumping-non"
         CoapUtils.observeCoapResource(uri, lifecycleScope)*/
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Your custom code here
+        // For example, pause a video, save data, or release resource
+        Log.d("ActivityLifecycle", "onPause called")
+        CoapUtils.cancelObserveCoapResource()
     }
 
     /*
