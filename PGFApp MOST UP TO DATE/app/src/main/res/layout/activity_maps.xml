@@ -68,11 +68,11 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/dashed_line"
-        android:textSize="34sp"
-        android:textAlignment="center"
         android:fontFamily="@font/montserratbold"
-        android:paddingTop="580dp"/>
+        android:paddingTop="580dp"
+        android:text="@string/dashed_line"
+        android:textAlignment="center"
+        android:textSize="34sp" />
 
     <TextView
         android:layout_width="120dp"
