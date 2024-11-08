@@ -16,6 +16,13 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.Polygon
+import com.google.android.gms.maps.model.PolygonOptions
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import org.json.JSONObject
 
 
@@ -27,6 +34,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMapsBinding
     private lateinit var boundsAct: BoundsActivity
     private var currentMarker: Marker? = null
+    private var polygon: Polygon? = null //polygon object
 
     /*
     Function Name: onCreate
@@ -68,20 +76,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
         //pull boundaries from the database
         // ->code for that goes here
+        grabBoarder()
 
-
-        /*this bit of code here just zooms in on the sample location we're using*/
-        /*if you want, you can change it to be your backyard or another area*/
-        //sample placement of the yard
+        /*Sample location
         val sampleYard = LatLng(39.7625051, -75.9706618)
-        //focuses the camera on a single area
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sampleYard, 20f))
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sampleYard, 20f))*/
 
         //keep map in place when pet is within boundaries by disabling gesture controls
-        mMap.getUiSettings().setScrollGesturesEnabled(false)
-        mMap.getUiSettings().setZoomGesturesEnabled(false)
-        mMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(false)
-        mMap.getUiSettings().setMapToolbarEnabled(false)
+        mMap.getUiSettings().setScrollGesturesEnabled(true) //allows for scrolling
+        mMap.getUiSettings().setZoomGesturesEnabled(false) //does not allow for zooming
+        mMap.getUiSettings().setMapToolbarEnabled(true) //map toolbar enabled for accessibility
 
         // Get updated location
         Log.d("CoapUtils", "Starting Observed Stuff")
@@ -138,6 +142,89 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         Log.d("Ignore", "ignore")
     }
 
+    fun grabBoarder() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("Boarder").document("5THHdolYzs3uJm1VxVh0")
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val boarderName = document.getString("Boarder Name")
+                    val geoPoints = document.get("GeoFence Points") as? List<GeoPoint>
+                    val uuid = document.getString("UUID")
+                    if (geoPoints != null) {
+                        // Use map to convert GeoPoints to LatLng and store in ArrayList
+                        val latLngList = ArrayList(geoPoints.map { geoPoint ->
+                            LatLng(geoPoint.latitude, geoPoint.longitude)
+                        })
+                        latLngList.forEachIndexed { index, latLng ->
+                            Log.d("MapsActivity", "GeoPoint $index: Latitude = ${latLng.latitude}, Longitude = ${latLng.longitude}")
+                        }
+                    drawPolygon(latLngList)
+                    }
+                    /*if (geoPoints != null) {
+                        // Loop through each GeoPoint and print its details
+                        geoPoints.forEachIndexed { index, geoPoint ->
+                            Log.d("FirestoreData", "GeoPoint $index: Latitude = ${geoPoint.latitude}, Longitude = ${geoPoint.longitude}")
+                        }
+                    } else {
+                        Log.d("FirestoreData", "No Geo Points found.")
+                    }*/
+                }
+                else {
+                    println("Document does not exist") }
+                }
+            .addOnFailureListener { exception ->
+                // Log the exception for debugging
+                println("Error fetching document: ${exception.message}")
+            }
+
+    }
+    /*
+Function Name : drawPolygon
+Parameters    : N/A
+Purpose       : Draw the boundary based on the user-input
+ */
+    fun drawPolygon(latLngList: List<LatLng>) {
+        // If a polygon already exists, remove it
+        polygon?.remove()
+
+        // Set up polygon options
+        val polygonOptions = PolygonOptions()
+            .addAll(latLngList)
+            .strokeColor(android.graphics.Color.RED)
+            .fillColor(android.graphics.Color.argb(50, 255, 0, 0))
+
+        // Add the polygon to the map
+        polygon = mMap.addPolygon(polygonOptions)
+
+        // Ensure the map view fits within the bounds of the polygon
+        fitBounds(latLngList)
+    }
+
+    /*
+    Function Name : fitBounds
+    Parameters    : List<LatLng> (latLngList)
+    Purpose       : Adjusts the map view to fit the boundary of the given LatLng points
+    */
+    fun fitBounds(latLngList: List<LatLng>) {
+        if (latLngList.isNotEmpty()) {
+            // Set up the boundary builder
+            val boundsBuilder = LatLngBounds.Builder()
+
+            // Include each point in the boundary
+            latLngList.forEach { point ->
+                boundsBuilder.include(point)
+            }
+
+            // Build the boundary
+            val bounds = boundsBuilder.build()
+
+            // Adjust the map view with a bit of padding around the polygon
+            val padding = 100 // Adjust as necessary
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
+        }
+    }
+
     /*
     Function Name: updateMarker
     Parameters: LatLng newLocation
@@ -157,7 +244,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             )
 
             // Move the camera to the new marker location
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(newLocation))
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 20f))
         } catch (e: Exception) {
             Log.e("MapError", "Error creating marker: ${e.message}", e)
         }

@@ -1,11 +1,13 @@
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.googleAndroidLibrariesMapsplatformSecretsGradlePlugin)
     id("com.google.gms.google-services")
     kotlin("plugin.serialization") version "2.0.21"
+    id("kotlin-kapt")
 }
-
+//def room_version = "2.5.2" // Check for the latest version
 android {
     namespace = "com.example.pgfapp"
     compileSdk = 34
@@ -88,5 +90,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
     implementation("org.eclipse.californium:californium-core:3.12.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+    implementation("androidx.room:room-runtime:2.5.2")
+    kapt("androidx.room:room-compiler:2.5.2")
 }
 
