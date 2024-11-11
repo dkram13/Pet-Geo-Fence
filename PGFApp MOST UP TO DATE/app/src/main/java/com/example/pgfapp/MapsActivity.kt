@@ -333,6 +333,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val dividerBar2 = findViewById<View>(R.id.bar2) as TextView
         dividerBar2.visibility = View.VISIBLE
 
+        //hide the buttons we dont need
+        val backArrow = findViewById<View>(R.id.back) as ImageButton
+        backArrow.visibility = View.GONE
+        val checkMark = findViewById<View>(R.id.check) as ImageButton
+        checkMark.visibility = View.GONE
+
         onBackArrow(v)
     }
 
