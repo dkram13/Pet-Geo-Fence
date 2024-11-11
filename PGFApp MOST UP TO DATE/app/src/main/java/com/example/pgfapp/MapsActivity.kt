@@ -80,7 +80,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     /*
     Function Name : onMapReady
     Parameters    : GoogleMap googleMap
-    Description   : Creates and displays the map to the user
+    Description   : Creates and displays the map to the user,
+                    Grabs and displays the border the user currently has selected,
+                    Gets the updated location of the pet from the CoAP server
     */
     override fun onMapReady(googleMap: GoogleMap){
         //initialize the google map
@@ -127,7 +129,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     /*
     Function Name : gotoHub
     Parameters    : View v
-    Description   : sends the user to the hub activity
+    Description   : sends the user to the settings
      */
     fun gotoHub(v: View?) {
         startActivity(Intent(this@MapsActivity, HubActivity::class.java))
@@ -242,7 +244,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     /*
     Function Name : updateMarker
     Parameters    : LatLng newLocation
-    Description   : updates the marker in terms of the current location
+    Description   : Updates the marker in terms of the current location
      */
     private fun updateMarker(newLocation: LatLng) {
         try {
@@ -266,7 +268,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     /*
     Function Name : hideButtons
-    Description   : hides the all the buttons and UI elements belonging to the main maps page
+    Description   : Hides the all the buttons and UI elements belonging to the main maps page
      */
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     fun hideButtons(){
@@ -342,16 +344,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         onBackArrow(v)
     }
 
+    /*
+    Function Name: onBackArrow
+    Parameters:
+    Description: Clears the map of all markers/polygons/things we don't need,
+                 Clears the markers mutable List,
+                 and grabs the most up to date border
+     */
     private fun onBackArrow(v: View?){
-        mMap.clear() //clear the map of all things not needed
+        mMap.clear()
         markers.clear()
-        grabBorder() //grab the most up to date border
+        grabBorder()
     }
 
     /*
     Function Name : updatePolygon
     Description   : Clears the boundary point arraylist and then
-                   repopulates it with the updated boundary points.
+                    repopulates it with the updated boundary points.
     */
     fun updatePolygon(){
         // Update polygon points with current marker positions
@@ -365,8 +374,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     /*
     Function    : editBounds
-    Parameters  : View v
-    Description : allows the user to edit the selected boundary
+    Parameters  : View v - the current activity view
+    Description : Hides the UI elements we do not currently need,
+                  Makes necessary UI elements visible,
+                  and then allows the user to edit the selected boundary.
      */
     fun editBounds(v: View?){
         hideButtons() //hide all the buttons
