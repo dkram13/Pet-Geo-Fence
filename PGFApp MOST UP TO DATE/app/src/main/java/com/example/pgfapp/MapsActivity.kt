@@ -338,6 +338,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun onBackArrow(v: View?){
         mMap.clear() //clear the map of all things not needed
+        markers.clear()
         grabBorder() //grab the most up to date border
     }
 
