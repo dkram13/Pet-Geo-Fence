@@ -40,6 +40,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var bounds = ArrayList<LatLng>()
     private var markers = mutableListOf<Marker?>()
     private lateinit var boundAct: BoundsActivity
+    private var locInaccRadius: Double? = null
     private var marker: Marker? = null
     private var polygon: Polygon? = null //polygon object
 
@@ -191,7 +192,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             // Remove the previous marker, if it exists
             currentMarker?.remove()
 
-            val radius = 0 
+            locInaccRadius = 0
 
             // Add a new marker at the updated location
             currentMarker = mMap.addMarker(
