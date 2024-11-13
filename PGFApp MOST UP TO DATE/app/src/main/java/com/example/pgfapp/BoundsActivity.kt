@@ -107,7 +107,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     Parameters    : N/A
     Purpose       : Draw the boundary based on the user-input
      */
-    public fun drawPolygon() {
+    fun drawPolygon() {
 
         //if polygon is not null
         if (polygon != null) {
@@ -133,7 +133,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     Parameters    : N/A
     Purpose       : Make sure that the boundary fits properly
      */
-    public fun fitBounds() {
+    fun fitBounds() {
 
         //if the bounds array is not empty
         if (bounds.isNotEmpty()) {

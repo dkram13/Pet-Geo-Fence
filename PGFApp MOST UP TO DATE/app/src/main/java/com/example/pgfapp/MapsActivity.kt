@@ -39,10 +39,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var currentMarker: Marker? = null
     private var bounds = ArrayList<LatLng>()
     private var markers = mutableListOf<Marker?>()
-    private lateinit var editBound: EditBoundsActivity
+    private lateinit var boundAct: BoundsActivity
     private var marker: Marker? = null
     private var polygon: Polygon? = null //polygon object
 
+
+    //METHODS THAT CREATE THE PAGE LAYOUT AND/OR THE FLOW OF THE ACTIVITY
     /*
     Function Name : onCreate
     Parameters    : Bundle savedInstanceState
@@ -96,7 +98,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         //keep map in place when pet is within boundaries by disabling gesture controls
         mMap.getUiSettings().setScrollGesturesEnabled(true) //allows for scrolling
-        mMap.getUiSettings().setZoomGesturesEnabled(false) //does not allow for zooming
+        mMap.getUiSettings().setZoomGesturesEnabled(true) //does not allow for zooming
         mMap.getUiSettings().setMapToolbarEnabled(true) //map toolbar enabled for accessibility
 
         // Get updated location
@@ -121,29 +123,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         //when pet gets out of the boundaries, allow the user to scroll through the map
         // ->code for that goes here
 
-        //display the boundary if it exists
-        // ->code for that goes here
-
     }
 
-    /*
-    Function Name : gotoHub
-    Parameters    : View v
-    Description   : sends the user to the settings
-     */
-    fun gotoHub(v: View?) {
-        startActivity(Intent(this@MapsActivity, HubActivity::class.java))
-    }
 
-    /*
-    Function Name : gotoDrawBounds
-    Parameters    : View v
-    Description   : Sends the user to the draw boundaries activity
-    */
-    fun gotoDrawBounds(v: View?){
-        startActivity(Intent(this@MapsActivity, BoundsActivity::class.java))
-    }
 
+    //METHODS THAT DEAL WITH THE DATABASE
     /*
     Function Name : testGetCoapReq
     Parameters    : View v
@@ -153,6 +137,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         //CoapUtils.onSendCoapGetRq(lifecycleScope)
         Log.d("Ignore", "ignore")
     }
+
 
     /*
     Function Name : grabBorder
@@ -195,51 +180,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
 
     }
-    /*
-    Function Name : drawPolygon
-    Parameters    : List<LatLng> latLngList
-    Purpose       : Draw the boundary based on the user-input
-    */
-    fun drawPolygon(latLngList: List<LatLng>) {
-        // If a polygon already exists, remove it
-        polygon?.remove()
-
-        // Set up polygon options
-        val polygonOptions = PolygonOptions()
-            .addAll(latLngList)
-            .strokeColor(android.graphics.Color.RED)
-            .fillColor(android.graphics.Color.argb(50, 255, 0, 0))
-
-        // Add the polygon to the map
-        polygon = mMap.addPolygon(polygonOptions)
-
-        // Ensure the map view fits within the bounds of the polygon
-        fitBounds(latLngList)
-    }
-
-    /*
-    Function Name : fitBounds
-    Parameters    : List<LatLng> latLngList
-    Purpose       : Adjusts the map view to fit the boundary of the given LatLng points
-    */
-    private fun fitBounds(latLngList: List<LatLng>) {
-        if (latLngList.isNotEmpty()) {
-            // Set up the boundary builder
-            val boundsBuilder = LatLngBounds.Builder()
-
-            // Include each point in the boundary
-            latLngList.forEach { point ->
-                boundsBuilder.include(point)
-            }
-
-            // Build the boundary
-            val bounds = boundsBuilder.build()
-
-            // Adjust the map view with a bit of padding around the polygon
-            val padding = 100 // Adjust as necessary
-            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
-        }
-    }
 
     /*
     Function Name : updateMarker
@@ -266,6 +206,72 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+
+
+    //METHODS THAT DEAL WITH THE POLYGON DRAWING
+    /*
+    Function Name : drawPolygon
+    Parameters    : List<LatLng> latLngList
+    Purpose       : Draw the boundary based on the user-input
+    */
+    fun drawPolygon(latLngList: List<LatLng>) {
+        // If a polygon already exists, remove it
+        polygon?.remove()
+
+        // Set up polygon options
+        val polygonOptions = PolygonOptions()
+            .addAll(latLngList)
+            .strokeColor(android.graphics.Color.RED)
+            .fillColor(android.graphics.Color.argb(50, 255, 0, 0))
+
+        // Add the polygon to the map
+        polygon = mMap.addPolygon(polygonOptions)
+
+        // Ensure the map view fits within the bounds of the polygon
+        fitBounds(latLngList)
+    }
+
+    /*
+    Function Name : updatePolygon
+    Description   : Clears the boundary point arraylist and then
+                repopulates it with the updated boundary points.
+    */
+    fun updatePolygon(){
+        // Update polygon points with current marker positions
+        bounds.clear()
+        for(marker in markers){
+            if(marker != null){
+                bounds.add(marker.position)
+            }
+        }
+    }
+
+    /*
+    Function Name : fitBounds
+    Parameters    : List<LatLng> latLngList
+    Purpose       : Adjusts the map view to fit the boundary of the given LatLng points
+    */
+    private fun fitBounds(latLngList: List<LatLng>) {
+        if (latLngList.isNotEmpty()) {
+            // Set up the boundary builder
+            val boundsBuilder = LatLngBounds.Builder()
+
+            // Include each point in the boundary
+            latLngList.forEach { point ->
+                boundsBuilder.include(point)
+            }
+
+            // Build the boundary
+            val bounds = boundsBuilder.build()
+
+            // Adjust the map view with a bit of padding around the polygon
+            val padding = 100 // Adjust as necessary
+            mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
+        }
+    }
+
+
+    //METHODS THAT DEAL WITH HIDING/REVEALING UI ELEMENTS
     /*
     Function Name : hideButtons
     Description   : Hides the all the buttons and UI elements belonging to the main maps page
@@ -335,7 +341,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val dividerBar2 = findViewById<View>(R.id.bar2) as TextView
         dividerBar2.visibility = View.VISIBLE
 
-        //hide the buttons we dont need
+        //hide the buttons we don't need
         val backArrow = findViewById<View>(R.id.back) as ImageButton
         backArrow.visibility = View.GONE
         val checkMark = findViewById<View>(R.id.check) as ImageButton
@@ -344,12 +350,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         onBackArrow(v)
     }
 
+
+
+    //METHODS THAT CONTROL WHAT A BUTTON DOES
     /*
-    Function Name: onBackArrow
-    Parameters:
-    Description: Clears the map of all markers/polygons/things we don't need,
-                 Clears the markers mutable List,
-                 and grabs the most up to date border
+    Function Name   : onBackArrow
+    Parameters      : View v
+    Description     : Clears the map of all markers/polygons/things we don't need,
+                      Clears the markers mutable List,
+                      and grabs the most up to date border
      */
     private fun onBackArrow(v: View?){
         mMap.clear()
@@ -357,27 +366,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         grabBorder()
     }
 
-    /*
-    Function Name : updatePolygon
-    Description   : Clears the boundary point arraylist and then
-                    repopulates it with the updated boundary points.
-    */
-    fun updatePolygon(){
-        // Update polygon points with current marker positions
-        bounds.clear()
-        for(marker in markers){
-            if(marker != null){
-                bounds.add(marker.position)
-            }
-        }
-    }
 
     /*
-    Function    : editBounds
-    Parameters  : View v - the current activity view
-    Description : Hides the UI elements we do not currently need,
-                  Makes necessary UI elements visible,
-                  and then allows the user to edit the selected boundary.
+    Function Name : editBounds
+    Parameters    : View v - the current activity view
+    Description   : Hides the UI elements we do not currently need,
+                    Makes necessary UI elements visible,
+                    and then allows the user to edit the selected boundary.
      */
     fun editBounds(v: View?){
         hideButtons() //hide all the buttons
@@ -389,9 +384,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         checkBtn.visibility = View.VISIBLE
 
         //loop to get each marker
+        var count = 1
         for(point in bounds){
-            marker = mMap.addMarker(MarkerOptions().position(point).title("Point").icon(BitmapDescriptorFactory.fromResource(R.mipmap.cust_mark)).draggable(true))
+            marker = mMap.addMarker(MarkerOptions().position(point).title("Point $count").icon(BitmapDescriptorFactory.fromResource(R.mipmap.cust_mark)).draggable(true))
             markers.add(marker)
+            count += 1
         }
 
         mMap.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
@@ -408,5 +405,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 drawPolygon(bounds)
             }
         })
+    }
+
+
+    // METHODS THAT SEND THE USER TO A DIFFERENT ACTIVITY
+    /*
+    Function Name : gotoHub
+    Parameters    : View v
+    Description   : sends the user to the settings
+    */
+    fun gotoHub(v: View?) {
+        startActivity(Intent(this@MapsActivity, HubActivity::class.java))
+    }
+
+    /*
+    Function Name : gotoDrawBounds
+    Parameters    : View v
+    Description   : Pauses the CoAP server and
+                    Sends the user to the draw boundaries activity
+    */
+    fun gotoDrawBounds(v: View?){
+        onPause()
+        startActivity(Intent(this@MapsActivity, BoundsActivity::class.java))
     }
 }
