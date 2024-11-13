@@ -6,10 +6,10 @@
       
     <path android:fillColor="#D1E5F0" android:pathData="M10,0L40,0A10,10 0,0 1,50 10L50,40A10,10 0,0 1,40 50L10,50A10,10 0,0 1,0 40L0,10A10,10 0,0 1,10 0z"/>
       
-    <path android:fillColor="#00000000" android:pathData="M16,25H34" android:strokeColor="#1E2022" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeWidth="3"/>
+    <path android:fillColor="#00000000" android:pathData="M16,25H34" android:strokeColor="#B31529" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeWidth="3"/>
       
-    <path android:fillColor="#00000000" android:pathData="M16,19H34" android:strokeColor="#1E2022" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeWidth="3"/>
+    <path android:fillColor="#00000000" android:pathData="M16,19H34" android:strokeColor="#B31529" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeWidth="3"/>
       
-    <path android:fillColor="#00000000" android:pathData="M16,31H34" android:strokeColor="#1E2022" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeWidth="3"/>
+    <path android:fillColor="#00000000" android:pathData="M16,31H34" android:strokeColor="#B31529" android:strokeLineCap="round" android:strokeLineJoin="round" android:strokeWidth="3"/>
     
 </vector>
