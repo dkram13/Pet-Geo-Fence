@@ -191,6 +191,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             // Remove the previous marker, if it exists
             currentMarker?.remove()
 
+            val radius = 0 
+
             // Add a new marker at the updated location
             currentMarker = mMap.addMarker(
                 MarkerOptions()
