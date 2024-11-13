@@ -192,7 +192,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             // Remove the previous marker, if it exists
             currentMarker?.remove()
 
-            locInaccRadius = 0
+            locInaccRadius = 0.00
 
             // Add a new marker at the updated location
             currentMarker = mMap.addMarker(
