@@ -134,7 +134,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     fun grabBoarder() {
         val db = FirebaseFirestore.getInstance()
-        db.collection("Boarder").document("5THHdolYzs3uJm1VxVh0")
+        db.collection("Boarder").document("9bJOQc0cPMfoqfuioXRr")
             .get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {

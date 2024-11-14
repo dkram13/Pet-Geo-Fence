@@ -90,5 +90,6 @@ dependencies {
     implementation("org.eclipse.californium:californium-core:3.12.0")
     implementation("androidx.room:room-runtime:2.5.2")
     kapt("androidx.room:room-compiler:2.5.2")
+    implementation("com.google.code.gson:gson:2.10.1")
 }
 
