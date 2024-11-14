@@ -125,6 +125,4 @@ class MainActivity : AppCompatActivity() {
     fun gotoMaps() {
         startActivity(Intent(this@MainActivity, MapsActivity::class.java))
     }
-
-
 }

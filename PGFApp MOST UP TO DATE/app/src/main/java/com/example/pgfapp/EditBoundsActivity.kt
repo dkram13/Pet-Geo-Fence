@@ -121,7 +121,7 @@ class EditBoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     Description: Draws the boundary
     Parameters: LatLng p1, LatLng p2, LatLng p3, LatLng p4
      */
-    private fun drawBounds(){
+    fun drawBounds(){
 
         //if polygon is not null
         if (polygon != null) {
@@ -144,7 +144,7 @@ class EditBoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     Description: Clears the boundary point arraylist and then
                  repopulates it with the updated boundary points.
      */
-    private fun updatePolygon(){
+    fun updatePolygon(){
         // Update polygon points with current marker positions
         bounds.clear()
         for(marker in markers){

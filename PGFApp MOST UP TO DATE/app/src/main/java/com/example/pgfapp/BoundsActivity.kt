@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.ViewModelProvider
 import com.example.pgfapp.DatabaseStuff.DatabaseViewModel
 import com.example.pgfapp.DatabaseStuff.Entities.Bounds
@@ -106,7 +107,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     Parameters    : N/A
     Purpose       : Draw the boundary based on the user-input
      */
-    public fun drawPolygon() {
+    fun drawPolygon() {
 
         //if polygon is not null
         if (polygon != null) {
@@ -132,7 +133,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     Parameters    : N/A
     Purpose       : Make sure that the boundary fits properly
      */
-    public fun fitBounds() {
+    fun fitBounds() {
 
         //if the bounds array is not empty
         if (bounds.isNotEmpty()) {
@@ -163,6 +164,11 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         //val geoPoints = listOf(GeoPoint(bounds))
         val boarderName = name?.text.toString()
         if (user != null) {
+
+            // Send to CoAP TEST
+            val uri = "coap://15.204.232.135:5683/boundary"
+            CoapUtils.sendCoordinates(uri, bounds, lifecycleScope)
+
             val uid = user?.uid
             val geoPoints = bounds.map { latLng ->
                 GeoPoint(latLng.latitude, latLng.longitude)
@@ -276,6 +282,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
             val editText = customLayout.findViewById<EditText>(R.id.editText)
             saveToDB(v, editText)
         }
+
         builder.setNegativeButton("Cancel"){ dialog: DialogInterface?, which: Int ->
         //close the alertdialog
 
