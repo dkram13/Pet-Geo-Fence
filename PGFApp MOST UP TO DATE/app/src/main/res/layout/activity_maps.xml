@@ -53,7 +53,7 @@
         android:id="@+id/boundary_info_tab"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="680dp"
+        android:layout_marginTop="490dp"
         android:src="@drawable/rectangle"
         android:contentDescription="@string/boundary_info_tab"
         />
@@ -68,12 +68,12 @@
         android:textSize="34sp"
         android:textAlignment="center"
         android:fontFamily="@font/montserratbold"
-        android:paddingTop="700dp"/>
+        android:paddingTop="550dp"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="710dp"
+        android:paddingTop="580dp"
         android:id="@+id/dashLine"
         android:text="@string/dashed_line"
         android:textAlignment="center"
@@ -89,7 +89,7 @@
         android:text="@string/test_1"
         android:textSize="30sp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="760dp"
+        android:layout_marginTop="630dp"
         android:fontFamily="@font/montserratbold"/>
 
     <Switch
@@ -99,7 +99,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="130dp"
-        android:layout_marginTop="760dp"
+        android:layout_marginTop="630dp"
         android:checked="true"
         tools:ignore="UseSwitchCompatOrMaterialXml"/>
 
@@ -111,7 +111,7 @@
         android:id="@+id/bar"
         android:fontFamily="@font/montserratbold"
         android:layout_marginStart="200dp"
-        android:layout_marginTop="760dp"
+        android:layout_marginTop="630dp"
         android:text="@string/bar"
         android:textSize="30sp" />
 
@@ -120,7 +120,7 @@
         android:background="#D1E5F0"
         android:layout_height="50dp"
         android:contentDescription="@string/list_pets"
-        android:layout_marginTop="760dp"
+        android:layout_marginTop="630dp"
         android:layout_marginStart="230dp"
         android:id="@+id/pets"
         android:visibility="visible"
@@ -134,7 +134,7 @@
         android:fontFamily="@font/montserratbold"
         android:layout_marginStart="300dp"
         android:textColor="#B31529"
-        android:layout_marginTop="760dp"
+        android:layout_marginTop="630dp"
         android:text="@string/bar"
         android:textSize="30sp" />
 
@@ -145,7 +145,7 @@
         android:visibility="visible"
         android:onClick="editBounds"
         android:contentDescription="@string/edit_boundary"
-        android:layout_marginTop="760dp"
+        android:layout_marginTop="630dp"
         android:layout_marginStart="330dp"
         android:id="@+id/edit_bounds_button"
         android:src="@drawable/edit_button"/>
