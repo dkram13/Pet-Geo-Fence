@@ -28,6 +28,11 @@ import com.google.android.gms.maps.model.PolygonOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import org.json.JSONObject
+import android.content.IntentFilter
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.os.Build
+
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -42,6 +47,25 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var editBound: EditBoundsActivity
     private var marker: Marker? = null
     private var polygon: Polygon? = null //polygon object
+
+
+    // Getting event from location foreground service
+    override fun onStart() {
+        super.onStart()
+        val filter = IntentFilter("com.example.pgfapp.LOCATION_UPDATE")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            // For Android 12 (API 31) and higher, specify the receiver's export status
+            registerReceiver(locationReceiver, filter, RECEIVER_EXPORTED)
+        } else {
+            // For older versions, just register the receiver as usual
+            registerReceiver(locationReceiver, filter)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(locationReceiver)
+    }
 
     /*
     Function Name : onCreate
@@ -58,23 +82,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
-        /*//coap server stuff
-        Log.d("CoapUtils", "Starting Observed Stuff")
-        val uri = "coap://californium.eclipseprojects.io/obs-pumping-non"
-        CoapUtils.observeCoapResource(uri, lifecycleScope)*/
-    }
-
-    /*
-    Function Name : onPause
-    Description   : Kills the connection to the CoAP server (if i got this wrong, please correct it)
-     */
-    override fun onPause() {
-        super.onPause()
-        // Your custom code here
-        // For example, pause a video, save data, or release resource
-        Log.d("ActivityLifecycle", "onPause called")
-        CoapUtils.cancelObserveCoapResource()
     }
 
     /*
@@ -96,27 +103,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         //keep map in place when pet is within boundaries by disabling gesture controls
         mMap.getUiSettings().setScrollGesturesEnabled(true) //allows for scrolling
-        mMap.getUiSettings().setZoomGesturesEnabled(false) //does not allow for zooming
         mMap.getUiSettings().setMapToolbarEnabled(true) //map toolbar enabled for accessibility
-
-        // Get updated location
-        Log.d("CoapUtils", "Starting Observed Stuff")
-        val uri = "coap://15.204.232.135:5683/batch"
-        CoapUtils.observeCoapResource(uri, lifecycleScope) { newLocation ->
-            Log.d("MainActivity", "New Location Observed!")
-            Log.d("MainActivity", newLocation)
-            // Update the UI or handle the new location as needed
-
-            val jsonObject = JSONObject(newLocation)
-            val latitude = jsonObject.getDouble("latitude")
-            val longitude = jsonObject.getDouble("longitude")
-            val newLatLng = LatLng(latitude, longitude)
-
-            // Update marker on map
-            runOnUiThread {
-                updateMarker(newLatLng)
-            }
-        }
 
         //when pet gets out of the boundaries, allow the user to scroll through the map
         // ->code for that goes here
@@ -144,14 +131,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         startActivity(Intent(this@MapsActivity, BoundsActivity::class.java))
     }
 
-    /*
-    Function Name : testGetCoapReq
-    Parameters    : View v
-    Description   : tests getting the coap request
-     */
-    fun testGetCoapReq(v: View?) {
-        //CoapUtils.onSendCoapGetRq(lifecycleScope)
-        Log.d("Ignore", "ignore")
+    private val locationReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let {
+                val newLocation = it.getParcelableExtra<LatLng>("newLocation")
+                newLocation?.let { location ->
+                    // Update the marker on the UI thread
+                    runOnUiThread {
+                        updateMarker(location)
+                    }
+                }
+            }
+        }
     }
 
     /*
@@ -260,7 +251,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             )
 
             // Move the camera to the new marker location
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 20f))
+            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 20f))
         } catch (e: Exception) {
             Log.e("MapError", "Error creating marker: ${e.message}", e)
         }

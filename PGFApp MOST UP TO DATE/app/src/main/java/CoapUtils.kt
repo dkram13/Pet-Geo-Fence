@@ -4,14 +4,11 @@ import org.eclipse.californium.core.CoapHandler
 import org.eclipse.californium.core.CoapResponse
 import org.eclipse.californium.core.CoapObserveRelation
 import org.eclipse.californium.core.coap.MediaTypeRegistry
-
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.CoroutineScope
 import com.google.android.gms.maps.model.LatLng
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 
 class CoapUtils {
@@ -54,16 +51,11 @@ class CoapUtils {
             coroutineScope.launch {
                 withContext(Dispatchers.IO) {
                     val client = CoapClient(uri)
+                    val wkt = buildPolygonWKT(bounds)
 
-                    // Convert LatLng objects to a list of maps with 'lat' and 'lng' keys
-                    val coordinatePairs = bounds.map { latLng ->
-                        mapOf("lat" to latLng.latitude, "lng" to latLng.longitude)
-                    }
+                    Log.d("WKT", "WKT POLYGON: $wkt")
 
-                    // Serialize coordinates as JSON
-                    val jsonCoordinates = Json.encodeToString(coordinatePairs)
-
-                    val response = client.put(jsonCoordinates, MediaTypeRegistry.APPLICATION_JSON)
+                    val response = client.put(wkt, MediaTypeRegistry.TEXT_PLAIN)
 
                     if (response.isSuccess) {
                         Log.d(TAG, "Coordinates sent successfully: ${response.responseText}")
@@ -72,6 +64,13 @@ class CoapUtils {
                     }
                 }
             }
+        }
+
+        private fun buildPolygonWKT(bounds: ArrayList<LatLng>): String {
+            val coordinates = bounds.joinToString(", ") { "${it.longitude} ${it.latitude}" }
+            val closedCoordinates = "$coordinates, ${bounds[0].longitude} ${bounds[0].latitude}"
+
+            return "POLYGON(($closedCoordinates))"
         }
     }
 }

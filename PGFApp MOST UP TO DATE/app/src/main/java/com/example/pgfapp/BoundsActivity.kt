@@ -68,9 +68,6 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         //disable gesture controls for a smoother experience
         //->we wouldn't want the user to accidentally move the camera
-        mMap.getUiSettings().setScrollGesturesEnabled(false)
-        mMap.getUiSettings().setZoomGesturesEnabled(false)
-        mMap.getUiSettings().setScrollGesturesEnabledDuringRotateOrZoom(false)
         mMap.getUiSettings().setMapToolbarEnabled(false)
 
         /*this bit of code here just zooms in on the sample location we're using*/
@@ -178,14 +175,12 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
                 "Boarder Name" to boarderName,
                 "GeoFence Points" to geoPoints
             )
-            db.collection("Boarder")
                 .add(boarders)
                 .addOnSuccessListener { documentReference ->
                     Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
                 }
                 .addOnFailureListener { e ->
                     Log.w(TAG, "Error adding document", e)
-                }// User is signed in
         } else {
             // No user is signed in
         }
