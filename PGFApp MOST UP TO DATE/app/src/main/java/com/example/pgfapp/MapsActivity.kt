@@ -261,31 +261,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    /*
-    Function Name : updateMarker
-    Parameters    : LatLng newLocation
-    Description   : Updates the marker in terms of the current location
-     */
-    private fun updateMarker(newLocation: LatLng) {
-        try {
-            // Remove the previous marker, if it exists
-            currentMarker?.remove()
-
-            // Add a new marker at the updated location
-            currentMarker = mMap.addMarker(
-                MarkerOptions()
-                    .position(newLocation)
-                    .title("Observed Location")
-                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.cust_mark))
-            )
-
-            // Move the camera to the new marker location
-            //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 20f))
-        } catch (e: Exception) {
-            Log.e("MapError", "Error creating marker: ${e.message}", e)
-        }
-    }
-
     //METHODS THAT DEAL WITH HIDING/REVEALING UI ELEMENTS
     /*
     Function Name : hideButtons
