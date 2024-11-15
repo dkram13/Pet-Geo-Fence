@@ -53,7 +53,7 @@
         android:id="@+id/boundary_info_tab"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="450dp"
+        android:layout_marginTop="490dp"
         android:src="@drawable/rectangle"
         android:contentDescription="@string/boundary_info_tab"
         />
@@ -64,6 +64,7 @@
         android:visibility="visible"
         android:id="@+id/boundsTxt"
         android:text="@string/boundaries"
+        android:textColor="#B31529"
         android:textSize="34sp"
         android:textAlignment="center"
         android:fontFamily="@font/montserratbold"
@@ -76,6 +77,7 @@
         android:id="@+id/dashLine"
         android:text="@string/dashed_line"
         android:textAlignment="center"
+        android:textColor="#B31529"
         android:textSize="50sp" />
 
     <TextView
@@ -83,6 +85,7 @@
         android:layout_height="50dp"
         android:visibility="visible"
         android:id="@+id/boundsName"
+        android:textColor="#B31529"
         android:text="@string/test_1"
         android:textSize="30sp"
         android:layout_marginStart="20dp"
@@ -91,6 +94,7 @@
 
     <Switch
         android:id="@+id/simpleSwitch"
+        android:background="#D1E5F0"
         android:visibility="visible"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -103,6 +107,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:visibility="visible"
+        android:textColor="#B31529"
         android:id="@+id/bar"
         android:fontFamily="@font/montserratbold"
         android:layout_marginStart="200dp"
@@ -112,6 +117,7 @@
 
     <ImageButton
         android:layout_width="50dp"
+        android:background="#D1E5F0"
         android:layout_height="50dp"
         android:contentDescription="@string/list_pets"
         android:layout_marginTop="630dp"
@@ -127,6 +133,7 @@
         android:id="@+id/bar2"
         android:fontFamily="@font/montserratbold"
         android:layout_marginStart="300dp"
+        android:textColor="#B31529"
         android:layout_marginTop="630dp"
         android:text="@string/bar"
         android:textSize="30sp" />
@@ -134,6 +141,7 @@
     <ImageButton
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:background="#D1E5F0"
         android:visibility="visible"
         android:onClick="editBounds"
         android:contentDescription="@string/edit_boundary"
@@ -148,6 +156,7 @@
     <ImageButton
         android:visibility="gone"
         android:id="@+id/back"
+        android:fillColor="#D1E5F0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
@@ -159,13 +168,14 @@
 
     <ImageButton
         android:visibility="gone"
+        android:fillColor="#D1E5F0"
         android:id="@+id/check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="350dp"
         android:layout_marginTop="5dp"
         android:background="@null"
-        android:onClick="onEditCheck"
+        android:onClick="unHideButtons"
         android:src="@drawable/check_button"
         android:contentDescription="@string/im_done_with_the_boundary" />
     <!--End of Edit Bounds Stuff-->

@@ -1,16 +1,17 @@
 package com.example.pgfapp
 
-import android.content.ContentValues.TAG
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.ViewModelProvider
+import com.example.pgfapp.DatabaseStuff.DatabaseViewModel
+import com.example.pgfapp.DatabaseStuff.Entities.Bounds
 import com.example.pgfapp.databinding.ActivityBoundsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -23,8 +24,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.PolygonOptions
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.GeoPoint
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 
@@ -37,7 +36,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var bounds = ArrayList<LatLng>() //array list of latitude longitude points
     private var polygon: Polygon? = null //polygon object
     private var index: Int = 1
-
+    private lateinit var databaseViewModel: DatabaseViewModel
     /*
     Function Name : onCreate
     Parameters    : Bundle savedInstanceState
@@ -49,6 +48,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityBoundsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        databaseViewModel = ViewModelProvider(this)[DatabaseViewModel::class.java]
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -104,7 +104,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     Parameters    : N/A
     Purpose       : Draw the boundary based on the user-input
      */
-    public fun drawPolygon() {
+    fun drawPolygon() {
 
         //if polygon is not null
         if (polygon != null) {
@@ -130,7 +130,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     Parameters    : N/A
     Purpose       : Make sure that the boundary fits properly
      */
-    public fun fitBounds() {
+    fun fitBounds() {
 
         //if the bounds array is not empty
         if (bounds.isNotEmpty()) {
@@ -153,7 +153,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     Description   : Saves the latitude and longitude coordinates to the database
     bounds is the array list of the plotted coordinates
     */
-    fun saveToDB(v: View?, name: EditText?){
+    /*fun saveToDB(v: View?, name: EditText?){
         //save to boundaries
         //bounds is the variable arraylist of latitude and longitude
         val db = Firebase.firestore
@@ -168,7 +168,8 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             val uid = user?.uid
             val geoPoints = bounds.map { latLng ->
-                GeoPoint(latLng.latitude, latLng.longitude)}
+                GeoPoint(latLng.latitude, latLng.longitude)
+            }
             
             val boarders = hashMapOf(
                 "UUID" to uid,
@@ -193,8 +194,34 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
             checkToMaps(v)
         }
     }
+*/
+    fun saveToDB(v: View?, name: EditText?) {
+        val boarderName = name?.text.toString()
 
+        // Ensure that the bounds have at least 3 points
+        if (bounds.size < 3) {
+            Toast.makeText(this, "Boundary Must Be 3 or more Points", Toast.LENGTH_SHORT).show()
+            return
+        }
+        // Convert the boundary points to a list of LatLng (or GeoPoint, depending on how your Room DB is set up)
+        /*val geoPoints = bounds.map { latLng ->
+            GeoPoint(latLng.latitude, latLng.longitude)
+        }*/
+        val user = Firebase.auth.currentUser
+        val uid = user?.uid
+        // Create a Boundary object with the name and points
+        val boundary = Bounds(
+            UUID = uid ?: "",  // You can generate a UUID or use any unique identifier for this boundary
+            BoundsName = boarderName,
+            boarder = bounds // Store the list of LatLng points as the boundary
+        )
 
+        // Save the boundary to the database via the ViewModel
+        databaseViewModel.addBounds(boundary)
+
+        // Go to the maps page after saving the boundary
+        checkToMaps(v)
+    }
     /*
     Function Name : onRedo
     Parameters    : View v
