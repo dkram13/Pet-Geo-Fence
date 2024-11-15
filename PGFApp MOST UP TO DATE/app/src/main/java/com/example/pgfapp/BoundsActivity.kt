@@ -164,7 +164,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
 
             // Send to CoAP TEST
             val uri = "coap://15.204.232.135:5683/boundary"
-            CoapUtils.sendCoordinates(uri, bounds, lifecycleScope)
+            com.example.pgfapp.utilities.CoapUtils.sendCoordinates(uri, bounds, lifecycleScope)
 
             val uid = user?.uid
             val geoPoints = bounds.map { latLng ->

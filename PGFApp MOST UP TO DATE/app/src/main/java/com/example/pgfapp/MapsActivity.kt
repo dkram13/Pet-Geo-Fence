@@ -1,6 +1,5 @@
 package com.example.pgfapp
 
-import CoapUtils
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -11,8 +10,6 @@ import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isGone
-import androidx.lifecycle.lifecycleScope
 import com.example.pgfapp.databinding.ActivityMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -27,7 +24,6 @@ import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.PolygonOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
-import org.json.JSONObject
 import android.content.IntentFilter
 import android.content.BroadcastReceiver
 import android.content.Context

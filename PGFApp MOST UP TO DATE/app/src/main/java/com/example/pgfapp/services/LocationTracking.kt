@@ -1,6 +1,6 @@
-package com.example.pgfapp
+package com.example.pgfapp.services
 
-import CoapUtils
+import com.example.pgfapp.utilities.NotificationUtils
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.CoroutineScope
@@ -14,6 +14,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import com.example.pgfapp.R
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.eclipse.californium.core.CoapClient
@@ -27,9 +28,14 @@ class LocationForegroundService : Service() {
     private val job = Job()
     private val coroutineScope = CoroutineScope(Dispatchers.IO + job)
     private var observeRelation: CoapObserveRelation? = null
+    private lateinit var notificationUtils: NotificationUtils
 
     override fun onCreate() {
         super.onCreate()
+
+        notificationUtils = NotificationUtils(this)
+        notificationUtils.createNotificationChannel()
+
         startForegroundService()
         startObservingLocation()
     }
@@ -69,6 +75,12 @@ class LocationForegroundService : Service() {
             val latitude = jsonObject.getDouble("latitude")
             val longitude = jsonObject.getDouble("longitude")
             val newLatLng = LatLng(latitude, longitude)
+
+            notificationUtils.sendNotification(
+                "New Location Update",
+                "Latitude: $latitude, Longitude: $longitude",
+                5353
+            )
 
             // Send the new location to MapsActivity or update the marker directly
             updateLocationInMapsActivity(newLatLng)
@@ -122,66 +134,3 @@ class LocationForegroundService : Service() {
         } ?: Log.d(TAG, "No active observation to cancel")
     }
 }
-
-/*
-class LocationForegroundService : Service() {
-
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
-
-    override fun onCreate() {
-        super.onCreate()
-        startForegroundService()
-        startObservingLocation()
-    }
-
-    private fun startForegroundService() {
-        val channelId = "LocationTrackingChannel"
-        val channelName = "Location Tracking"
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT)
-            val manager = getSystemService(NotificationManager::class.java)
-            manager.createNotificationChannel(channel)
-        }
-
-        val notification: Notification = NotificationCompat.Builder(this, channelId)
-            .setContentTitle("Location Tracking")
-            .setContentText("Tracking Collar...")
-            .build()
-
-        startForeground(1, notification)
-    }
-
-    private fun startObservingLocation() {
-        val uri = "coap://15.204.232.135:5683/batch"
-
-        CoapUtils.observeCoapResource(uri, coroutineScope) { newLocation ->
-            Log.d("com.example.pgfapp.LocationForegroundService", "New Location Observed: $newLocation")
-
-            val jsonObject = JSONObject(newLocation)
-            val latitude = jsonObject.getDouble("latitude")
-            val longitude = jsonObject.getDouble("longitude")
-            val newLatLng = LatLng(latitude, longitude)
-
-            // Send the new location to MapsActivity or update the marker directly
-            updateLocationInMapsActivity(newLatLng)
-        }
-    }
-
-    private fun updateLocationInMapsActivity(newLatLng: LatLng) {
-        // Send a broadcast to MapsActivity with the new location
-        val intent = Intent("com.example.pgfapp.LOCATION_UPDATE")
-        intent.putExtra("newLocation", newLatLng)
-        sendBroadcast(intent)
-    }
-
-    @Override
-    override fun onDestroy() {
-        Log.d("com.example.pgfapp.LocationForegroundService", "Destroying Observer Instance")
-        CoapUtils.cancelObserveCoapResource() // Stop observing when service is destroyed
-        super.onDestroy()
-    }
-
-    override fun onBind(intent: Intent?): IBinder? = null
-}
-*/
