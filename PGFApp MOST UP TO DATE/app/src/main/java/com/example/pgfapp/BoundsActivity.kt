@@ -66,8 +66,6 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         //initialize the object
         mMap = googleMap
 
-        //disable gesture controls for a smoother experience
-        //->we wouldn't want the user to accidentally move the camera
         mMap.getUiSettings().setMapToolbarEnabled(false)
 
         /*this bit of code here just zooms in on the sample location we're using*/

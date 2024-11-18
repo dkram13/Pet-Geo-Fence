@@ -38,6 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:autofillHints="enter your email address"
             android:background="@drawable/rounded_corner"
             android:fontFamily="@font/montserrat"
             android:hint="@string/emailField"
@@ -56,6 +57,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autofillHints="enter your password"
             android:layout_marginTop="16dp"
             android:hint="@string/passwordField"
             android:textColor="@color/black"
