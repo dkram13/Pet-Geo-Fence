@@ -2,7 +2,10 @@ package com.example.pgfapp
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
@@ -20,6 +23,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.PolygonOptions
@@ -68,6 +72,21 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mMap.getUiSettings().setMapToolbarEnabled(false)
 
+        val userTheme = getCurrentThemeMode()
+        try {
+            val success = mMap.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    this,
+                    getMapStyleResource(userTheme)
+                )
+            )
+            if (!success) {
+                Log.e("MapsActivity", "Style parsing failed.")
+            }
+        } catch (e: Resources.NotFoundException) {
+            Log.e("MapsActivity", "Can't find style. Error: ", e)
+        }
+
         /*this bit of code here just zooms in on the sample location we're using*/
         /*if you want, you can change it to be your backyard or another area*/
         //sample placement of the yard
@@ -95,6 +114,26 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
+    }
+
+
+    private fun getCurrentThemeMode(): String {
+        // Check if the system is using dark or light mode
+        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        return when (nightModeFlags) {
+            Configuration.UI_MODE_NIGHT_YES -> "dark" // Dark mode is active
+            Configuration.UI_MODE_NIGHT_NO -> "light" // Light mode is active
+            else -> "light" // Default to light mode
+        }
+    }
+
+    private fun getMapStyleResource(mode: String): Int {
+        // Return the corresponding map style based on the theme mode
+        if (mode == "dark") {
+            return R.raw.dark_mode // Reference to the dark map style
+        } else {
+            return R.raw.light_mode // Reference to the light map style
+        }
     }
 
     /*
@@ -285,6 +324,10 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         dialog.show()
         }
 
+
+
+
     }
+
 
 
