@@ -1,8 +1,14 @@
 package com.example.pgfapp
 
-import CoapUtils
+
 import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.content.res.Configuration
+import android.content.res.Resources
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -20,8 +26,11 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.Circle
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polygon
@@ -29,7 +38,8 @@ import com.google.android.gms.maps.model.PolygonOptions
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
-import org.json.JSONObject
+
+
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -42,12 +52,32 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var bounds = ArrayList<LatLng>()
     private var markers = mutableListOf<Marker?>()
     private lateinit var boundAct: BoundsActivity
-    private var locInaccRadius: Double? = null
+    private var locInaccRadius: Double = 0.0
     private var marker: Marker? = null
+    private lateinit var switch: Switch
     private var polygon: Polygon? = null //polygon object
     private lateinit var adapter: PagerAdapter
+    private var circle: Circle? = null
 
-    //METHODS THAT CREATE THE PAGE LAYOUT AND/OR THE FLOW OF THE ACTIVITY
+
+    // Getting event from location foreground service
+    override fun onStart() {
+        super.onStart()
+        val filter = IntentFilter("com.example.pgfapp.LOCATION_UPDATE")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            // For Android 12 (API 31) and higher, specify the receiver's export status
+            registerReceiver(locationReceiver, filter, RECEIVER_EXPORTED)
+        } else {
+            // For older versions, just register the receiver as usual
+            registerReceiver(locationReceiver, filter)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(locationReceiver)
+    }
+
     /*
     Function Name : onCreate
     Parameters    : Bundle savedInstanceState
@@ -79,27 +109,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position))
             }
         })
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
-        /*//coap server stuff
-        Log.d("CoapUtils", "Starting Observed Stuff")
-        val uri = "coap://californium.eclipseprojects.io/obs-pumping-non"
-        CoapUtils.observeCoapResource(uri, lifecycleScope)*/
-    }
-
-    /*
-    Function Name : onPause
-    Description   : Kills the connection to the CoAP server (if i got this wrong, please correct it)
-     */
-    override fun onPause() {
-        super.onPause()
-        // Your custom code here
-        // For example, pause a video, save data, or release resource
-        Log.d("ActivityLifecycle", "onPause called")
-        CoapUtils.cancelObserveCoapResource()
     }
 
     /*
@@ -110,8 +124,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     Gets the updated location of the pet from the CoAP server
     */
     override fun onMapReady(googleMap: GoogleMap){
+
+
         //initialize the google map
         mMap = googleMap
+
+        val userTheme = getCurrentThemeMode()
+        try {
+            val success = mMap.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    this,
+                    getMapStyleResource(userTheme)
+                )
+            )
+            if (!success) {
+                Log.e("MapsActivity", "Style parsing failed.")
+            }
+        } catch (e: Resources.NotFoundException) {
+            Log.e("MapsActivity", "Can't find style. Error: ", e)
+        }
+
+
         //pull boundaries from the database
         grabBorder()
 
@@ -121,44 +154,46 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         //keep map in place when pet is within boundaries by disabling gesture controls
         mMap.getUiSettings().setScrollGesturesEnabled(true) //allows for scrolling
-        mMap.getUiSettings().setZoomGesturesEnabled(true) //does not allow for zooming
         mMap.getUiSettings().setMapToolbarEnabled(true) //map toolbar enabled for accessibility
-
-        // Get updated location
-        Log.d("CoapUtils", "Starting Observed Stuff")
-        val uri = "coap://15.204.232.135:5683/batch"
-        CoapUtils.observeCoapResource(uri, lifecycleScope) { newLocation ->
-            Log.d("MainActivity", "New Location Observed!")
-            Log.d("MainActivity", newLocation)
-            // Update the UI or handle the new location as needed
-
-            val jsonObject = JSONObject(newLocation)
-            val latitude = jsonObject.getDouble("latitude")
-            val longitude = jsonObject.getDouble("longitude")
-            val newLatLng = LatLng(latitude, longitude)
-
-            // Update marker on map
-            runOnUiThread {
-                updateMarker(newLatLng)
-            }
-        }
 
         //when pet gets out of the boundaries, allow the user to scroll through the map
         // ->code for that goes here
 
     }
 
+    private fun getCurrentThemeMode(): String {
+        // Check if the system is using dark or light mode
+        val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        return when (nightModeFlags) {
+            Configuration.UI_MODE_NIGHT_YES -> "dark" // Dark mode is active
+            Configuration.UI_MODE_NIGHT_NO -> "light" // Light mode is active
+            else -> "light" // Default to light mode
+        }
+    }
+
+    private fun getMapStyleResource(mode: String): Int {
+        // Return the corresponding map style based on the theme mode
+        if (mode == "dark") {
+             return R.raw.dark_mode // Reference to the dark map style
+        } else {
+            return R.raw.light_mode // Reference to the light map style
+        }
+    }
 
 
-    //METHODS THAT DEAL WITH THE DATABASE
-    /*
-    Function Name : testGetCoapReq
-    Parameters    : View v
-    Description   : tests getting the coap request
-     */
-    fun testGetCoapReq(v: View?) {
-        //CoapUtils.onSendCoapGetRq(lifecycleScope)
-        Log.d("Ignore", "ignore")
+
+    private val locationReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let {
+                val newLocation = it.getParcelableExtra<LatLng>("newLocation")
+                newLocation?.let { location ->
+                    // Update the marker on the UI thread
+                    runOnUiThread {
+                        updateMarker(location)
+                    }
+                }
+            }
+        }
     }
 
 
@@ -211,10 +246,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      */
     private fun updateMarker(newLocation: LatLng) {
         try {
-            // Remove the previous marker, if it exists
+            // Remove the previous marker and location inaccuracy circle, if they exist
             currentMarker?.remove()
+            circle?.remove()
 
-            locInaccRadius = 0.00
+            locInaccRadius = 10.00
 
             // Add a new marker at the updated location
             currentMarker = mMap.addMarker(
@@ -222,6 +258,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     .position(newLocation)
                     .title("Observed Location")
                     .icon(BitmapDescriptorFactory.fromResource(R.mipmap.cust_mark))
+            )
+
+            //Add a new circle around the marker
+            circle = mMap.addCircle(
+                CircleOptions()
+                    .center(newLocation)
+                    .radius(locInaccRadius)
+                    .strokeColor(android.graphics.Color.RED)
+                    .fillColor(android.graphics.Color.BLUE)
             )
 
             // Move the camera to the new marker location
@@ -294,7 +339,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding))
         }
     }
-
 
     //METHODS THAT DEAL WITH HIDING/REVEALING UI ELEMENTS
     /*
@@ -392,6 +436,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
+
     /*
     Function Name : editBounds
     Parameters    : View v - the current activity view
@@ -432,12 +477,43 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         })
     }
 
+    /*
+    Function Name : switchFunctionality
+    Parameters    : View v
+    Description   : The Switch Functionality
+     */
+    fun switchFunctionality(v: View?){
+        switch = findViewById<View>(R.id.simpleSwitch) as Switch
+
+        if(switch.isChecked){
+            //make the polygon visible
+            polygon?.isVisible = true
+        }
+        else{
+            //make the polygon invisible
+            polygon?.isVisible = false
+        }
+
+        // on below line we are adding check change listener for our switch.
+        switch.setOnCheckedChangeListener { Switch, isChecked ->
+            // on below line we are checking
+            // if switch is checked or not.
+            if (isChecked) {
+                //make the polygon visible
+                polygon?.isVisible = true
+            } else {
+                //make the polygon invisible
+                polygon?.isVisible = false
+            }
+        }
+    }
+
 
     // METHODS THAT SEND THE USER TO A DIFFERENT ACTIVITY
     /*
     Function Name : gotoHub
     Parameters    : View v
-    Description   : sends the user to the settings
+    Description   : sends the user to the settings hub
     */
     fun gotoHub(v: View?) {
         startActivity(Intent(this@MapsActivity, HubActivity::class.java))

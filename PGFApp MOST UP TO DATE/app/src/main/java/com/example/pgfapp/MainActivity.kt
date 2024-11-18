@@ -1,10 +1,8 @@
 package com.example.pgfapp
 
-import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -12,10 +10,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.pgfapp.services.LocationForegroundService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+//import com.example.pgfapp.LocationForegroundService
 
 class MainActivity : AppCompatActivity() {
     val db = Firebase.firestore
@@ -63,6 +63,11 @@ class MainActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         // Sign in is successful
                         Log.d("@id/email" + "@id/pwd", "success")
+
+                        Log.d("LFG", "Starting")
+                        val serviceIntent = Intent(this, LocationForegroundService::class.java)
+                        stopService(serviceIntent)
+                        startService(serviceIntent)
 
                         /*val user = auth.currentUser
                         val uid = user?.uid
