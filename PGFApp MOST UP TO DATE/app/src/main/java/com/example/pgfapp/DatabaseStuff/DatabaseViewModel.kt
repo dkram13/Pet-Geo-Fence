@@ -3,6 +3,7 @@ package com.example.pgfapp.DatabaseStuff
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.example.pgfapp.DatabaseStuff.Entities.Bounds
 import kotlinx.coroutines.launch
@@ -36,4 +37,9 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
             repository.DeleteBounds(bounds)
         }
     }
+
+    fun countBoarders(uuid: String): LiveData<Int> {
+        return repository.countBoarders(uuid)
+    }
+
 }

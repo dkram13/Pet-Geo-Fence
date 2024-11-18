@@ -9,7 +9,6 @@
     <!--Default layout_height is match parent-->
     <!-- what we want is 500dp for layout_height-->
 
-
     <!--Main Maps Page Stuff-->
     <!--Settings Button-->
     <!--Sends User To Settings Page-->
@@ -189,7 +188,7 @@
         android:id="@+id/tabLayout"
         android:layout_width="409dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="288dp"
+        android:layout_marginBottom="340dp"
         map:layout_constraintBottom_toBottomOf="parent"
         map:layout_constraintEnd_toEndOf="parent"
         map:layout_constraintHorizontal_bias="1.0"
@@ -198,24 +197,21 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pets" />
+            android:text="Monday" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Boarders" />
+            android:text="Tuesday" />
 
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager2"
-        android:layout_width="411dp"
-        android:layout_height="0dp"
+        android:layout_width="409dp"
+        android:layout_height="338dp"
         map:layout_constraintBottom_toBottomOf="parent"
         map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintHorizontal_bias="0.0"
-        map:layout_constraintStart_toStartOf="parent"
-        map:layout_constraintTop_toBottomOf="@id/tabLayout" />
+        map:layout_constraintStart_toStartOf="parent" />
 
     <!--End of Edit Bounds Stuff-->
 

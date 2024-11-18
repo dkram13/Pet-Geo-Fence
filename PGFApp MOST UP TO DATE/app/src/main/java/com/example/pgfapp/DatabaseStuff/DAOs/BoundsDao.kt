@@ -15,7 +15,10 @@ interface BoundsDao {
     @Delete
     fun DeleteBounds(bounds: Bounds)
 
-    @Query("SELECT COUNT(*) FROM Bounds")
-    fun CountBoarders(): LiveData<Int>
+    @Query("SELECT COUNT(*) FROM Bounds WHERE UUID = :uuid")
+    fun CountBoarders(uuid: String): LiveData<Int>
+
+    @Query("SELECT COUNT(*) FROM Bounds WHERE UUID = :uuid")//will need to make a value that gets past that gives the
+    fun retreiveBoarder(uuid: String): LiveData<Int>        // primary key number
 
 }

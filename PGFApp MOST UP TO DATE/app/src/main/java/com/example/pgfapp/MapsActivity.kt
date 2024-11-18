@@ -17,6 +17,9 @@ import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.widget.ViewPager2
+import com.example.pgfapp.ViewPager2MapsAct.PagerAdapter
 import com.example.pgfapp.databinding.ActivityMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -32,6 +35,7 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.PolygonOptions
+import com.google.android.material.tabs.TabLayout
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 
@@ -47,10 +51,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var currentMarker: Marker? = null
     private var bounds = ArrayList<LatLng>()
     private var markers = mutableListOf<Marker?>()
+    private lateinit var boundAct: BoundsActivity
     private var locInaccRadius: Double = 0.0
     private var marker: Marker? = null
     private lateinit var switch: Switch
     private var polygon: Polygon? = null //polygon object
+    private lateinit var adapter: PagerAdapter
     private var circle: Circle? = null
 
 
@@ -82,7 +88,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        adapter = PagerAdapter(supportFragmentManager,lifecycle)
+        binding.viewPager2.adapter = adapter
+        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if (tab != null) {
+                    binding.viewPager2.currentItem = tab.position
+                }
+            }
 
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+        })
+        binding.viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                binding.tabLayout.selectTab(binding.tabLayout.getTabAt(position))
+            }
+        })
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
