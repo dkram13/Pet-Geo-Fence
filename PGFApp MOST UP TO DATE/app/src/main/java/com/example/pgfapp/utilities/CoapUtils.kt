@@ -1,3 +1,5 @@
+package com.example.pgfapp.utilities
+
 import android.util.Log
 import org.eclipse.californium.core.CoapClient
 import org.eclipse.californium.core.CoapHandler
@@ -13,7 +15,7 @@ import com.google.android.gms.maps.model.LatLng
 
 class CoapUtils {
     companion object {
-        private const val TAG = "CoapUtils"
+        private const val TAG = "com.example.pgfapp.utilities.CoapUtils"
         private var observeRelation: CoapObserveRelation? = null
 
         // Function to observe a CoAP resource with a callback for observed data
