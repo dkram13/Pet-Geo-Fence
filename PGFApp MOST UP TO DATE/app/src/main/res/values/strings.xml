@@ -51,5 +51,9 @@
     <string name="list_pets">List Pets</string>
     <string name="bar">|</string>
     <string name="edit_boundary">Edit Boundary</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="boarders">Boarders</string>
+    <string name="pets">pets</string>
 
 </resources>

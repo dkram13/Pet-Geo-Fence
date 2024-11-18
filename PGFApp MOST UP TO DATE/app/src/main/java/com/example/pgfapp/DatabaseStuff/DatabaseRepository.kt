@@ -1,5 +1,6 @@
 package com.example.pgfapp.DatabaseStuff
 
+import androidx.lifecycle.LiveData
 import com.example.pgfapp.DatabaseStuff.DAOs.BoundsDao
 import com.example.pgfapp.DatabaseStuff.DAOs.BoundsPetDao
 import com.example.pgfapp.DatabaseStuff.DAOs.PetLocationDao
@@ -26,5 +27,8 @@ class DatabaseRepository (
         }
     }
 
+    fun countBoarders(uuid: String): LiveData<Int> {
+        return boundsDao.CountBoarders(uuid)
+    }
 
 }

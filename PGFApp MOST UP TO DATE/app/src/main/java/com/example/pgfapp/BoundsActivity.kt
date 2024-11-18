@@ -8,7 +8,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.ViewModelProvider
 import com.example.pgfapp.DatabaseStuff.DatabaseViewModel
 import com.example.pgfapp.DatabaseStuff.Entities.Bounds
@@ -25,6 +24,7 @@ import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.PolygonOptions
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlin.math.atan2
 
 
 //PURPOSE: Allows the User to draw a boundary and save it
@@ -101,30 +101,44 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
     }
+    // Function to calculate the centroid of the boundary points
+    private fun calculateCentroid(points: ArrayList<LatLng>): LatLng {
+        val latitude = points.sumOf { it.latitude } / points.size
+        val longitude = points.sumOf { it.longitude } / points.size
+        return LatLng(latitude, longitude)
+    }
 
+    // Function to sort points in clockwise order around the centroid
+    private fun sortPointsClockwise(points: ArrayList<LatLng>): ArrayList<LatLng> {
+        val centroid = calculateCentroid(points)
+        return ArrayList(points.sortedBy { point ->
+            atan2(point.latitude - centroid.latitude, point.longitude - centroid.longitude)
+        })
+    }
     /*
     Function Name : drawPolygon
     Parameters    : N/A
     Purpose       : Draw the boundary based on the user-input
      */
     fun drawPolygon() {
+        // Sort points in a clockwise order
+        val sortedBounds = sortPointsClockwise(bounds)
 
-        //if polygon is not null
-        if (polygon != null) {
-            //remove it
-            polygon?.remove()
-        }
+        bounds.clear()
+        bounds.addAll(sortedBounds)
+        // If a polygon already exists, remove it
+        polygon?.remove()
 
-        //set up the polygon drawing
+        // Set up the polygon options with sorted points
         val polygonOptions = PolygonOptions()
-            .addAll(bounds)
+            .addAll(sortedBounds)
             .strokeColor(android.graphics.Color.RED)
             .fillColor(android.graphics.Color.argb(50, 255, 0, 0))
 
-        //add the polygon to the map
+        // Add the polygon to the map
         polygon = mMap.addPolygon(polygonOptions)
 
-        //ensure it fits within the points of the boundary
+        // Fit the polygon within view
         fitBounds()
     }
 

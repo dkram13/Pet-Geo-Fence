@@ -1,30 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!--Default layout_height is match parent-->
     <!-- what we want is 500dp for layout_height-->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MapsActivity"/>
 
     <!--Main Maps Page Stuff-->
     <!--Settings Button-->
     <!--Sends User To Settings Page-->
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        map:layout_constraintBottom_toTopOf="@id/tabLayout"
-        map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintHorizontal_bias="0.0"
-        map:layout_constraintStart_toStartOf="parent"
-        map:layout_constraintTop_toTopOf="parent" />
-
     <ImageButton
+        android:visibility="visible"
         android:id="@+id/settings_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,15 +29,25 @@
         android:contentDescription="@string/contentDescrHamburger"
         android:onClick="gotoHub"
         android:padding="8dp"
-        android:src="@drawable/hamburger"
-        android:visibility="visible"
-        map:layout_constraintStart_toStartOf="parent"
-        map:layout_constraintTop_toTopOf="parent" />
+        android:src="@drawable/hamburger" />
 
     <!--Add Button-->
     <!--Lets User Draw A Boundary-->
+    <ImageButton
+        android:visibility="visible"
+        android:id="@+id/add_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="5dp"
+        android:background="@null"
+        android:contentDescription="@string/Add_Button"
+        android:onClick="gotoDrawBounds"
+        android:padding="8dp"
+        android:src="@drawable/rectangle_1"/>
 
-    <!--Boundary Info Tab
+    <!--Boundary Info Tab-->
     <ImageView
         android:visibility="visible"
         android:id="@+id/boundary_info_tab"
@@ -143,80 +149,36 @@
         android:layout_marginStart="330dp"
         android:id="@+id/edit_bounds_button"
         android:src="@drawable/edit_button"/>
-    <!-End of Main Maps Page Stuff-->
-
+    <!--End of Main Maps Page Stuff-->
 
     <!--Edit Bounds Stuff Here-->
-
     <ImageButton
-        android:id="@+id/add_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="@null"
-        android:contentDescription="@string/Add_Button"
-        android:onClick="gotoDrawBounds"
-        android:padding="8dp"
-        android:src="@drawable/rectangle_1"
-        android:visibility="visible"
-        map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
+        android:visibility="gone"
         android:id="@+id/back"
+        android:fillColor="#D1E5F0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:background="@null"
-        android:contentDescription="@string/go_back_to_the_main_page"
         android:onClick="unHideButtons"
         android:src="@drawable/back_button"
-        android:visibility="gone" />
+        android:contentDescription="@string/go_back_to_the_main_page" />
 
     <ImageButton
+        android:visibility="gone"
+        android:fillColor="#D1E5F0"
         android:id="@+id/check"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="350dp"
         android:layout_marginTop="5dp"
         android:background="@null"
-        android:contentDescription="@string/im_done_with_the_boundary"
         android:onClick="unHideButtons"
         android:src="@drawable/check_button"
-        android:visibility="gone" />
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        android:layout_width="409dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="288dp"
-        map:layout_constraintBottom_toBottomOf="parent"
-        map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintHorizontal_bias="1.0"
-        map:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pets" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Boarders" />
-
-    </com.google.android.material.tabs.TabLayout>
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager2"
-        android:layout_width="411dp"
-        android:layout_height="0dp"
-        map:layout_constraintBottom_toBottomOf="parent"
-        map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintHorizontal_bias="0.0"
-        map:layout_constraintStart_toStartOf="parent"
-        map:layout_constraintTop_toBottomOf="@id/tabLayout" />
+        android:contentDescription="@string/im_done_with_the_boundary" />
 
     <!--End of Edit Bounds Stuff-->
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
