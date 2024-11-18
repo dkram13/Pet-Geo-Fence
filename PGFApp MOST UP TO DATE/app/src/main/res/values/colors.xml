@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Black and White -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="Red40">#B31529</color>
+
+    <!--Blue To Red-->
+    <color name="darkest_blue">#1065AB</color>
     <color name="darker_blue">#3A93C3</color>
+    <color name="light_blue">#8EC4DE</color>
     <color name="lighter_blue">#D1E5F0</color>
+    <color name="brighter_white">#F9F9F9</color>
+    <color name="tan">#FEDBC7</color>
+    <color name="salmon">#F6A482</color>
+    <color name="brick">#D75F4C</color>
+    <color name="Red40">#B31529</color>
+
+
+
 </resources>
