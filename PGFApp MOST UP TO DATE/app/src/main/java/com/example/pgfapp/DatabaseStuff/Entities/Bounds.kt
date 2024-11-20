@@ -10,7 +10,7 @@ import com.google.android.gms.maps.model.LatLng
 data class Bounds(
     @PrimaryKey(autoGenerate = true) val BoundId: Int = 0,
     val UUID: String,             // Unique Identifier (UUID)
-    val BoundsName: String,           // Name of the boarder
+    val BoundName: String,           // Name of the boarder
     @TypeConverters(GeoPointsConverter::class) val boarder: ArrayList<LatLng>
 
     )

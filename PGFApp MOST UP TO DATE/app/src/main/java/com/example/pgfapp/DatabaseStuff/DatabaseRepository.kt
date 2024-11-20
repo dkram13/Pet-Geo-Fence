@@ -30,5 +30,8 @@ class DatabaseRepository (
     fun countBoarders(uuid: String): LiveData<Int> {
         return boundsDao.CountBoarders(uuid)
     }
+    fun grabBoarderNames(uuid: String): LiveData<List<String>> {
+        return boundsDao.GrabBoarderNames(uuid)
+    }
 
 }

@@ -15,7 +15,7 @@ import com.example.pgfapp.DatabaseStuff.Entities.PetLocation
 import com.example.pgfapp.DatabaseStuff.Entities.Pets
 
 
-@Database(entities = [Bounds::class, BoundsPet::class, Pets::class, PetLocation::class], version =1, exportSchema = false)
+@Database(entities = [Bounds::class, BoundsPet::class, Pets::class, PetLocation::class], version =2, exportSchema = false)
 @TypeConverters(GeoPointsConverter::class)
 abstract class UserDatabase: RoomDatabase() {
 
@@ -33,12 +33,14 @@ abstract class UserDatabase: RoomDatabase() {
             if (tempInstance != null){
                 return tempInstance
             }
-            synchronized(this){
+            synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     UserDatabase::class.java,
                     "user_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration() // Automatically clears the database
+                    .build()
                 INSTANCE = instance
                 return instance
             }

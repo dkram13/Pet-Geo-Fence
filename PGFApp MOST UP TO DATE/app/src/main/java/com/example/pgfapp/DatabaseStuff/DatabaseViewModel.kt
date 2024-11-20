@@ -42,4 +42,8 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
         return repository.countBoarders(uuid)
     }
 
+    fun grabBoarderNames(uuid: String): LiveData<List<String>> {
+        return repository.grabBoarderNames(uuid)
+    }
+
 }

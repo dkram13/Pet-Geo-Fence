@@ -263,7 +263,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         // Create a Boundary object with the name and points
         val boundary = Bounds(
             UUID = uid ?: "",  // You can generate a UUID or use any unique identifier for this boundary
-            BoundsName = boarderName,
+            BoundName = boarderName,
             boarder = bounds // Store the list of LatLng points as the boundary
         )
 

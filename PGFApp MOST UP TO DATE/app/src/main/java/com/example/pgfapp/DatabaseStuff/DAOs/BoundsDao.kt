@@ -18,7 +18,7 @@ interface BoundsDao {
     @Query("SELECT COUNT(*) FROM Bounds WHERE UUID = :uuid")
     fun CountBoarders(uuid: String): LiveData<Int>
 
-    @Query("SELECT COUNT(*) FROM Bounds WHERE UUID = :uuid")//will need to make a value that gets past that gives the
-    fun retreiveBoarder(uuid: String): LiveData<Int>        // primary key number
+    @Query("SELECT BoundName FROM Bounds WHERE UUID = :uuid ORDER BY BoundName ASC")//will need to make a value that gets past that gives the
+    fun GrabBoarderNames(uuid: String): LiveData<List<String>>        // primary key number
 
 }
