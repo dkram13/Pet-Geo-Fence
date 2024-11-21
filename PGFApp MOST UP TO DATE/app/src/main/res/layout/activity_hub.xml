@@ -4,40 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3A93C3"
+    android:background="@color/darkest_blue"
     android:fitsSystemWindows="true"
     tools:context=".HubActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
 
         <ImageButton
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginStart="-340dp"
+            android:layout_marginTop="10dp"
             android:background="@null"
             android:contentDescription="@string/go_back_to_the_main_page"
             android:onClick="backToMaps"
             android:src="@drawable/back_button" />
 
-        <TextView
-            android:layout_width="343dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="-20dp"
-            android:layout_marginTop="0dp"
-            android:fontFamily="@font/montserratbold"
-            android:text="@string/utilities_hub"
-            android:textAlignment="center"
-            tools:ignore="RtlHardcoded" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:contentDescription="@string/pgf_logo"
+            android:src="@mipmap/logo_launcher"
+            android:layout_marginStart="-410dp"
+            android:layout_marginTop="70dp"/>
 
         <!--Location History-->
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="-372.5dp"
-            android:layout_marginTop="150dp"
+            android:layout_marginLeft="-410dp"
+            android:layout_marginTop="200dp"
             android:backgroundTint="#D1E5F0"
             android:contentDescription="@string/contentDescrLocHist"
             android:onClick="goToLocHist"
@@ -46,72 +45,101 @@
             tools:ignore="RtlHardcoded" />
 
         <TextView
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="165dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="200dp"
             android:fontFamily="@font/montserratbold"
             android:text="@string/locHist"
-            android:textColor="#B31529" />
+            android:textColor="@color/salmon"
+            android:textSize="30sp" />
 
-        <!--Device History-->
+        <!--Location History-->
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="-350dp"
-            android:layout_marginTop="250dp"
+            android:layout_marginLeft="-410dp"
+            android:layout_marginTop="270dp"
             android:backgroundTint="#D1E5F0"
-            android:contentDescription="@string/devices"
-            android:src="@drawable/baseline_phonelink_24" />
+            android:contentDescription="@string/privacy_policy"
+            android:src="@drawable/baseline_privacy_tip_24"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="265dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="270dp"
             android:fontFamily="@font/montserratbold"
-            android:text="@string/device_management"
-            android:textColor="#B31529" />
+            android:text="@string/privacy_policy_text"
+            android:textColor="@color/salmon"
+            android:textSize="30sp" />
 
-        <!--Data Usage-->
+        <!--Training Guide-->
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="-350dp"
-            android:layout_marginTop="350dp"
+            android:layout_marginStart="-410dp"
+            android:layout_marginTop="340dp"
             android:backgroundTint="#D1E5F0"
-            android:contentDescription="@string/data_usages"
-            android:src="@drawable/baseline_cloud_24" />
+            android:contentDescription="@string/settings"
+            android:src="@drawable/baseline_menu_book_24" />
 
         <TextView
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="365dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="340dp"
+            android:layout_marginStart="10sp"
             android:fontFamily="@font/montserratbold"
-            android:text="@string/data_usage"
-            android:textColor="#B31529" />
+            android:text="@string/training_guide"
+            android:textSize="30sp"
+            android:textColor="@color/salmon" />
+
+        <!-- How To Use -->
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="-410dp"
+            android:layout_marginTop="410dp"
+            android:backgroundTint="#D1E5F0"
+            android:contentDescription="@string/settings"
+            android:src="@drawable/baseline_question_answer_24" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="410dp"
+            android:layout_marginStart="10sp"
+            android:fontFamily="@font/montserratbold"
+            android:text="@string/how_to_use"
+            android:textSize="30sp"
+            android:textColor="@color/salmon" />
 
         <!--Settings-->
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="-350dp"
-            android:layout_marginTop="450dp"
+            android:layout_marginStart="-410dp"
+            android:layout_marginTop="480dp"
             android:backgroundTint="#D1E5F0"
             android:contentDescription="@string/settings"
             android:src="@drawable/baseline_settings_24" />
 
         <TextView
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="465dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="480dp"
+            android:layout_marginStart="10sp"
             android:fontFamily="@font/montserratbold"
-            android:text="@string/settingstxt"
-            android:textColor="#B31529" />
+            android:text="@string/settings_text"
+            android:textSize="30sp"
+            android:textColor="@color/salmon" />
 
         <!--LogOut-->
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginStart="-350dp"
+            android:layout_marginStart="-410dp"
             android:layout_marginTop="550dp"
             android:backgroundTint="#D1E5F0"
             android:contentDescription="@string/logouttheheck"
@@ -119,12 +147,16 @@
             android:src="@drawable/baseline_logout_24" />
 
         <TextView
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="565dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="550dp"
             android:fontFamily="@font/montserratbold"
             android:text="@string/logout"
-            android:textColor="#B31529" />
+            android:textColor="@color/salmon"
+            android:textSize="30sp" />
+
+
 
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
