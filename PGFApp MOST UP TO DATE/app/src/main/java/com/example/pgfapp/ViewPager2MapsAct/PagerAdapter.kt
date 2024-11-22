@@ -17,7 +17,7 @@ class PagerAdapter(fragmentManager: FragmentManager,lifecycle: Lifecycle):
                 petsFragment()
             }
             else->{
-                boardersFragment()
+                bordersFragment()
             }
         }
     }

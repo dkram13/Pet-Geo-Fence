@@ -33,5 +33,15 @@ class DatabaseRepository (
     fun grabBoarderNames(uuid: String): LiveData<List<String>> {
         return boundsDao.GrabBoarderNames(uuid)
     }
-
+    fun grabBorders(uuid: String): LiveData<List<Bounds>> {
+        return boundsDao.GrabBorders(uuid)
+    }
+    fun updateBoundaryActiveStatus(boundaryId: Long, isActive: Boolean) {
+        // Call the DAO method to update the boundary status
+        boundsDao.updateBoundaryActiveStatus(boundaryId, isActive)
+    }
+    fun deactivateOtherBoundaries(boundaryId: Long) {
+        // Call the DAO method to update the boundary status
+        boundsDao.deactivateOtherBoundaries(boundaryId)
+    }
 }

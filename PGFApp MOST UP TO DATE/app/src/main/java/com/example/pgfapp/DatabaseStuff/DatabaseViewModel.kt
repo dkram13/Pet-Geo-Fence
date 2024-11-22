@@ -45,5 +45,16 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
     fun grabBoarderNames(uuid: String): LiveData<List<String>> {
         return repository.grabBoarderNames(uuid)
     }
+    fun grabBorders(uuid: String): LiveData<List<Bounds>> {
+        return repository.grabBorders(uuid)
+    }
+    fun updateBoundaryActiveStatus(boundaryId: Long, isActive: Boolean) {
+        // Make sure your repository has this method to update the database
+        repository.updateBoundaryActiveStatus(boundaryId, isActive)
+    }
+    fun deactivateOtherBoundaries(boundaryId: Long) {
+        // Make sure your repository has this method to update the database
+        repository.deactivateOtherBoundaries(boundaryId)
+    }
 
 }

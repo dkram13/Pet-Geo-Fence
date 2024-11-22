@@ -11,6 +11,6 @@ data class Bounds(
     @PrimaryKey(autoGenerate = true) val BoundId: Int = 0,
     val UUID: String,             // Unique Identifier (UUID)
     val BoundName: String,           // Name of the boarder
-    @TypeConverters(GeoPointsConverter::class) val boarder: ArrayList<LatLng>
-
+    @TypeConverters(GeoPointsConverter::class) val boarder: ArrayList<LatLng>,
+    val isActive: Boolean
     )
