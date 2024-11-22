@@ -161,6 +161,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
+    /*
+    Function Name   : getCurrentThemeMode
+    Description     : Checks the users current phone theme and returns a string indicating either dark or light mode
+    Return Value    : if dark mode is active it returns "dark"
+                      if light mode is active it returns "light"
+     */
     private fun getCurrentThemeMode(): String {
         // Check if the system is using dark or light mode
         val nightModeFlags = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
