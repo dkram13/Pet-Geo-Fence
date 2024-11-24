@@ -8,7 +8,7 @@
     android:background="@color/darkest_blue"
     android:layout_gravity="center"
     android:padding="20dp"
-    tools:context=".MainActivity">
+    tools:context=".SignUpActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +16,6 @@
         android:gravity="center"
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
-
 
         <TextView
             android:layout_width="match_parent"
@@ -38,13 +37,33 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="40sp"
+            android:text="@string/create_account"
+            android:textColor="@color/salmon"
+            android:fontFamily="@font/montserratbold"
+            android:textAlignment="center"/>
+
+        <ImageButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:onClick="backToLogin"
+            android:layout_marginTop="-120dp"
+            android:layout_marginStart="-150dp"
+            android:backgroundTint="@color/darkest_blue"
+            android:contentDescription="@string/go_back_to_the_login_page"
+            android:src="@drawable/back_button"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:textSize="30sp"
+            android:layout_marginTop="60dp"
             android:textColor="@color/salmon"
             android:text = "@string/emailtxt"
             android:fontFamily="@font/montserratbold"/>
 
         <EditText
-            android:id="@+id/email_input"
+            android:id="@+id/new_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -62,52 +81,63 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text = "@string/pwdtxt"
-            android:textColor="@color/salmon"
-            android:layout_marginTop="10dp"
             android:textSize="30sp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/salmon"
+            android:text = "@string/pwdtxt"
             android:fontFamily="@font/montserratbold"/>
 
         <EditText
+            android:id="@+id/txtpassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="enter your password"
-            android:layout_marginTop="16dp"
-            android:hint="@string/passwordField"
+            android:layout_marginTop="10dp"
+            android:autofillHints="enter your email address"
+            android:background="@drawable/rounded_corner"
+            android:fontFamily="@font/montserrat"
+            android:hint="@string/emailField"
+            android:inputType="textPassword"
+            android:padding="18dp"
+            android:backgroundTint="@color/lighter_blue"
             android:textColor="@color/Red40"
             android:textColorHint="@color/Red40"
-            android:textSize="20sp"
-            android:fontFamily="@font/montserrat"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/salmon"
+            android:text = "@string/confirm_password"
+            android:fontFamily="@font/montserratbold"/>
+
+        <EditText
+            android:id="@+id/confirm_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:autofillHints="enter your email address"
             android:background="@drawable/rounded_corner"
-            android:backgroundTint="@color/lighter_blue"
-            android:padding="18dp"
+            android:fontFamily="@font/montserrat"
+            android:hint="@string/confirm_password_txt"
             android:inputType="textPassword"
-            android:id="@+id/password_input"/>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/sign_in"
-            android:backgroundTint="@color/light_blue"
+            android:padding="18dp"
+            android:backgroundTint="@color/lighter_blue"
             android:textColor="@color/Red40"
-            android:fontFamily="@font/montserratbold"
-            android:layout_marginTop="10dp"
-            android:textSize="20sp"
-            android:id="@+id/login_button"/>
+            android:textColorHint="@color/Red40"
+            android:textSize="20sp" />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:onClick="gotoSignUp"
-            android:fontFamily="@font/montserratbold"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="30dp"
             android:textColor="@color/Red40"
             android:backgroundTint="@color/light_blue"
-            android:text="@string/create_account"/>
+            android:onClick="onNextBtn"
+            android:fontFamily="@font/montserratbold"
+            android:text="@string/Next"/>
 
     </LinearLayout>
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

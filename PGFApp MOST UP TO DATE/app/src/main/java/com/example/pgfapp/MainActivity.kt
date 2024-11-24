@@ -3,6 +3,7 @@ package com.example.pgfapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -96,9 +97,6 @@ class MainActivity : AppCompatActivity() {
                         ).show()
                     }
                 }
-
-            /* remove this for the final build */
-            Log.i("Test Credentials","Username: $email and Password: $pwd")
         }
     }
 
@@ -129,5 +127,14 @@ class MainActivity : AppCompatActivity() {
      */
     fun gotoMaps() {
         startActivity(Intent(this@MainActivity, MapsActivity::class.java))
+    }
+
+    /*
+    Function Name: gotoMaps
+    Parameters: None
+    Description: Sends the user to the sign up page
+     */
+    fun gotoSignUp(v: View?){
+        startActivity(Intent(this@MainActivity, SignUpActivity::class.java))
     }
 }

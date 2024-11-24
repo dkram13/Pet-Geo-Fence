@@ -63,5 +63,11 @@
     <string name="pets_text">Pets</string>
     <string name="borders">Borders</string>
     <string name="pgf_logo">PGF logo</string>
+    <string name="create_account">Create Account</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="go_back_to_the_login_page">Go back to the login page</string>
+    <string name="sign_in">Sign In</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="confirm_password_txt">confirm password</string>
 
 </resources>
