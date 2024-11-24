@@ -24,9 +24,9 @@ interface BoundsDao {
     @Query("SELECT * FROM Bounds WHERE UUID = :uuid ORDER BY BoundName ASC")
     fun GrabBorders(uuid: String): LiveData<List<Bounds>>
 
-    @Query("UPDATE Bounds SET isActive = :isActive WHERE BoundId = :boundaryId")
-    fun updateBoundaryActiveStatus(boundaryId: Long, isActive: Boolean)
+    @Query("UPDATE bounds SET isActive = :isActive WHERE boundId = :boundId")
+    suspend fun updateIsActive(boundId: Int, isActive: Boolean): Int
 
-    @Query("UPDATE Bounds SET isActive = 0 WHERE BoundId != :boundaryId")
-    fun deactivateOtherBoundaries(boundaryId: Long)
+    @Query("SELECT * FROM Bounds WHERE UUID = :uuid and isActive = 1")
+    fun grabActiveBorder(uuid: String): LiveData<List<Bounds>>
 }

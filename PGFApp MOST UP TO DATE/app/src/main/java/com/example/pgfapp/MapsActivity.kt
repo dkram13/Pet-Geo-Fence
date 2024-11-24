@@ -17,8 +17,10 @@ import android.widget.ImageView
 import android.widget.Switch
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
+import com.example.pgfapp.DatabaseStuff.DatabaseViewModel
 import com.example.pgfapp.ViewPager2MapsAct.PagerAdapter
 import com.example.pgfapp.databinding.ActivityMapsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -36,10 +38,8 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.PolygonOptions
 import com.google.android.material.tabs.TabLayout
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.GeoPoint
-
-
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -58,7 +58,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var polygon: Polygon? = null //polygon object
     private lateinit var adapter: PagerAdapter
     private var circle: Circle? = null
-
+    private lateinit var databaseViewModel: DatabaseViewModel
 
     // Getting event from location foreground service
     override fun onStart() {
@@ -85,7 +85,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        databaseViewModel = ViewModelProvider(this)[DatabaseViewModel::class.java]
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         adapter = PagerAdapter(supportFragmentManager,lifecycle)
@@ -208,42 +208,27 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     Description   : Grabs the boundary from the database
      */
     private fun grabBorder() {
-        val db = FirebaseFirestore.getInstance()
-        db.collection("Boarder").document("9bJOQc0cPMfoqfuioXRr")
-            .get()
-            .addOnSuccessListener { document ->
-                if (document != null && document.exists()) {
-                    val boarderName = document.getString("Boarder Name")
-                    val geoPoints = document.get("GeoFence Points") as? List<GeoPoint>
-                    val uuid = document.getString("UUID")
-                    if (geoPoints != null) {
-                        // Use map to convert GeoPoints to LatLng and store in ArrayList
-                        bounds = ArrayList(geoPoints.map { geoPoint ->
-                            LatLng(geoPoint.latitude, geoPoint.longitude)
-                        })
-                        bounds.forEachIndexed { index, latLng ->
-                            Log.d("MapsActivity", "GeoPoint $index: Latitude = ${latLng.latitude}, Longitude = ${latLng.longitude}")
-                        }
-                    drawPolygon(bounds)
-                    }
-                    /*if (geoPoints != null) {
-                        // Loop through each GeoPoint and print its details
-                        geoPoints.forEachIndexed { index, geoPoint ->
-                            Log.d("FirestoreData", "GeoPoint $index: Latitude = ${geoPoint.latitude}, Longitude = ${geoPoint.longitude}")
-                        }
-                    } else {
-                        Log.d("FirestoreData", "No Geo Points found.")
-                    }*/
-                }
-                else {
-                    println("Document does not exist") }
-                }
-            .addOnFailureListener { exception ->
-                // Log the exception for debugging
-                println("Error fetching document: ${exception.message}")
-            }
+        val user = Firebase.auth.currentUser
+        val uid = user?.uid
+        if (uid != null) {
+            databaseViewModel.grabActiveBorder(uid).observe(this, Observer { activeBorders ->
+                if (activeBorders.isNotEmpty()) {
+                    // Access the points from the first active border (assuming only one active border)
+                    val activeBorderPoints = activeBorders[0].boarder // Assuming `boarder` is the correct field name
 
+                    // Draw the polygon if there are points
+                    if (activeBorderPoints.isNotEmpty()) {
+                        drawPolygon(activeBorderPoints)
+                    }
+                } else {
+                    polygon?.remove()
+                    // Handle case when there is no active border
+                    //Toast.makeText(this, "No active border found", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
     }
+
 
     /*
     Function Name : updateMarker

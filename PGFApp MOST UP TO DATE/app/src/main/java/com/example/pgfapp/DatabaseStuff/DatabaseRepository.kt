@@ -36,12 +36,10 @@ class DatabaseRepository (
     fun grabBorders(uuid: String): LiveData<List<Bounds>> {
         return boundsDao.GrabBorders(uuid)
     }
-    fun updateBoundaryActiveStatus(boundaryId: Long, isActive: Boolean) {
-        // Call the DAO method to update the boundary status
-        boundsDao.updateBoundaryActiveStatus(boundaryId, isActive)
+    suspend fun updateIsActive(boundId: Int, isActive: Boolean) {
+        boundsDao.updateIsActive(boundId, isActive)
     }
-    fun deactivateOtherBoundaries(boundaryId: Long) {
-        // Call the DAO method to update the boundary status
-        boundsDao.deactivateOtherBoundaries(boundaryId)
+    fun grabActiveBorder(uuid: String): LiveData<List<Bounds>> {
+        return boundsDao.grabActiveBorder(uuid)
     }
 }
