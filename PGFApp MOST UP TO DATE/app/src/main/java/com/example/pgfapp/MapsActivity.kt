@@ -19,10 +19,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.example.pgfapp.DatabaseStuff.DatabaseViewModel
 import com.example.pgfapp.ViewPager2MapsAct.PagerAdapter
 import com.example.pgfapp.databinding.ActivityMapsBinding
+import com.example.pgfapp.utilities.CoapUtils
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -40,6 +42,7 @@ import com.google.android.gms.maps.model.PolygonOptions
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -219,11 +222,20 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     // Draw the polygon if there are points
                     if (activeBorderPoints.isNotEmpty()) {
                         drawPolygon(activeBorderPoints)
+
+                        Log.i("MapsActivity", "SENDING NEW BORDER")
+                        val uri = "coap://15.204.232.135:5683/boundary"
+                        CoapUtils.sendCoordinates(uri, activeBorderPoints, lifecycleScope)
                     }
                 } else {
                     polygon?.remove()
                     // Handle case when there is no active border
                     //Toast.makeText(this, "No active border found", Toast.LENGTH_SHORT).show()
+
+                    Log.i("MapsActivity", "EMPTY BORDER")
+                    val emptyBounds = ArrayList<LatLng>()
+                    val uri = "coap://15.204.232.135:5683/boundary"
+                    CoapUtils.sendCoordinates(uri, emptyBounds, lifecycleScope)
                 }
             })
         }
