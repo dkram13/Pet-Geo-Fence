@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.pgfapp.DatabaseStuff.DatabaseViewModel
+import com.example.pgfapp.MapsActivity
 import com.example.pgfapp.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -21,17 +22,19 @@ import kotlinx.coroutines.launch
 
 class bordersFragment : Fragment() {
     private lateinit var databaseViewModel: DatabaseViewModel
+    private lateinit var mainMaps: MapsActivity
     private var activeToggle: Switch? = null
+    private lateinit var v: View
     private lateinit var toggleListener: CompoundButton.OnCheckedChangeListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         databaseViewModel = ViewModelProvider(this)[DatabaseViewModel::class.java]
+        mainMaps = MapsActivity()
+
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_borders, container, false)
         val buttonContainer = view.findViewById<LinearLayout>(R.id.button_container)
         val user = Firebase.auth.currentUser
@@ -89,7 +92,7 @@ class bordersFragment : Fragment() {
             }
         }
 
-        // Fetch boarder names from the database and populate the view
+        // Fetch border names from the database and populate the view
         databaseViewModel.grabBorders(uuid).observe(viewLifecycleOwner) { borderButtons ->
             buttonContainer.removeAllViews()
 

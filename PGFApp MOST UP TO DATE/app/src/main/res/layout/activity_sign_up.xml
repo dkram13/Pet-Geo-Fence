@@ -53,6 +53,7 @@
             android:contentDescription="@string/go_back_to_the_login_page"
             android:src="@drawable/back_button"/>
 
+        <!--Email Field-->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -78,6 +79,9 @@
             android:textColorHint="@color/Red40"
             android:textSize="20sp" />
 
+        <!--If we are using mobile 2FA, then add a field for their phone number-->
+
+        <!--Initial Password Field-->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -95,7 +99,7 @@
             android:autofillHints="enter your email address"
             android:background="@drawable/rounded_corner"
             android:fontFamily="@font/montserrat"
-            android:hint="@string/emailField"
+            android:hint="@string/passwordField"
             android:inputType="textPassword"
             android:padding="18dp"
             android:backgroundTint="@color/lighter_blue"
@@ -103,6 +107,7 @@
             android:textColorHint="@color/Red40"
             android:textSize="20sp" />
 
+        <!--Confirm Password Field-->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

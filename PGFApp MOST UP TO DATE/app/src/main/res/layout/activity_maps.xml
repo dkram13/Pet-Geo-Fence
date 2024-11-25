@@ -171,7 +171,8 @@
         android:contentDescription="@string/go_back_to_the_main_page"
         android:onClick="unHideButtons"
         android:src="@drawable/back_button"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:ignore="MissingConstraints" />
 
     <ImageButton
         android:id="@+id/check"
@@ -183,7 +184,8 @@
         android:contentDescription="@string/im_done_with_the_boundary"
         android:onClick="unHideButtons"
         android:src="@drawable/check_button"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:ignore="MissingConstraints"/>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
@@ -203,7 +205,7 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Borders" />
+            android:text="@string/borders" />
 
     </com.google.android.material.tabs.TabLayout>
 

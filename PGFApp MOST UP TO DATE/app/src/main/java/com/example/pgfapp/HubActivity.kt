@@ -10,6 +10,11 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.pgfapp.databinding.ActivityHubBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class HubActivity : AppCompatActivity() {
 
@@ -18,6 +23,7 @@ class HubActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityHubBinding
+    private lateinit var auth: FirebaseAuth
 
     /*
     Function Name: onCreate
@@ -30,6 +36,10 @@ class HubActivity : AppCompatActivity() {
         binding = ActivityHubBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        //get the user currently signed in
+        auth = Firebase.auth
+        val user = auth.currentUser
+        val userID = user?.uid
     }
 
     /*
@@ -57,6 +67,10 @@ class HubActivity : AppCompatActivity() {
     Description: Logs out the user and sends them back to the login page
      */
     fun logout(v: View?){
+        //log out the user
+        auth.signOut()
+
+        //send them back to the sign in page
         startActivity(Intent(this@HubActivity, MainActivity::class.java))
     }
 
