@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.pgfapp.DatabaseStuff.DatabaseViewModel
-import com.example.pgfapp.MapsActivity
 import com.example.pgfapp.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -22,25 +21,36 @@ import kotlinx.coroutines.launch
 
 class bordersFragment : Fragment() {
     private lateinit var databaseViewModel: DatabaseViewModel
-    private lateinit var mainMaps: MapsActivity
     private var activeToggle: Switch? = null
-    private lateinit var v: View
     private lateinit var toggleListener: CompoundButton.OnCheckedChangeListener
+    private lateinit var buttonContainer: LinearLayout
+    private var uuid: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         databaseViewModel = ViewModelProvider(this)[DatabaseViewModel::class.java]
-        mainMaps = MapsActivity()
-
+        uuid = Firebase.auth.currentUser?.uid
     }
 
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_borders, container, false)
-        val buttonContainer = view.findViewById<LinearLayout>(R.id.button_container)
-        val user = Firebase.auth.currentUser
-        val uuid = user?.uid.toString()
+        buttonContainer = view.findViewById(R.id.button_container)
 
-        // Toggle listener to manage the active switch
+        setupToggleListener()
+        return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        // Reset activeToggle to ensure the correct one is active based on the database
+        activeToggle = null
+
+        // Repopulate the borders
+        populateBorders()
+    }
+
+    private fun setupToggleListener() {
         toggleListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
             Log.d("ToggleListener", "buttonView is: ${buttonView.javaClass.simpleName}, tag: ${buttonView.tag}")
             val boundId = buttonView.tag as? Int
@@ -48,8 +58,7 @@ class bordersFragment : Fragment() {
 
             if (boundId != null) {
                 lifecycleScope.launch {
-                    // Update the database for the current toggle
-                    databaseViewModel.updateIsActive(boundId, isChecked) // Set isActive for the current boundId
+                    databaseViewModel.updateIsActive(boundId, isChecked)
                 }
             }
 
@@ -62,7 +71,7 @@ class bordersFragment : Fragment() {
                         val previousBoundId = previousSwitch.tag as? Int
                         previousBoundId?.let {
                             lifecycleScope.launch {
-                                databaseViewModel.updateIsActive(it, false) // Set isActive = false for previous bound
+                                databaseViewModel.updateIsActive(it, false)
                             }
                         }
                         // Turn off the previous switch
@@ -78,26 +87,20 @@ class bordersFragment : Fragment() {
             } else {
                 // When a switch is turned off, set activeToggle to null and update the database for this switch
                 if (activeToggle == buttonView) {
-                    Log.d("ToggleListener", "Turning off the current active switch")
-                    activeToggle = null  // Reset active toggle
-                    // Update the database to set isActive to false for the current boundId
-                    val currentBoundId = buttonView.tag as? Int
-                    currentBoundId?.let {
-                        lifecycleScope.launch {
-                            databaseViewModel.updateIsActive(it, false) // Set isActive = false for this bound
-                        }
-                    }
+                    activeToggle = null
                 }
-                Toast.makeText(context, "Boundary ${buttonView.text} is now OFF", Toast.LENGTH_SHORT).show()
             }
         }
+    }
 
-        // Fetch border names from the database and populate the view
-        databaseViewModel.grabBorders(uuid).observe(viewLifecycleOwner) { borderButtons ->
+    private fun populateBorders() {
+        val userUuid = uuid ?: return
+
+        // Observe and populate the UI with borders
+        databaseViewModel.grabBorders(userUuid).observe(viewLifecycleOwner) { borderButtons ->
             buttonContainer.removeAllViews()
 
             borderButtons.forEach { bounds ->
-                // Create a parent LinearLayout for each row
                 val parentLayout = LinearLayout(requireContext()).apply {
                     orientation = LinearLayout.VERTICAL
                     layoutParams = LinearLayout.LayoutParams(
@@ -107,7 +110,6 @@ class bordersFragment : Fragment() {
                     setPadding(10, 10, 10, 10)
                 }
 
-                // Create a button row layout (horizontal LinearLayout)
                 val buttonRowLayout = LinearLayout(requireContext()).apply {
                     orientation = LinearLayout.HORIZONTAL
                     layoutParams = LinearLayout.LayoutParams(
@@ -116,54 +118,69 @@ class bordersFragment : Fragment() {
                     )
                 }
 
-                // Create the "Edit" button
                 val nameButton = Button(requireContext()).apply {
-                    text = "${bounds.BoundName}"
+                    text = bounds.BoundName
                     layoutParams = LinearLayout.LayoutParams(
                         0, LinearLayout.LayoutParams.WRAP_CONTENT,
-                        1f // Take equal weight in horizontal space
+                        1f
                     )
                     setOnClickListener {
                         Toast.makeText(requireContext(), "Editing: ${bounds.BoundName}", Toast.LENGTH_SHORT).show()
                     }
                 }
+
                 val deleteButton = Button(requireContext()).apply {
                     text = "delete"
                     layoutParams = LinearLayout.LayoutParams(
                         0, LinearLayout.LayoutParams.WRAP_CONTENT,
-                        1f // Take equal weight in horizontal space
+                        1f
                     )
                     setOnClickListener {
-                        Toast.makeText(requireContext(), "deleting: ${bounds}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Deleting: ${bounds}", Toast.LENGTH_SHORT).show()
                         lifecycleScope.launch {
                             databaseViewModel.deleteBoundUsingID(bounds.UUID, bounds.BoundId)
                         }
                     }
                 }
-                // Create the toggle switch and set its initial state based on the database
+
                 val toggleSwitch = Switch(requireContext()).apply {
                     tag = bounds.BoundId
-                    isChecked = bounds.isActive // Set the initial state of the switch based on the database value
+                    isChecked = bounds.isActive
                     layoutParams = LinearLayout.LayoutParams(
                         0, LinearLayout.LayoutParams.WRAP_CONTENT,
-                        1f // Take equal weight in horizontal space
+                        1f
                     )
                     setOnCheckedChangeListener(toggleListener)
+
+                    // Update activeToggle if this is the active toggle from the database
+                    if (bounds.isActive) {
+                        activeToggle = this
+                    }
                 }
 
-                // Add the "Edit" button and toggle switch to the horizontal layout
                 buttonRowLayout.addView(nameButton)
                 buttonRowLayout.addView(deleteButton)
                 buttonRowLayout.addView(toggleSwitch)
 
-                // Add the button row layout to the parent layout
                 parentLayout.addView(buttonRowLayout)
-
-                // Add the parent layout to the main container
                 buttonContainer.addView(parentLayout)
             }
-        }
 
-        return view
+            // Add a "+" button at the end of the list
+            val addButton = Button(requireContext()).apply {
+                text = "+"
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                )
+                setOnClickListener {
+                    Toast.makeText(requireContext(), "Add new boundary", Toast.LENGTH_SHORT).show()
+                    // Navigate to boundary creation screen or implement your logic here
+                }
+            }
+
+            // Add the "+" button to the container
+            buttonContainer.addView(addButton)
+        }
     }
 }
