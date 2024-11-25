@@ -31,7 +31,7 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun deleteBounds(bounds: Bounds) {
+    suspend fun deleteBounds(bounds: Bounds) {
         // Using viewModelScope to launch a coroutine to perform the database operation
         viewModelScope.launch {
             repository.DeleteBounds(bounds)
@@ -53,5 +53,8 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
     }
     fun grabActiveBorder(uuid: String): LiveData<List<Bounds>> {
         return repository.grabActiveBorder(uuid)
+    }
+    suspend fun deleteBoundUsingID(uuid: String, boundId: Int) {
+        repository.deleteBoundUsingID(uuid, boundId)
     }
 }

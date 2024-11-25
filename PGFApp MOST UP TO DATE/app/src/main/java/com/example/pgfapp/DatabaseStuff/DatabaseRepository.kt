@@ -42,4 +42,7 @@ class DatabaseRepository (
     fun grabActiveBorder(uuid: String): LiveData<List<Bounds>> {
         return boundsDao.grabActiveBorder(uuid)
     }
+    suspend fun deleteBoundUsingID(uuid: String, boundId: Int) {
+        boundsDao.deleteBoundUsingID(uuid, boundId)
+    }
 }

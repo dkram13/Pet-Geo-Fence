@@ -13,7 +13,7 @@ interface BoundsDao {
     fun AddBounds(bounds: Bounds)
 
     @Delete
-    fun DeleteBounds(bounds: Bounds)
+    suspend fun DeleteBounds(bounds: Bounds)
 
     @Query("SELECT COUNT(*) FROM Bounds WHERE UUID = :uuid")
     fun CountBoarders(uuid: String): LiveData<Int>
@@ -29,4 +29,7 @@ interface BoundsDao {
 
     @Query("SELECT * FROM Bounds WHERE UUID = :uuid and isActive = 1")
     fun grabActiveBorder(uuid: String): LiveData<List<Bounds>>
+
+    @Query("DELETE FROM Bounds WHERE UUID = :uuid and BoundId = :boundId")
+    suspend fun deleteBoundUsingID(uuid: String, boundId: Int)
 }

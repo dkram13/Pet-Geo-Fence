@@ -124,7 +124,19 @@ class bordersFragment : Fragment() {
                         Toast.makeText(requireContext(), "Editing: ${bounds.BoundName}", Toast.LENGTH_SHORT).show()
                     }
                 }
-
+                val deleteButton = Button(requireContext()).apply {
+                    text = "delete"
+                    layoutParams = LinearLayout.LayoutParams(
+                        0, LinearLayout.LayoutParams.WRAP_CONTENT,
+                        1f // Take equal weight in horizontal space
+                    )
+                    setOnClickListener {
+                        Toast.makeText(requireContext(), "deleting: ${bounds}", Toast.LENGTH_SHORT).show()
+                        lifecycleScope.launch {
+                            databaseViewModel.deleteBoundUsingID(bounds.UUID, bounds.BoundId)
+                        }
+                    }
+                }
                 // Create the toggle switch and set its initial state based on the database
                 val toggleSwitch = Switch(requireContext()).apply {
                     tag = bounds.BoundId
@@ -138,6 +150,7 @@ class bordersFragment : Fragment() {
 
                 // Add the "Edit" button and toggle switch to the horizontal layout
                 buttonRowLayout.addView(nameButton)
+                buttonRowLayout.addView(deleteButton)
                 buttonRowLayout.addView(toggleSwitch)
 
                 // Add the button row layout to the parent layout
