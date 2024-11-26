@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.example.pgfapp.DatabaseStuff.Entities.Bounds
+import com.example.pgfapp.DatabaseStuff.Entities.Pets
 import kotlinx.coroutines.launch
 
 class DatabaseViewModel(application: Application) : AndroidViewModel(application) {
@@ -38,13 +39,6 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
-    fun countBoarders(uuid: String): LiveData<Int> {
-        return repository.countBoarders(uuid)
-    }
-
-    fun grabBoarderNames(uuid: String): LiveData<List<String>> {
-        return repository.grabBoarderNames(uuid)
-    }
     fun grabBorders(uuid: String): LiveData<List<Bounds>> {
         return repository.grabBorders(uuid)
     }
@@ -56,5 +50,15 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
     }
     suspend fun deleteBoundUsingID(uuid: String, boundId: Int) {
         repository.deleteBoundUsingID(uuid, boundId)
+    }
+
+    fun AddPet(pets: Pets) {
+        // Using viewModelScope to launch a coroutine to perform the database operation
+        viewModelScope.launch {
+            repository.AddPet(pets)
+        }
+    }
+    fun grabPets(uuid: String): LiveData<List<Pets>> {
+        return repository.grabPets(uuid)
     }
 }

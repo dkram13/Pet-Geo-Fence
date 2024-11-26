@@ -69,5 +69,5 @@
     <string name="sign_in">Sign In</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="confirm_password_txt">confirm password</string>
-
+    <string name="collar">Collar</string>
 </resources>

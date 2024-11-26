@@ -8,4 +8,5 @@ data class Pets(
     @PrimaryKey(autoGenerate = true) val PetId: Int = 0,
     val IMEI: Int,
     val PetName: String,
+    val UUID: String
 )
