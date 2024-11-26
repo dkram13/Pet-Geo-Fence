@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/darkest_blue"
     tools:context=".LocationHistory">
 
     <LinearLayout
@@ -14,47 +15,47 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="16dp">
 
+        <ImageButton
+            android:id="@+id/settings_button"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:contentDescription="@string/contentDescrHamburger"
+            android:onClick="gotoHub"
+            android:src="@drawable/back_button"/>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginTop="0dp"
-            android:background="@drawable/rounded_corner"
+            android:layout_height="wrap_content"
+            android:textColor="@color/salmon"
+            android:layout_marginTop="60dp"
+            android:layout_marginStart="-50sp"
+            android:textSize="50sp"
             android:fontFamily="@font/montserratbold"
             android:text="@string/locHist"
             android:textAlignment="center" />
 
 
-        <ImageButton
-            android:id="@+id/settings_button"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="-400dp"
-            android:layout_marginTop="50dp"
-            android:background="@null"
-            android:contentDescription="@string/contentDescrHamburger"
-            android:onClick="gotoHub"
-            android:src="@drawable/back_button" />
-
         <TextView
-            android:layout_width="410dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="90dp"
-            android:layout_marginStart="-50dp"
-            android:fontFamily="@font/montserratbold"
-            android:text="Yesterday"
+            android:layout_marginTop="180dp"
+            android:layout_marginStart="-410dp"
+            android:textSize="30sp"
             android:background="@drawable/rounded_corner"
+            android:backgroundTint="@color/light_blue"
+            android:textColor="@color/Red40"
+            android:fontFamily="@font/montserratbold"
+            android:text="@string/yesterday"
             android:textAlignment="center" />
 
         <RelativeLayout
-            android:layout_width="414dp"
-            android:layout_height="300dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/light_blue"
             android:background="@drawable/rounded_corner"
-            android:layout_marginLeft="-415dp"
-            android:layout_marginTop="140dp">
+            android:layout_marginStart="-415dp"
+            android:layout_marginTop="250dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -67,36 +68,45 @@
                 android:layout_marginStart="100dp"
                 android:layout_marginTop="120dp"
                 android:src="@drawable/happy_trail" />
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="250dp"
+                android:rotationX="@integer/material_motion_duration_medium_1"
+                android:src="@drawable/happy_trail" />
         </RelativeLayout>
 
         <TextView
-            android:layout_width="350dp"
-            android:layout_marginTop="450dp"
-            android:layout_marginStart="-380dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Recent History"
-            android:textAlignment="center"
-            android:background="@drawable/rounded_corner"/>
-        <TextView
-            android:layout_width="350dp"
-            android:layout_marginTop="500dp"
-            android:layout_marginStart="-350dp"
-            android:layout_height="wrap_content"
-            android:text="@string/monday_april_24th_2024" />
+            android:layout_marginTop="710dp"
+            android:layout_marginStart="-410dp"
+            android:textSize="30sp"
+            android:background="@drawable/rounded_corner"
+            android:backgroundTint="@color/light_blue"
+            android:textColor="@color/Red40"
+            android:fontFamily="@font/montserratbold"
+            android:text="@string/december_4th_2024"
+            android:textAlignment="center" />
 
         <TextView
-        android:layout_width="350dp"
-        android:layout_marginTop="550dp"
-        android:layout_marginStart="-350dp"
-        android:layout_height="wrap_content"
-        android:text="Sunday April 23rd 2024 | 11:40am-5:03pm" />
-
-        <TextView
-            android:layout_width="350dp"
-            android:layout_marginTop="600dp"
-            android:layout_marginStart="-350dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Friday April 21st 2024 | 1:55pm-5:43pm" />
+            android:layout_marginTop="760dp"
+            android:layout_marginStart="-410dp"
+            android:textSize="30sp"
+            android:background="@drawable/rounded_corner"
+            android:backgroundTint="@color/light_blue"
+            android:textColor="@color/Red40"
+            android:fontFamily="@font/montserratbold"
+            android:text="@string/december_3rd_2024"
+            android:textAlignment="center" />
+
+
+
+
 
 
 

@@ -6,6 +6,7 @@ import com.example.pgfapp.DatabaseStuff.DAOs.BoundsPetDao
 import com.example.pgfapp.DatabaseStuff.DAOs.PetLocationDao
 import com.example.pgfapp.DatabaseStuff.DAOs.PetsDao
 import com.example.pgfapp.DatabaseStuff.Entities.Bounds
+import com.example.pgfapp.DatabaseStuff.Entities.Pets
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -27,14 +28,8 @@ class DatabaseRepository (
         }
     }
 
-    fun countBoarders(uuid: String): LiveData<Int> {
-        return boundsDao.CountBoarders(uuid)
-    }
-    fun grabBoarderNames(uuid: String): LiveData<List<String>> {
-        return boundsDao.GrabBoarderNames(uuid)
-    }
     fun grabBorders(uuid: String): LiveData<List<Bounds>> {
-        return boundsDao.GrabBorders(uuid)
+        return boundsDao.grabBorders(uuid)
     }
     suspend fun updateIsActive(boundId: Int, isActive: Boolean) {
         boundsDao.updateIsActive(boundId, isActive)
@@ -44,5 +39,15 @@ class DatabaseRepository (
     }
     suspend fun deleteBoundUsingID(uuid: String, boundId: Int) {
         boundsDao.deleteBoundUsingID(uuid, boundId)
+    }
+
+    suspend fun AddPet(pets: Pets) {
+        withContext(Dispatchers.IO) {
+            petsDao.AddPet(pets)
+        }
+    }
+
+    fun grabPets(uuid: String): LiveData<List<Pets>> {
+        return petsDao.grabPets(uuid)
     }
 }

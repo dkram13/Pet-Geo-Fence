@@ -1,9 +1,13 @@
 package com.example.pgfapp
 
+import android.Manifest
+import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,10 +15,13 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.pgfapp.DatabaseStuff.DatabaseViewModel
 import com.example.pgfapp.DatabaseStuff.Entities.Bounds
 import com.example.pgfapp.databinding.ActivityBoundsBinding
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -26,6 +33,7 @@ import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.PolygonOptions
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlin.math.atan2
@@ -41,6 +49,12 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     private var polygon: Polygon? = null //polygon object
     private var index: Int = 1
     private lateinit var databaseViewModel: DatabaseViewModel
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val locationPermissions = arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    )
+
     /*
     Function Name : onCreate
     Parameters    : Bundle savedInstanceState
@@ -71,6 +85,15 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
         mMap.getUiSettings().setMapToolbarEnabled(false)
+
+        // Initialize FusedLocationProviderClient
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        //check if the user has their location services enabled
+        if (hasLocationPermissions()) {
+            getLastLocation()
+        } else {
+            ActivityCompat.requestPermissions(this, locationPermissions, 1)
+        }
 
         val userTheme = getCurrentThemeMode()
         try {
@@ -338,6 +361,59 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         val dialog = builder.create()
         dialog.show()
         }
+
+    // Function to check if location permissions are granted
+    private fun hasLocationPermissions(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    // Get the last known location using FusedLocationProvider
+    @SuppressLint("MissingPermission")
+    private fun getLastLocation() {
+        if(hasLocationPermissions()) {
+            fusedLocationClient.lastLocation.addOnSuccessListener(
+                this,
+                OnSuccessListener<Location?> { location ->
+                    if (location != null) {
+                        val latitude = location.latitude
+                        val longitude = location.longitude
+                        val userLoc = LatLng(latitude, longitude)
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLoc, 20f))
+                        Toast.makeText(this, "Location: $latitude, $longitude", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(this, "Location is null", Toast.LENGTH_SHORT).show()
+                    }
+                })
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Failed to get location: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+        }
+        else{
+            ActivityCompat.requestPermissions(this, locationPermissions, 1)
+        }
+    }
+
+    // Handle permission request result (for runtime permissions)
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permissions granted, get location
+                getLastLocation()
+            } else {
+                Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
 
 

@@ -15,14 +15,8 @@ interface BoundsDao {
     @Delete
     suspend fun DeleteBounds(bounds: Bounds)
 
-    @Query("SELECT COUNT(*) FROM Bounds WHERE UUID = :uuid")
-    fun CountBoarders(uuid: String): LiveData<Int>
-
-    @Query("SELECT BoundName FROM Bounds WHERE UUID = :uuid ORDER BY BoundName ASC")//will need to make a value that gets past that gives the
-    fun GrabBoarderNames(uuid: String): LiveData<List<String>>        // primary key number
-
     @Query("SELECT * FROM Bounds WHERE UUID = :uuid ORDER BY BoundName ASC")
-    fun GrabBorders(uuid: String): LiveData<List<Bounds>>
+    fun grabBorders(uuid: String): LiveData<List<Bounds>>
 
     @Query("UPDATE bounds SET isActive = :isActive WHERE boundId = :boundId")
     suspend fun updateIsActive(boundId: Int, isActive: Boolean): Int
