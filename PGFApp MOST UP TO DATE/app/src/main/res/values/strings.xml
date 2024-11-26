@@ -69,5 +69,8 @@
     <string name="sign_in">Sign In</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="confirm_password_txt">confirm password</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="december_4th_2024">December 4th, 2024</string>
+    <string name="december_3rd_2024">December 3rd, 2024</string>
 
 </resources>
