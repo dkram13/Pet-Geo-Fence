@@ -72,15 +72,6 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        // Initialize FusedLocationProviderClient
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        //check if the user has their location services enabled
-        if (hasLocationPermissions()) {
-            getLastLocation()
-        } else {
-            ActivityCompat.requestPermissions(this, locationPermissions, 1)
-        }
-
     }
 
 
@@ -94,6 +85,15 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
 
         mMap.getUiSettings().setMapToolbarEnabled(false)
+
+        // Initialize FusedLocationProviderClient
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        //check if the user has their location services enabled
+        if (hasLocationPermissions()) {
+            getLastLocation()
+        } else {
+            ActivityCompat.requestPermissions(this, locationPermissions, 1)
+        }
 
         val userTheme = getCurrentThemeMode()
         try {
