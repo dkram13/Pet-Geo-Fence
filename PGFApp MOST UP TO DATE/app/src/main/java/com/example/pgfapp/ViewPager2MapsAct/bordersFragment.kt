@@ -1,6 +1,7 @@
 package com.example.pgfapp.ViewPager2MapsAct
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,9 +32,7 @@ class bordersFragment : Fragment() {
         uuid = Firebase.auth.currentUser?.uid
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_borders, container, false)
         buttonContainer = view.findViewById(R.id.button_container)
 
@@ -53,7 +52,10 @@ class bordersFragment : Fragment() {
 
     private fun setupToggleListener() {
         toggleListener = CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+            Log.d("ToggleListener", "buttonView is: ${buttonView.javaClass.simpleName}, tag: ${buttonView.tag}")
             val boundId = buttonView.tag as? Int
+            Log.d("ToggleListener", "Updating boundId: $boundId, isActive: $isChecked")
+
             if (boundId != null) {
                 lifecycleScope.launch {
                     databaseViewModel.updateIsActive(boundId, isChecked)
@@ -61,21 +63,29 @@ class bordersFragment : Fragment() {
             }
 
             if (isChecked) {
+                // If a switch is turned on, deactivate the previous active toggle
                 activeToggle?.let { previousSwitch ->
                     if (previousSwitch != buttonView) {
+                        Log.d("ToggleListener", "Turning off the previous switch: ${previousSwitch.tag}")
+                        // Update the database to set isActive to false for the previously active bound
                         val previousBoundId = previousSwitch.tag as? Int
                         previousBoundId?.let {
                             lifecycleScope.launch {
                                 databaseViewModel.updateIsActive(it, false)
                             }
                         }
+                        // Turn off the previous switch
                         previousSwitch.setOnCheckedChangeListener(null)
                         previousSwitch.isChecked = false
                         previousSwitch.setOnCheckedChangeListener(toggleListener)
                     }
                 }
+
+                // Set the current switch as active and update the database for its boundId
                 activeToggle = buttonView as Switch
+                Toast.makeText(context, "Boundary ${buttonView.text} is now ON", Toast.LENGTH_SHORT).show()
             } else {
+                // When a switch is turned off, set activeToggle to null and update the database for this switch
                 if (activeToggle == buttonView) {
                     activeToggle = null
                 }

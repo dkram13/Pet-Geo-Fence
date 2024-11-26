@@ -115,15 +115,15 @@
             android:textSize="30sp"
             android:textColor="@color/salmon" />
 
-        <!--Settings-->
+        <!--Log Out-->
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="-410dp"
             android:layout_marginTop="480dp"
-            android:backgroundTint="#D1E5F0"
-            android:contentDescription="@string/settings"
-            android:src="@drawable/baseline_settings_24" />
+            android:backgroundTint="@color/lighter_blue"
+            android:contentDescription="@string/logout"
+            android:src="@drawable/baseline_logout_24" />
 
         <TextView
             android:layout_width="match_parent"
@@ -131,30 +131,9 @@
             android:layout_marginTop="480dp"
             android:layout_marginStart="10sp"
             android:fontFamily="@font/montserratbold"
-            android:text="@string/settings_text"
+            android:text="@string/logout"
             android:textSize="30sp"
             android:textColor="@color/salmon" />
-
-        <!--LogOut-->
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="-410dp"
-            android:layout_marginTop="550dp"
-            android:backgroundTint="#D1E5F0"
-            android:contentDescription="@string/logouttheheck"
-            android:onClick="logout"
-            android:src="@drawable/baseline_logout_24" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="550dp"
-            android:fontFamily="@font/montserratbold"
-            android:text="@string/logout"
-            android:textColor="@color/salmon"
-            android:textSize="30sp" />
 
 
 

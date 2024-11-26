@@ -50,11 +50,14 @@ class SignUpActivity : AppCompatActivity() {
 
 
     /*
-    Function Name: backToLogin
+    Function Name: onNextBtn
     Parameters: View v
-    Description: Sends the user back to the login page
+    Description: Allows the user to register a new account with a
      */
     fun onNextBtn(v: View?){
+        //initialize authenticator
+        auth = Firebase.auth
+
         //get all the user input info
         val emailView = findViewById<View>(R.id.new_email) as EditText
         val pwdInputView = findViewById<View>(R.id.txtpassword) as EditText
@@ -64,7 +67,7 @@ class SignUpActivity : AppCompatActivity() {
         val pwdInput = pwdInputView.text.toString()
         val pwdConfirm = pwdConfirmView.text.toString()
 
-        //if the email and initial password field are empty
+        //if the email or initial password field are empty
         if(email.isEmpty() || pwdInput.isEmpty()) {
             // Create the alert builder
             val builder = AlertDialog.Builder(this)
@@ -83,23 +86,41 @@ class SignUpActivity : AppCompatActivity() {
             dialog.show()
         }
 
-        auth = Firebase.auth
+
         val newUser = auth.createUserWithEmailAndPassword(email, pwdInput)
         newUser.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
+            if (task.isSuccessful && pwdInput == pwdConfirm) {
                 // User registration successful
                 val user = auth.currentUser
                 val userID = user?.uid
-
-
+                //send an email for verification
+                sendEmailVerification(user)
                 //send the user to the sign in page
                 startActivity(Intent(this@SignUpActivity, MainActivity::class.java))
             } else {
                 // Registration failed
-                val errorMessage = task.exception?.message ?: "Registration failed"
+                val errorMessage = task.exception?.message ?: "Failed To Make an Account"
                 Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
             }
         }
 
     }
+
+    fun sendEmailVerification(user: FirebaseUser?) {
+        if (user != null) {
+            user.sendEmailVerification()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Email sent successfully
+                        Log.d("EmailVerification", "Verification email sent.")
+                    } else {
+                        // Handle error
+                        val errorMessage = "Failed to send verification email: ${task.exception?.message}"
+                    }
+                }
+        } else {
+            val errorMessage = "Already Signed In"
+        }
+    }
+
 }

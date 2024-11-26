@@ -23,6 +23,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.pgfapp.DatabaseStuff.DatabaseViewModel
 import com.example.pgfapp.ViewPager2MapsAct.PagerAdapter
 import com.example.pgfapp.databinding.ActivityMapsBinding
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -40,6 +41,13 @@ import com.google.android.gms.maps.model.PolygonOptions
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import android.Manifest
+import android.content.pm.PackageManager
+import android.location.Location
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.OnSuccessListener
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -59,6 +67,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var adapter: PagerAdapter
     private var circle: Circle? = null
     private lateinit var databaseViewModel: DatabaseViewModel
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val locationPermissions = arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    )
 
     // Getting event from location foreground service
     override fun onStart() {
@@ -114,6 +127,69 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        // Initialize FusedLocationProviderClient
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        //check if the user has their location services enabled
+        if (hasLocationPermissions()) {
+            getLastLocation()
+        } else {
+            ActivityCompat.requestPermissions(this, locationPermissions, 1)
+        }
+
+    }
+
+    // Function to check if location permissions are granted
+    private fun hasLocationPermissions(): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(
+            this, Manifest.permission.ACCESS_COARSE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    // Get the last known location using FusedLocationProvider
+    @SuppressLint("MissingPermission")
+    private fun getLastLocation() {
+        if(hasLocationPermissions()) {
+            fusedLocationClient.lastLocation.addOnSuccessListener(
+                this,
+                OnSuccessListener<Location?> { location ->
+                    if (location != null) {
+                        val latitude = location.latitude
+                        val longitude = location.longitude
+                        val userLoc = LatLng(latitude, longitude)
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLoc, 20f))
+                        Toast.makeText(this, "Location: $latitude, $longitude", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(this, "Location is null", Toast.LENGTH_SHORT).show()
+                    }
+                })
+                .addOnFailureListener { e ->
+                    Toast.makeText(this, "Failed to get location: ${e.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+        }
+        else{
+            ActivityCompat.requestPermissions(this, locationPermissions, 1)
+        }
+    }
+
+    // Handle permission request result (for runtime permissions)
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permissions granted, get location
+                getLastLocation()
+            } else {
+                Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     /*
@@ -185,7 +261,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             return R.raw.light_mode // Reference to the light map style
         }
     }
-
 
 
     private val locationReceiver = object : BroadcastReceiver() {
