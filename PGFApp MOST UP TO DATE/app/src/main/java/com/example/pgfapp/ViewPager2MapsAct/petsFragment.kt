@@ -1,22 +1,22 @@
 package com.example.pgfapp.ViewPager2MapsAct
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.CompoundButton
+import android.widget.EditText
 import android.widget.LinearLayout
-import android.widget.Switch
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import com.example.pgfapp.DatabaseStuff.DatabaseViewModel
+import com.example.pgfapp.DatabaseStuff.Entities.Pets
 import com.example.pgfapp.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.launch
 
 class petsFragment : Fragment() {
     private lateinit var databaseViewModel: DatabaseViewModel
@@ -71,11 +71,8 @@ class petsFragment : Fragment() {
                     }
                 }
 
-
-
                 // Add buttons to the row layout
                 buttonRowLayout.addView(nameButton)
-
 
                 // Add the row to the container
                 petsContainer.addView(buttonRowLayout)
@@ -89,13 +86,68 @@ class petsFragment : Fragment() {
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
                 setOnClickListener {
-                    Toast.makeText(requireContext(), "Add a new pet", Toast.LENGTH_SHORT).show()
-                    // Implement navigation to add pet screen
+                    showAddPetDialog()
                 }
             }
 
             // Add the "+" button to the container
             petsContainer.addView(addButton)
         }
+    }
+
+    // Function to show the dialog when "+" button is clicked
+    private fun showAddPetDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Add a New Pet")
+
+        // Create an input layout with two EditTexts (IMEI and Pet Name)
+        val inputLayout = LinearLayout(requireContext())
+        inputLayout.orientation = LinearLayout.VERTICAL
+
+        val imeiInput = EditText(requireContext()).apply {
+            hint = "Enter IMEI"
+            inputType = InputType.TYPE_CLASS_PHONE // Ensures only numeric input for IMEI
+        }
+
+        val petNameInput = EditText(requireContext()).apply {
+            hint = "Enter Pet Name"
+        }
+
+        inputLayout.addView(imeiInput)
+        inputLayout.addView(petNameInput)
+
+        builder.setView(inputLayout)
+
+        builder.setPositiveButton("Add") { dialog, _ ->
+            val imei = imeiInput.text.toString()
+            val petName = petNameInput.text.toString()
+
+            if (imei.isNotEmpty() && petName.isNotEmpty()) {
+                // Save the pet to the database
+                savePet(imei, petName)
+            } else {
+                Toast.makeText(requireContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            }
+
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.show()
+    }
+
+    // Function to save the pet (you can replace this with your database logic)
+    private fun savePet(imei: String, petName: String) {
+        // Add the logic to save the pet in your database or ViewModel
+        val userUuid = uuid ?: return
+        val pet = Pets(
+            IMEI = imei,
+            PetName = petName,
+            UUID = userUuid
+        ) // Assuming you have a Pet data class with IMEI
+        databaseViewModel.AddPet(pet) // Assuming addPet is implemented in your ViewModel
     }
 }

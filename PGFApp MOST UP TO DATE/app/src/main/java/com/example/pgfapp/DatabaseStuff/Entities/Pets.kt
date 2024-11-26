@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class Pets(
     @PrimaryKey(autoGenerate = true) val PetId: Int = 0,
-    val IMEI: Int,
+    val IMEI: String,
     val PetName: String,
     val UUID: String
 )

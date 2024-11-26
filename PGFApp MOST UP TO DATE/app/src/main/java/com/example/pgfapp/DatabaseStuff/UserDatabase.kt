@@ -15,7 +15,7 @@ import com.example.pgfapp.DatabaseStuff.Entities.PetLocation
 import com.example.pgfapp.DatabaseStuff.Entities.Pets
 
 
-@Database(entities = [Bounds::class, BoundsPet::class, Pets::class, PetLocation::class], version =4, exportSchema = false)
+@Database(entities = [Bounds::class, BoundsPet::class, Pets::class, PetLocation::class], version =5, exportSchema = false)
 @TypeConverters(GeoPointsConverter::class)
 abstract class UserDatabase: RoomDatabase() {
 
