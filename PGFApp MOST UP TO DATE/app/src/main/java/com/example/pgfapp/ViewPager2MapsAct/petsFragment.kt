@@ -2,7 +2,6 @@ package com.example.pgfapp.ViewPager2MapsAct
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -106,7 +105,7 @@ class petsFragment : Fragment() {
 
         val imeiInput = EditText(requireContext()).apply {
             hint = "Enter IMEI"
-            inputType = InputType.TYPE_CLASS_PHONE // Ensures only numeric input for IMEI
+            //inputType = InputType.TYPE_CLASS_PHONE // Ensures only numeric input for IMEI
         }
 
         val petNameInput = EditText(requireContext()).apply {
