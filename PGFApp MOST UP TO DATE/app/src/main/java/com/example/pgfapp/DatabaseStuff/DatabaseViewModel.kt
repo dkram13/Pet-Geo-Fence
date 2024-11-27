@@ -61,4 +61,7 @@ class DatabaseViewModel(application: Application) : AndroidViewModel(application
     fun grabPets(uuid: String): LiveData<List<Pets>> {
         return repository.grabPets(uuid)
     }
+    suspend fun deletePetUsingID(uuid: String, petId: Int) {
+        repository.deletePetUsingID(uuid, petId)
+    }
 }

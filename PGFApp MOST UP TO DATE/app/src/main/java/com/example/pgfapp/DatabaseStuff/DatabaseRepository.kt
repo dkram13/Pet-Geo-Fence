@@ -50,4 +50,9 @@ class DatabaseRepository (
     fun grabPets(uuid: String): LiveData<List<Pets>> {
         return petsDao.grabPets(uuid)
     }
+
+    suspend fun deletePetUsingID(uuid: String, petId: Int) {
+        petsDao.deletePetUsingID(uuid, petId)
+    }
+
 }
