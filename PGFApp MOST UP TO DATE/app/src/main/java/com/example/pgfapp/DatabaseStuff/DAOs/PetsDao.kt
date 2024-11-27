@@ -18,4 +18,6 @@ interface PetsDao {
     @Query("SELECT * FROM Pets WHERE UUID = :uuid ORDER BY PetName ASC")
     fun grabPets(uuid: String): LiveData<List<Pets>>
 
+    @Query("SELECT * FROM Pets WHERE UUID = :uuid ORDER BY PetName ASC")
+    fun grabPetsSync(uuid: String): List<Pets> // New synchronous method
 }
