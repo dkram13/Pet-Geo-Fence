@@ -1,5 +1,6 @@
 package com.example.pgfapp.ViewPager2MapsAct
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.pgfapp.BoundsActivity
 import com.example.pgfapp.DatabaseStuff.DatabaseViewModel
 import com.example.pgfapp.R
 import com.google.firebase.auth.ktx.auth
@@ -174,8 +176,9 @@ class bordersFragment : Fragment() {
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
                 setOnClickListener {
-                    Toast.makeText(requireContext(), "Add new boundary", Toast.LENGTH_SHORT).show()
-                    // Navigate to boundary creation screen or implement your logic here
+                    // Navigate to BordersActivity
+                    val intent = Intent(requireContext(), BoundsActivity::class.java)
+                    startActivity(intent)
                 }
             }
 
