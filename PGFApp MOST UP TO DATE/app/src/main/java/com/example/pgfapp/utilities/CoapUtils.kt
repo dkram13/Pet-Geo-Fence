@@ -69,6 +69,9 @@ class CoapUtils {
         }
 
         private fun buildPolygonWKT(bounds: ArrayList<LatLng>): String {
+            if (bounds.isEmpty()) {
+                return "POLYGON EMPTY"
+            }
             val coordinates = bounds.joinToString(", ") { "${it.longitude} ${it.latitude}" }
             val closedCoordinates = "$coordinates, ${bounds[0].longitude} ${bounds[0].latitude}"
 

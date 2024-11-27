@@ -14,6 +14,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.LiveData
 import com.example.pgfapp.R
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -22,13 +23,19 @@ import org.eclipse.californium.core.CoapHandler
 import org.eclipse.californium.core.CoapObserveRelation
 import org.eclipse.californium.core.CoapResponse
 import org.json.JSONObject
+import com.example.pgfapp.DatabaseStuff.Entities.Pets
+import com.example.pgfapp.DatabaseStuff.UserDatabase
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+
 
 class LocationForegroundService : Service() {
     private val TAG = "LFG Service"
     private val job = Job()
     private val coroutineScope = CoroutineScope(Dispatchers.IO + job)
-    private var observeRelation: CoapObserveRelation? = null
+    private val activeObservations = mutableMapOf<String, CoapObserveRelation>()
     private lateinit var notificationUtils: NotificationUtils
+    private val observedPetIMEIs = mutableSetOf<String>()
 
     override fun onCreate() {
         super.onCreate()
@@ -37,7 +44,34 @@ class LocationForegroundService : Service() {
         notificationUtils.createNotificationChannel()
 
         startForegroundService()
-        startObservingLocation()
+
+        val auth = Firebase.auth
+        val user = auth.currentUser
+        val userUuid = user?.uid ?: ""
+
+        // Observe pets list for this user
+        val petsDao = UserDatabase.getDatabase(application).PetsDao()
+        val petsLiveData: LiveData<List<Pets>> = petsDao.grabPets(userUuid)
+        petsLiveData.observeForever { pets ->
+            /*val newPets = pets.filter { pet -> !observedPetIMEIs.contains(pet.IMEI) }
+            if (newPets.isNotEmpty()) {
+                newPets.forEach { pet -> observedPetIMEIs.add(pet.IMEI) }
+
+                //cancelAllObservations()
+
+                Log.d(TAG, "Service started for ${pets.size} pets")
+                pets.forEach { pet ->
+                    startObservingLocation(pet)
+                }
+            }*/
+
+            cancelAllObservations()
+
+            Log.d(TAG, "Service started for ${pets.size} pets")
+            pets.forEach { pet ->
+                startObservingLocation(pet)
+            }
+        }
     }
 
     private fun startForegroundService() {
@@ -55,42 +89,46 @@ class LocationForegroundService : Service() {
         val notification: Notification = NotificationCompat.Builder(this, channelId)
             .setContentTitle("Location Tracking")
             .setContentText("Tracking Collar...")
-            .setSmallIcon(R.drawable.ic_launcher_foreground) // Replace with your app's icon
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setOngoing(true) // Make it ongoing (non-dismissible)
+            .setOngoing(true)
             .build()
 
-        // Start the service in the foreground with the notification
         startForeground(1, notification)
     }
 
-    private fun startObservingLocation() {
-        val uri = "coap://15.204.232.135:5683/batch"
+    private fun startObservingLocation(pet: Pets) {
+        // Construct the URI dynamically using the pet's IMEI
+        val uri = "coap://15.204.232.135:5683/${pet.IMEI}/batch"
 
-        observeCoapResource(uri, coroutineScope) { newLocation ->
-            Log.d(TAG, "New Location Observed: $newLocation")
+        // Observe the location for this pet and store the CoapObserveRelation in the map
+        observeCoapResource(uri, coroutineScope, pet.IMEI) { newLocation ->
+            Log.d(TAG, "New Location Observed for Pet IMEI: ${pet.IMEI} - $newLocation")
 
             // Parse the new location JSON
             val jsonObject = JSONObject(newLocation)
             val latitude = jsonObject.getDouble("latitude")
             val longitude = jsonObject.getDouble("longitude")
             val newLatLng = LatLng(latitude, longitude)
+            val inBounds = jsonObject.getInt("in_bounds")
 
-            notificationUtils.sendNotification(
-                "New Location Update",
-                "Latitude: $latitude, Longitude: $longitude",
-                5353
-            )
+            if (inBounds != 1) {
+                notificationUtils.sendNotification(
+                    "Pet out of bounds!: ${pet.PetName}",
+                    "Latitude: $latitude, Longitude: $longitude",
+                    5353
+                )
+            }
 
-            // Send the new location to MapsActivity or update the marker directly
-            updateLocationInMapsActivity(newLatLng)
+            updateLocationInMapsActivity(newLatLng, pet.IMEI)
         }
     }
 
-    private fun updateLocationInMapsActivity(newLatLng: LatLng) {
+    private fun updateLocationInMapsActivity(newLatLng: LatLng, petIMEI: String) {
         // Send a broadcast to MapsActivity with the new location
         val intent = Intent("com.example.pgfapp.LOCATION_UPDATE")
         intent.putExtra("newLocation", newLatLng)
+        intent.putExtra("petIMEI", petIMEI)
         sendBroadcast(intent)
     }
 
@@ -99,22 +137,22 @@ class LocationForegroundService : Service() {
 
         // Stop observing when the service is destroyed
         Log.d(TAG, "Destroying Observer Instance")
-        cancelObserveCoapResource()
+        cancelAllObservations()
         super.onDestroy()
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
-    private fun observeCoapResource(uri: String, coroutineScope: CoroutineScope, onUpdate: (String) -> Unit) {
+    private fun observeCoapResource(uri: String, coroutineScope: CoroutineScope, petIMEI: String, onUpdate: (String) -> Unit) {
         coroutineScope.launch {
             withContext(Dispatchers.IO) {
                 val client = CoapClient(uri)
 
-                observeRelation = client.observe(object : CoapHandler {
+                activeObservations[petIMEI] = client.observe(object : CoapHandler {
                     override fun onLoad(response: CoapResponse?) {
                         response?.let {
                             val responseText = it.responseText
-                            onUpdate(responseText) // Call the callback with new data
+                            onUpdate(responseText)
                         }
                     }
 
@@ -126,11 +164,11 @@ class LocationForegroundService : Service() {
         }
     }
 
-    private fun cancelObserveCoapResource() {
-        observeRelation?.let {
-            it.proactiveCancel() // Cancel the observation
-            Log.d(TAG, "Observation canceled")
-            observeRelation = null
-        } ?: Log.d(TAG, "No active observation to cancel")
+    private fun cancelAllObservations() {
+        activeObservations.forEach { (imei, observeRelation) ->
+            observeRelation.proactiveCancel() // Cancel each observation
+            Log.d(TAG, "Observation canceled for IMEI: $imei")
+        }
+        activeObservations.clear() // Clear the map of active observations
     }
 }

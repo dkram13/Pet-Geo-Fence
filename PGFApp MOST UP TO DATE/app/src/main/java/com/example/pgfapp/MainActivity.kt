@@ -16,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-//import com.example.pgfapp.LocationForegroundService
+
 
 class MainActivity : AppCompatActivity() {
     val db = Firebase.firestore
@@ -65,10 +65,9 @@ class MainActivity : AppCompatActivity() {
                         // Sign in is successful
                         Log.d("@id/email" + "@id/pwd", "success")
 
-                        Log.d("LFG", "Starting")
-                        val serviceIntent = Intent(this, LocationForegroundService::class.java)
-                        stopService(serviceIntent)
-                        startService(serviceIntent)
+                        val serviceIntent = Intent(application, LocationForegroundService::class.java)
+                        application.stopService(serviceIntent)
+                        application.startService(serviceIntent)
 
                         /*val user = auth.currentUser
                         val uid = user?.uid

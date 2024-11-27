@@ -19,10 +19,12 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.example.pgfapp.DatabaseStuff.DatabaseViewModel
 import com.example.pgfapp.ViewPager2MapsAct.PagerAdapter
 import com.example.pgfapp.databinding.ActivityMapsBinding
+import com.example.pgfapp.utilities.CoapUtils
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -41,14 +43,20 @@ import com.google.android.gms.maps.model.PolygonOptions
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
 import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.LiveData
+import com.example.pgfapp.DatabaseStuff.UserDatabase
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.tasks.OnSuccessListener
-
+import com.example.pgfapp.DatabaseStuff.DAOs.PetsDao
+import com.example.pgfapp.DatabaseStuff.Entities.Pets
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -62,10 +70,12 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var boundAct: BoundsActivity
     private var locInaccRadius: Double = 0.0
     private var marker: Marker? = null
+    private val petMarkers = mutableMapOf<String, Marker?>()
+    private val petCircles = mutableMapOf<String, Circle?>()
     private lateinit var switch: Switch
     private var polygon: Polygon? = null //polygon object
     private lateinit var adapter: PagerAdapter
-    private var circle: Circle? = null
+    //private var circle: Circle? = null
     private lateinit var databaseViewModel: DatabaseViewModel
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val locationPermissions = arrayOf(
@@ -127,16 +137,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
-        // Initialize FusedLocationProviderClient
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        //check if the user has their location services enabled
-        if (hasLocationPermissions()) {
-            getLastLocation()
-        } else {
-            ActivityCompat.requestPermissions(this, locationPermissions, 1)
-        }
-
     }
 
     // Function to check if location permissions are granted
@@ -224,6 +224,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         //pull boundaries from the database
         grabBorder()
 
+        // Initialize FusedLocationProviderClient
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        //check if the user has their location services enabled
+        if (hasLocationPermissions()) {
+            getLastLocation()
+        } else {
+            ActivityCompat.requestPermissions(this, locationPermissions, 1)
+        }
+
         /*Sample location
         val sampleYard = LatLng(39.7625051, -75.9706618)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sampleYard, 20f))*/
@@ -262,21 +271,55 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-
     private val locationReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.let {
                 val newLocation = it.getParcelableExtra<LatLng>("newLocation")
+                val petIMEI = it.getStringExtra("petIMEI") // Get the IMEI from the Intent
                 newLocation?.let { location ->
-                    // Update the marker on the UI thread
-                    runOnUiThread {
-                        updateMarker(location)
+                    petIMEI?.let { imei ->
+                        // Update the marker on the UI thread
+                        runOnUiThread {
+                            // Add a marker for the received pet's location
+                            updateMarkerForPet(location, imei) // Pass IMEI to update the correct marker
+                        }
                     }
                 }
             }
         }
     }
 
+    private fun updateMarkerForPet(location: LatLng, petIMEI: String) {
+        try {
+            // Remove the previous marker and circle if they exist
+            petMarkers[petIMEI]?.remove()
+            petCircles[petIMEI]?.remove()
+
+            // Add a new marker at the updated location
+            val marker = mMap.addMarker(
+                MarkerOptions()
+                    .position(location)
+                    .title("Pet $petIMEI Location")
+                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.cust_mark))
+            )
+            petMarkers[petIMEI] = marker
+
+            // Add a new circle around the marker (radius of 10 meters as an example)
+            val circle = mMap.addCircle(
+                CircleOptions()
+                    .center(location)
+                    .radius(10.0)  // Set the radius to 10 meters or any other value
+                    .strokeColor(android.graphics.Color.RED)
+                    .fillColor(android.graphics.Color.argb(50, 255, 0, 0)) // Semi-transparent red
+            )
+            petCircles[petIMEI] = circle
+
+            // Move the camera to the new marker location (zoom as needed)
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15f))
+        } catch (e: Exception) {
+            Log.e("MapError", "Error updating marker and circle: ${e.message}", e)
+        }
+    }
 
     /*
     Function Name : grabBorder
@@ -286,62 +329,67 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val user = Firebase.auth.currentUser
         val uid = user?.uid
         if (uid != null) {
+
+            val petsDao = UserDatabase.getDatabase(application).PetsDao() // Access the DAO
+
             databaseViewModel.grabActiveBorder(uid).observe(this, Observer { activeBorders ->
                 if (activeBorders.isNotEmpty()) {
                     // Access the points from the first active border (assuming only one active border)
-                    val activeBorderPoints = activeBorders[0].boarder // Assuming `boarder` is the correct field name
+                    val activeBorderPoints = activeBorders[0].boarder
 
                     // Draw the polygon if there are points
                     if (activeBorderPoints.isNotEmpty()) {
                         drawPolygon(activeBorderPoints)
+
+                        CoroutineScope(Dispatchers.IO).launch {
+                            try {
+                                // Fetch all pets for the given UUID
+                                val pets = petsDao.grabPetsSync(uid)
+
+                                pets.forEach { pet ->
+                                    val petIMEI = pet.IMEI
+                                    Log.i("MapsActivity", "SENDING NEW BORDER TO: $petIMEI")
+
+                                    // Construct the CoAP URI dynamically for the device
+                                    val uri = "coap://15.204.232.135:5683/${petIMEI}/boundary"
+
+                                    // Send the coordinates to the CoAP server
+                                    CoapUtils.sendCoordinates(uri, activeBorderPoints, this)
+                                }
+                            } catch (e: Exception) {
+                                Log.e("MapsActivity", "Error while sending borders: ${e.message}")
+                            }
+                        }
                     }
                 } else {
                     polygon?.remove()
                     // Handle case when there is no active border
                     //Toast.makeText(this, "No active border found", Toast.LENGTH_SHORT).show()
+
+                    val emptyBounds = ArrayList<LatLng>()
+                    CoroutineScope(Dispatchers.IO).launch {
+                        try {
+                            // Fetch all pets for the given UUID
+                            val pets = petsDao.grabPetsSync(uid)
+
+                            pets.forEach { pet ->
+                                val petIMEI = pet.IMEI
+                                Log.i("MapsActivity", "SENDING NEW BORDER TO: $petIMEI")
+
+                                // Construct the CoAP URI dynamically for the device
+                                val uri = "coap://15.204.232.135:5683/${petIMEI}/boundary"
+
+                                // Send the coordinates to the CoAP server
+                                CoapUtils.sendCoordinates(uri, emptyBounds, this)
+                            }
+                        } catch (e: Exception) {
+                            Log.e("MapsActivity", "Error while sending borders: ${e.message}")
+                        }
+                    }
                 }
             })
         }
     }
-
-
-    /*
-    Function Name : updateMarker
-    Parameters    : LatLng newLocation
-    Description   : Updates the marker in terms of the current location
-     */
-    private fun updateMarker(newLocation: LatLng) {
-        try {
-            // Remove the previous marker and location inaccuracy circle, if they exist
-            currentMarker?.remove()
-            circle?.remove()
-
-            locInaccRadius = 10.00
-
-            // Add a new marker at the updated location
-            currentMarker = mMap.addMarker(
-                MarkerOptions()
-                    .position(newLocation)
-                    .title("Observed Location")
-                    .icon(BitmapDescriptorFactory.fromResource(R.mipmap.cust_mark))
-            )
-
-            //Add a new circle around the marker
-            circle = mMap.addCircle(
-                CircleOptions()
-                    .center(newLocation)
-                    .radius(locInaccRadius)
-                    .strokeColor(android.graphics.Color.RED)
-                    .fillColor(android.graphics.Color.BLUE)
-            )
-
-            // Move the camera to the new marker location
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(newLocation, 20f))
-        } catch (e: Exception) {
-            Log.e("MapError", "Error creating marker: ${e.message}", e)
-        }
-    }
-
 
 
     //METHODS THAT DEAL WITH THE POLYGON DRAWING
