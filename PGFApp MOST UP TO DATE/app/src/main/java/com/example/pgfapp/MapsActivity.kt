@@ -233,10 +233,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             ActivityCompat.requestPermissions(this, locationPermissions, 1)
         }
 
-        /*Sample location
-        val sampleYard = LatLng(39.7625051, -75.9706618)
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sampleYard, 20f))*/
-
         //keep map in place when pet is within boundaries by disabling gesture controls
         mMap.getUiSettings().setScrollGesturesEnabled(true) //allows for scrolling
         mMap.getUiSettings().setMapToolbarEnabled(true) //map toolbar enabled for accessibility

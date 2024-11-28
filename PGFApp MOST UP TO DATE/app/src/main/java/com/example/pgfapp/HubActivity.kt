@@ -60,6 +60,32 @@ class HubActivity : AppCompatActivity() {
         startActivity(Intent(this@HubActivity, LocationHistory::class.java))
     }
 
+    /*
+    Function Name: goToPrivacy
+    Parameters: View v
+    Description: Sends the user to the privacy policy page
+     */
+    fun goToPrivacy(v: View?){
+        startActivity(Intent(this@HubActivity, PrivacyPolicyActivity::class.java))
+    }
+
+    /*
+    Function Name: goToTrainGuide
+    Parameters: View v
+    Description: Sends the user to the Training Guide Page
+     */
+    fun goToTrainGuide(v: View?){
+        startActivity(Intent(this@HubActivity, TrainingGuideActivity::class.java))
+    }
+
+    /*
+    Function Name: goToHowToUse
+    Parameters: View v
+    Description: Sends the user to the How To Use Page
+     */
+    fun goToHowToUse(v: View?){
+        startActivity(Intent(this@HubActivity, HowToUseActivity::class.java))
+    }
 
     /*
     Function Name: logout

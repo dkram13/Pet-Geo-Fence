@@ -20,6 +20,21 @@
         android:theme="@style/Theme.PGFApp"
         tools:targetApi="31">
         <activity
+            android:name=".HowToUseActivity"
+            android:exported="false"
+            android:label="@string/title_activity_how_to_use"
+            android:theme="@style/Theme.PGFApp.NoActionBar" />
+        <activity
+            android:name=".TrainingGuideActivity"
+            android:exported="false"
+            android:label="@string/title_activity_training_guide"
+            android:theme="@style/Theme.PGFApp.NoActionBar" />
+        <activity
+            android:name=".PrivacyPolicyActivity"
+            android:exported="false"
+            android:label="@string/title_activity_privacy_policy"
+            android:theme="@style/Theme.PGFApp.NoActionBar" />
+        <activity
             android:name=".SignUpActivity"
             android:exported="true"
             android:label="@string/title_activity_sign_up"

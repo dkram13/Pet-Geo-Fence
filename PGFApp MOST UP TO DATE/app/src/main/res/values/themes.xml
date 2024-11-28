@@ -3,4 +3,13 @@
     <style name="Base.Theme.PGFApp" parent="Theme.Material3.DayNight.NoActionBar"></style>
 
     <style name="Theme.PGFApp" parent="Base.Theme.PGFApp" />
+
+    <style name="Theme.PGFApp.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.PGFApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.PGFApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

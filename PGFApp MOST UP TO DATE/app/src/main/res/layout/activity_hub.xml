@@ -60,7 +60,8 @@
             android:layout_height="50dp"
             android:layout_marginLeft="-410dp"
             android:layout_marginTop="270dp"
-            android:backgroundTint="#D1E5F0"
+            android:backgroundTint="@color/lighter_blue"
+            android:onClick="goToPrivacy"
             android:contentDescription="@string/privacy_policy"
             android:src="@drawable/baseline_privacy_tip_24"
             tools:ignore="RtlHardcoded" />
@@ -83,6 +84,7 @@
             android:layout_marginTop="340dp"
             android:backgroundTint="#D1E5F0"
             android:contentDescription="@string/settings"
+            android:onClick="goToTrainGuide"
             android:src="@drawable/baseline_menu_book_24" />
 
         <TextView
@@ -103,6 +105,7 @@
             android:layout_marginTop="410dp"
             android:backgroundTint="#D1E5F0"
             android:contentDescription="@string/settings"
+            android:onClick="goToHowToUse"
             android:src="@drawable/baseline_question_answer_24" />
 
         <TextView
@@ -123,6 +126,7 @@
             android:layout_marginTop="480dp"
             android:backgroundTint="@color/lighter_blue"
             android:contentDescription="@string/logout"
+            android:onClick="logout"
             android:src="@drawable/baseline_logout_24" />
 
         <TextView
