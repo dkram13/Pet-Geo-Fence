@@ -23,7 +23,7 @@ class TrainingGuideActivity : AppCompatActivity() {
         binding.toolbarLayout.title = title
     }
 
-    fun backToHub(view: View) {
+    fun backToHub(view: View?) {
         startActivity(Intent(this@TrainingGuideActivity, HubActivity::class.java))
     }
 }
