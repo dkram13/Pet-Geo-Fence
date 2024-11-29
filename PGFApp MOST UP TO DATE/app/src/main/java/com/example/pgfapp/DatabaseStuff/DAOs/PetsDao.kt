@@ -20,6 +20,7 @@ interface PetsDao {
 
     @Query("SELECT * FROM Pets WHERE UUID = :uuid ORDER BY PetName ASC")
     fun grabPetsSync(uuid: String): List<Pets> // New synchronous method
+
     @Query("DELETE FROM Pets WHERE UUID = :uuid and PetId = :petId")
     suspend fun deletePetUsingID(uuid: String, petId: Int)
 }

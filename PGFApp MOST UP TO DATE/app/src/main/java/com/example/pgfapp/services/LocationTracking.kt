@@ -111,6 +111,7 @@ class LocationForegroundService : Service() {
             val longitude = jsonObject.getDouble("longitude")
             val newLatLng = LatLng(latitude, longitude)
             val inBounds = jsonObject.getInt("in_bounds")
+            val batteryLevel = jsonObject.getInt("battery")
 
             if (inBounds != 1) {
                 notificationUtils.sendNotification(
@@ -120,6 +121,7 @@ class LocationForegroundService : Service() {
                 )
             }
 
+            updateBatteryLevel(pet.IMEI, batteryLevel)
             updateLocationInMapsActivity(newLatLng, pet.IMEI)
         }
     }
@@ -171,4 +173,13 @@ class LocationForegroundService : Service() {
         }
         activeObservations.clear() // Clear the map of active observations
     }
+
+    private fun updateBatteryLevel(petIMEI: String, batteryLevel: Int) {
+        // Create an intent for the battery update
+        val intent = Intent("com.example.pgfapp.BATTERY_UPDATE")
+        intent.putExtra("petIMEI", petIMEI)
+        intent.putExtra("batteryLevel", batteryLevel)
+        sendBroadcast(intent)
+    }
+
 }

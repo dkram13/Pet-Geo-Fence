@@ -1,8 +1,14 @@
 package com.example.pgfapp.ViewPager2MapsAct
 
 import android.app.AlertDialog
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +18,10 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity.RECEIVER_EXPORTED
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -22,14 +31,36 @@ import com.example.pgfapp.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
+import com.example.pgfapp.viewmodels.PetDataViewModel
 
 class petsFragment : Fragment() {
     private lateinit var databaseViewModel: DatabaseViewModel
+    private lateinit var petDataViewModel: PetDataViewModel
     private lateinit var petsContainer: LinearLayout
     private var uuid: String? = null
 
+    private val batteryUpdateReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (intent.action == "com.example.pgfapp.BATTERY_UPDATE") {
+                val petIMEI = intent.getStringExtra("petIMEI")
+                val batteryLevel = intent.getIntExtra("batteryLevel", -1)
+
+                // Call the ViewModel to update the battery level
+                if (!petIMEI.isNullOrEmpty()) {
+                    petDataViewModel.updateBatteryLevel(petIMEI, batteryLevel)
+                }
+
+                Log.e("PETF", "Fire 1")
+
+                // Update the UI for the specific pet (you could call a function to update the text)
+                //updateBatteryLevelUI(petIMEI, batteryLevel)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        petDataViewModel = ViewModelProvider(this)[PetDataViewModel::class.java]
         databaseViewModel = ViewModelProvider(this)[DatabaseViewModel::class.java]
         uuid = Firebase.auth.currentUser?.uid
     }
@@ -39,12 +70,43 @@ class petsFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_pets, container, false)
         petsContainer = view.findViewById(R.id.pets_container)
+
+        populatePets()
+
         return view
     }
 
     override fun onResume() {
         super.onResume()
-        populatePets()
+        //populatePets()
+
+        // Register the receiver for battery updates
+        /*val intentFilter = IntentFilter("com.example.pgfapp.BATTERY_UPDATE")
+        requireContext().registerReceiver(batteryUpdateReceiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)*/
+
+        val filter = IntentFilter("com.example.pgfapp.BATTERY_UPDATE")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            // For Android 12 (API 31) and higher, specify the receiver's export status
+            requireContext().registerReceiver(batteryUpdateReceiver, filter, RECEIVER_EXPORTED)
+        } else {
+            // For older versions, just register the receiver as usual
+            requireContext().registerReceiver(batteryUpdateReceiver, filter)
+        }
+
+        petDataViewModel.batteryLevels.observe(viewLifecycleOwner) { batteryLevels ->
+            // Iterate through the batteryLevels list and update the UI
+            batteryLevels.forEach { petBatteryLevel ->
+                val batteryLevel = petBatteryLevel.batteryLevel
+                val imei = petBatteryLevel.imei
+                updateBatteryLevelUI(imei, batteryLevel)
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Unregister the battery update receiver to prevent leaks
+        requireContext().unregisterReceiver(batteryUpdateReceiver)
     }
 
     private fun populatePets() {
@@ -91,8 +153,11 @@ class petsFragment : Fragment() {
                         }
                     }
                 }
+
                 val batteryButton = TextView(requireContext()).apply {
-                    text = "50%"
+                    text = "N/A"
+                    //val batteryLevel = petDataViewModel.batteryLevels.value?.get(pet.IMEI.toInt()) ?: "" // Default to 50 if not found
+                    //text = "$batteryLevel%"
                     layoutParams = LinearLayout.LayoutParams(
                         0, LinearLayout.LayoutParams.WRAP_CONTENT,
                         1f
@@ -110,8 +175,10 @@ class petsFragment : Fragment() {
                     ellipsize = TextUtils.TruncateAt.END
                     isClickable = false // Disable clicks
                     isFocusable = false // Disable focus
+                    tag = "battery-${pet.IMEI}" // Tag to identify this battery button
+
                 }
-                val dataLeftButton = TextView(requireContext()).apply {
+                /*val dataLeftButton = TextView(requireContext()).apply {
                     text = "5GB/60GB"
                     layoutParams = LinearLayout.LayoutParams(
                         0, LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -130,12 +197,12 @@ class petsFragment : Fragment() {
                     ellipsize = TextUtils.TruncateAt.END
                     isClickable = false // Disable clicks
                     isFocusable = false // Disable focus
-                }
+                }*/
                 // Add buttons to the row layout
                 buttonRowLayout.addView(nameButton)
                 buttonRowLayout.addView(deleteButton)
                 buttonRowLayout.addView(batteryButton)
-                buttonRowLayout.addView(dataLeftButton)
+                //buttonRowLayout.addView(dataLeftButton)
                 // Add the row to the container
                 petsContainer.addView(buttonRowLayout)
             }
@@ -211,5 +278,19 @@ class petsFragment : Fragment() {
             UUID = userUuid
         ) // Assuming you have a Pet data class with IMEI
         databaseViewModel.AddPet(pet) // Assuming addPet is implemented in your ViewModel
+    }
+
+    private fun updateBatteryLevelUI(petIMEI: String?, batteryLevel: Int) {
+        try {
+            if (petIMEI != null) {
+                // Find the battery TextView by its tag
+                Log.e("PETF", "Updating Battery Level")
+                val batteryTextView = petsContainer.findViewWithTag<TextView>("battery-$petIMEI")
+                batteryTextView?.text = "$batteryLevel%"
+            }
+        } catch (e: Exception) {
+            // Handle the exception (e.g., log it)
+            Log.e("PETF", "Error updating battery level UI", e)
+        }
     }
 }
