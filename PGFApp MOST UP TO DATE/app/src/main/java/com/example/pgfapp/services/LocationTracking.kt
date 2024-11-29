@@ -112,24 +112,28 @@ class LocationForegroundService : Service() {
             val newLatLng = LatLng(latitude, longitude)
             val inBounds = jsonObject.getInt("in_bounds")
             val batteryLevel = jsonObject.getInt("battery")
+            val accuracy = jsonObject.getInt("accuracy")
+
+            val batteryPercentage = convertBatteryToPercentage(batteryLevel)
 
             if (inBounds != 1) {
                 notificationUtils.sendNotification(
-                    "Pet out of bounds!: ${pet.PetName}",
+                    "${pet.PetName} is out of bounds!",
                     "Latitude: $latitude, Longitude: $longitude",
                     5353
                 )
             }
 
-            updateBatteryLevel(pet.IMEI, batteryLevel)
-            updateLocationInMapsActivity(newLatLng, pet.IMEI)
+            updateBatteryLevel(pet.IMEI, batteryPercentage)
+            updateLocationInMapsActivity(newLatLng, accuracy.toString(), pet.IMEI)
         }
     }
 
-    private fun updateLocationInMapsActivity(newLatLng: LatLng, petIMEI: String) {
+    private fun updateLocationInMapsActivity(newLatLng: LatLng, accuracy: String, petIMEI: String) {
         // Send a broadcast to MapsActivity with the new location
         val intent = Intent("com.example.pgfapp.LOCATION_UPDATE")
         intent.putExtra("newLocation", newLatLng)
+        intent.putExtra("accuracy", accuracy)
         intent.putExtra("petIMEI", petIMEI)
         sendBroadcast(intent)
     }
@@ -182,4 +186,8 @@ class LocationForegroundService : Service() {
         sendBroadcast(intent)
     }
 
+    fun convertBatteryToPercentage(batteryLevelMv: Int, minVoltageMv: Int = 3000, maxVoltageMv: Int = 4200): Int {
+        val percentage = ((batteryLevelMv - minVoltageMv).toDouble() / (maxVoltageMv - minVoltageMv) * 100).toInt()
+        return percentage.coerceIn(0, 100) // Ensure the value is between 0 and 100
+    }
 }

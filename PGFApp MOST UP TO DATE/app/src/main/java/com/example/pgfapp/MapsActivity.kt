@@ -279,13 +279,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.let {
                 val newLocation = it.getParcelableExtra<LatLng>("newLocation")
-                val petIMEI = it.getStringExtra("petIMEI") // Get the IMEI from the Intent
+                val accuracy = it.getStringExtra("accuracy")
+                val petIMEI = it.getStringExtra("petIMEI")
                 newLocation?.let { location ->
-                    petIMEI?.let { imei ->
-                        // Update the marker on the UI thread
-                        runOnUiThread {
-                            // Add a marker for the received pet's location
-                            updateMarkerForPet(location, imei) // Pass IMEI to update the correct marker
+                    accuracy?.let { accuracy ->
+                        petIMEI?.let { imei ->
+                            runOnUiThread {
+                                updateMarkerForPet(location, accuracy, imei)
+                            }
                         }
                     }
                 }
@@ -293,7 +294,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun updateMarkerForPet(location: LatLng, petIMEI: String) {
+    private fun updateMarkerForPet(location: LatLng, accuracy: String, petIMEI: String) {
         try {
             // Remove the previous marker and circle if they exist
             petMarkers[petIMEI]?.remove()
@@ -308,11 +309,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             )
             petMarkers[petIMEI] = marker
 
-            // Add a new circle around the marker (radius of 10 meters as an example)
             val circle = mMap.addCircle(
                 CircleOptions()
                     .center(location)
-                    .radius(10.0)  // Set the radius to 10 meters or any other value
+                    .radius(accuracy.toDouble())
                     .strokeColor(android.graphics.Color.RED)
                     .fillColor(android.graphics.Color.argb(50, 255, 0, 0)) // Semi-transparent red
             )

@@ -49,11 +49,6 @@ class petsFragment : Fragment() {
                 if (!petIMEI.isNullOrEmpty()) {
                     petDataViewModel.updateBatteryLevel(petIMEI, batteryLevel)
                 }
-
-                Log.e("PETF", "Fire 1")
-
-                // Update the UI for the specific pet (you could call a function to update the text)
-                //updateBatteryLevelUI(petIMEI, batteryLevel)
             }
         }
     }
@@ -80,9 +75,6 @@ class petsFragment : Fragment() {
         super.onResume()
         //populatePets()
 
-        // Register the receiver for battery updates
-        /*val intentFilter = IntentFilter("com.example.pgfapp.BATTERY_UPDATE")
-        requireContext().registerReceiver(batteryUpdateReceiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)*/
 
         val filter = IntentFilter("com.example.pgfapp.BATTERY_UPDATE")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -156,8 +148,6 @@ class petsFragment : Fragment() {
 
                 val batteryButton = TextView(requireContext()).apply {
                     text = "N/A"
-                    //val batteryLevel = petDataViewModel.batteryLevels.value?.get(pet.IMEI.toInt()) ?: "" // Default to 50 if not found
-                    //text = "$batteryLevel%"
                     layoutParams = LinearLayout.LayoutParams(
                         0, LinearLayout.LayoutParams.WRAP_CONTENT,
                         1f
@@ -284,7 +274,6 @@ class petsFragment : Fragment() {
         try {
             if (petIMEI != null) {
                 // Find the battery TextView by its tag
-                Log.e("PETF", "Updating Battery Level")
                 val batteryTextView = petsContainer.findViewWithTag<TextView>("battery-$petIMEI")
                 batteryTextView?.text = "$batteryLevel%"
             }
