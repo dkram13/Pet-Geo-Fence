@@ -5,20 +5,20 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#8EC4DE"
     tools:context=".ViewPager2MapsAct.bordersFragment">
 
-    <TextView
+    <!--<TextView
     android:id="@+id/textView"
     android:layout_width="0dp"
     android:layout_height="0dp"
-    android:background="#00ffff"
+    android:background="#8EC4DE"
     android:gravity="center"
     android:text="@string/boarders"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
-
+    app:layout_constraintTop_toTopOf="parent" />-->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"

@@ -18,20 +18,18 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity.RECEIVER_EXPORTED
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.registerReceiver
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.pgfapp.DatabaseStuff.DatabaseViewModel
 import com.example.pgfapp.DatabaseStuff.Entities.Pets
 import com.example.pgfapp.R
+import com.example.pgfapp.viewmodels.PetDataViewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.launch
-import com.example.pgfapp.viewmodels.PetDataViewModel
 
 class petsFragment : Fragment() {
     private lateinit var databaseViewModel: DatabaseViewModel
@@ -129,7 +127,7 @@ class petsFragment : Fragment() {
                     maxLines = 1 // Limit to one line
                     ellipsize = TextUtils.TruncateAt.END
                     setOnClickListener {
-                        Toast.makeText(requireContext(), "Editing: ${pet.PetName}", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(requireContext(), "Editing: ${pet.PetName}", Toast.LENGTH_SHORT).show()
                     }
                 }
                 val deleteButton = Button(requireContext()).apply {
@@ -189,6 +187,7 @@ class petsFragment : Fragment() {
                     isFocusable = false // Disable focus
                 }*/
                 // Add buttons to the row layout
+
                 buttonRowLayout.addView(nameButton)
                 buttonRowLayout.addView(deleteButton)
                 buttonRowLayout.addView(batteryButton)

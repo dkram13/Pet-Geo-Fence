@@ -1,5 +1,6 @@
 package com.example.pgfapp.ViewPager2MapsAct
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -127,10 +128,21 @@ class bordersFragment : Fragment() {
                         1f
                     )
                     setOnClickListener {
-                        Toast.makeText(requireContext(), "Editing: ${bounds.BoundName}", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(requireContext(), "Editing: ${bounds.BoundName}", Toast.LENGTH_SHORT).show()
                     }
                 }
-
+                /*val deleteButton = ImageView(requireContext()).apply {
+                    layoutParams = LinearLayout.LayoutParams(
+                        0, LinearLayout.LayoutParams.WRAP_CONTENT,
+                        1f
+                    )
+                    setImageResource(R.drawable.delete_button) // Replace with your drawable resource
+                    setPadding(16, 8, 16, 8) // Optional: Add padding for aesthetics
+                    setBackgroundResource(android.R.drawable.btn_default) // Optional: Add button-like background
+                    adjustViewBounds = true // Maintain aspect ratio
+                    scaleType = ImageView.ScaleType.CENTER_INSIDE // Scale the image inside the bounds
+                    isClickable = true // Make it clickable if needed
+                    isFocusable = true // Enable focus for accessibility*/
                 val deleteButton = Button(requireContext()).apply {
                     text = "delete"
                     layoutParams = LinearLayout.LayoutParams(
@@ -138,10 +150,23 @@ class bordersFragment : Fragment() {
                         1f
                     )
                     setOnClickListener {
-                        Toast.makeText(requireContext(), "Deleting: ${bounds}", Toast.LENGTH_SHORT).show()
-                        lifecycleScope.launch {
-                            databaseViewModel.deleteBoundUsingID(bounds.UUID, bounds.BoundId)
-                        }
+                        // Show a confirmation dialog before deleting
+                        AlertDialog.Builder(requireContext())
+                            .setTitle("Delete Confirmation")
+                            .setMessage("Are you sure you want to delete this boundary?")
+                            .setPositiveButton("Yes") { dialog, _ ->
+                                // Perform the delete operation
+                                lifecycleScope.launch {
+                                    Toast.makeText(requireContext(), "Deleting: ${bounds}", Toast.LENGTH_SHORT).show()
+                                    databaseViewModel.deleteBoundUsingID(bounds.UUID, bounds.BoundId)
+                                }
+                                dialog.dismiss() // Close the dialog
+                            }
+                            .setNegativeButton("No") { dialog, _ ->
+                                dialog.dismiss() // Close the dialog without doing anything
+                            }
+                            .create()
+                            .show()
                     }
                 }
 
@@ -159,6 +184,17 @@ class bordersFragment : Fragment() {
                         activeToggle = this
                     }
                 }
+                nameButton.measure(0, 0)
+                deleteButton.measure(0, 0)
+                toggleSwitch.measure(0, 0)
+
+                // Find the tallest height
+                val tallestHeight = maxOf(nameButton.measuredHeight, deleteButton.measuredHeight, toggleSwitch.measuredHeight)
+
+                // Apply the tallest height to all views
+                nameButton.layoutParams.height = tallestHeight
+                deleteButton.layoutParams.height = tallestHeight
+                toggleSwitch.layoutParams.height = tallestHeight
 
                 buttonRowLayout.addView(nameButton)
                 buttonRowLayout.addView(deleteButton)

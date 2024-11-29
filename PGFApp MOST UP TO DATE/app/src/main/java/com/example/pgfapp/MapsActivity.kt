@@ -1,31 +1,33 @@
 package com.example.pgfapp
 
 
-import android.annotation.SuppressLint
+import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.Switch
-import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.example.pgfapp.DatabaseStuff.DatabaseViewModel
+import com.example.pgfapp.DatabaseStuff.UserDatabase
 import com.example.pgfapp.ViewPager2MapsAct.PagerAdapter
 import com.example.pgfapp.databinding.ActivityMapsBinding
 import com.example.pgfapp.utilities.CoapUtils
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -40,21 +42,11 @@ import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.PolygonOptions
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
-import android.Manifest
-import android.content.pm.PackageManager
-import android.location.Location
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.lifecycle.LiveData
-import com.example.pgfapp.DatabaseStuff.UserDatabase
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.OnSuccessListener
-import com.example.pgfapp.DatabaseStuff.DAOs.PetsDao
-import com.example.pgfapp.DatabaseStuff.Entities.Pets
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -463,7 +455,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     Function Name : hideButtons
     Description   : Hides the all the buttons and UI elements belonging to the main maps page
      */
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
+    /*@SuppressLint("UseSwitchCompatOrMaterialCode")
     fun hideButtons(){
         //hide all the buttons and switches
         val settingsBtn = findViewById<View>(R.id.settings_button) as ImageButton
@@ -537,7 +529,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         onBackArrow(v)
     }
 
-
+*/
 
     //METHODS THAT CONTROL WHAT A BUTTON DOES
     /*
@@ -562,7 +554,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     Makes necessary UI elements visible,
                     and then allows the user to edit the selected boundary.
      */
-    fun editBounds(v: View?){
+/*    fun editBounds(v: View?){
         hideButtons() //hide all the buttons
 
         //make the needed buttons visible
@@ -594,13 +586,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
     }
-
+*/
     /*
     Function Name : switchFunctionality
     Parameters    : View v
     Description   : The Switch Functionality
      */
-    fun switchFunctionality(v: View?){
+/*    fun switchFunctionality(v: View?){
         switch = findViewById<View>(R.id.simpleSwitch) as Switch
 
         if(switch.isChecked){
@@ -625,7 +617,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
-
+*/
 
     // METHODS THAT SEND THE USER TO A DIFFERENT ACTIVITY
     /*

@@ -11,7 +11,7 @@
         android:id="@+id/textView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="#00ffff"
+        android:background="#8EC4DE"
         android:gravity="center"
         android:text="@string/collar"
         app:layout_constraintBottom_toBottomOf="parent"
