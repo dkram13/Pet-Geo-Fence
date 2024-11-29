@@ -137,6 +137,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
     }
 
     // Function to check if location permissions are granted
@@ -149,43 +157,38 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
-    // Get the last known location using FusedLocationProvider
-    @SuppressLint("MissingPermission")
-    private fun getLastLocation() {
-        if(hasLocationPermissions()) {
-            fusedLocationClient.lastLocation.addOnSuccessListener(
+    // Get the users fine (exact) location using FusedLocationProvider
+    private fun getCurrentLocation() {
+        // Check for permission again in case it was granted after the initial check
+        if (ActivityCompat.checkSelfPermission(
                 this,
-                OnSuccessListener<Location?> { location ->
-                    if (location != null) {
-                        val latitude = location.latitude
-                        val longitude = location.longitude
-                        val userLoc = LatLng(latitude, longitude)
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLoc, 20f))
-                        Toast.makeText(this, "Location: $latitude, $longitude", Toast.LENGTH_SHORT)
-                            .show()
-                    } else {
-                        Toast.makeText(this, "Location is null", Toast.LENGTH_SHORT).show()
-                    }
-                })
-                .addOnFailureListener { e ->
-                    Toast.makeText(this, "Failed to get location: ${e.message}", Toast.LENGTH_SHORT)
-                        .show()
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+
+        // Request current location
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener(this, OnSuccessListener<Location> { location ->
+                if (location != null) {
+                    // Use the location data here
+                    val latLng = LatLng(location.latitude, location.longitude)
+
+                    // Move the camera to the user's location and add a marker
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20f))
                 }
-        }
-        else{
-            ActivityCompat.requestPermissions(this, locationPermissions, 1)
-        }
+            })
     }
 
     // Handle permission request result (for runtime permissions)
     override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
-    ) {
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 1) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permissions granted, get location
-                getLastLocation()
+                getCurrentLocation()
             } else {
                 Toast.makeText(this, "Location permission denied", Toast.LENGTH_SHORT).show()
             }
@@ -204,6 +207,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         //initialize the google map
         mMap = googleMap
+        // Check for permission again in case it was granted after the initial check
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            mMap.isMyLocationEnabled = true
+        }
+
 
         val userTheme = getCurrentThemeMode()
         try {
@@ -228,7 +236,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         //check if the user has their location services enabled
         if (hasLocationPermissions()) {
-            getLastLocation()
+            getCurrentLocation()
         } else {
             ActivityCompat.requestPermissions(this, locationPermissions, 1)
         }
@@ -261,9 +269,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun getMapStyleResource(mode: String): Int {
         // Return the corresponding map style based on the theme mode
         if (mode == "dark") {
-             return R.raw.dark_mode // Reference to the dark map style
+             return R.raw.dark_mode_maps // Reference to the dark map style
         } else {
-            return R.raw.light_mode // Reference to the light map style
+            return R.raw.light_mode_maps // Reference to the light map style
         }
     }
 
