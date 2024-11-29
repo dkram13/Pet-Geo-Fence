@@ -27,7 +27,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="71dp"
                 android:src="@drawable/back_button"
                 android:onClick="backToHub"
                 android:contentDescription="@string/go_back"/>

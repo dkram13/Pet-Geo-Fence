@@ -159,9 +159,9 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun getMapStyleResource(mode: String): Int {
         // Return the corresponding map style based on the theme mode
         if (mode == "dark") {
-            return R.raw.dark_mode // Reference to the dark map style
+            return R.raw.dark_mode_maps // Reference to the dark map style
         } else {
-            return R.raw.light_mode // Reference to the light map style
+            return R.raw.light_mode_maps // Reference to the light map style
         }
     }
 
