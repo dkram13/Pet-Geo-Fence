@@ -137,10 +137,21 @@ class petsFragment : Fragment() {
                         1f
                     )
                     setOnClickListener {
-                        Toast.makeText(requireContext(), "Deleting: ${pet.PetName}", Toast.LENGTH_SHORT).show()
-                        lifecycleScope.launch {
-                            databaseViewModel.deletePetUsingID(pet.UUID, pet.PetId)
-                        }
+                        //toast.makeText(requireContext(), "Deleting: ${pet.PetName}", Toast.LENGTH_SHORT).show()
+                        AlertDialog.Builder(requireContext())
+                            .setTitle("Delete Confirmation")
+                            .setMessage("Are you sure you want to delete this Collar?")
+                            .setPositiveButton("Yes") { dialog, _ ->
+                                lifecycleScope.launch {
+                                    databaseViewModel.deletePetUsingID(pet.UUID, pet.PetId)
+                                }
+                                dialog.dismiss() // Close the dialog
+                            }
+                            .setNegativeButton("No") { dialog, _ ->
+                                dialog.dismiss() // Close the dialog without doing anything
+                            }
+                            .create()
+                            .show()
                     }
                 }
 
