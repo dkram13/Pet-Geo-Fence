@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -15,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -107,14 +109,24 @@ class petsFragment : Fragment() {
             petsContainer.removeAllViews() // Clear the container before adding new buttons
 
             pets.forEach { pet ->
-                // Create a row for each pet
+                val parentLayout = LinearLayout(requireContext()).apply {
+                    orientation = LinearLayout.VERTICAL
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    ).apply {
+                        setMargins(0, 8, 0, 8) // Add vertical spacing between rows
+                    }
+                    background = ContextCompat.getDrawable(requireContext(), R.drawable.background) // Replace with your color
+                    setPadding(4, 4, 4, 4) // Padding for aesthetics
+                }
+
                 val buttonRowLayout = LinearLayout(requireContext()).apply {
                     orientation = LinearLayout.HORIZONTAL
                     layoutParams = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
+                        110//LinearLayout.LayoutParams.WRAP_CONTENT
                     )
-
                 }
 
                 // Add a button for the pet name
@@ -122,22 +134,30 @@ class petsFragment : Fragment() {
                     text = pet.PetName
                     layoutParams = LinearLayout.LayoutParams(
                         0, LinearLayout.LayoutParams.WRAP_CONTENT,
-                        2f
+                        3f
                     )
-                    maxLines = 1 // Limit to one line
-                    ellipsize = TextUtils.TruncateAt.END
+                    setBackgroundColor(Color.TRANSPARENT) // Makes the button blend in with the bar
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.black)) // Adjust text color
+                    gravity = Gravity.CENTER
                     setOnClickListener {
-                        //Toast.makeText(requireContext(), "Editing: ${pet.PetName}", Toast.LENGTH_SHORT).show()
                     }
                 }
-                val deleteButton = Button(requireContext()).apply {
-                    text = "delete"
+
+                // Add a delete button
+                val deleteButton = ImageView(requireContext()).apply {
                     layoutParams = LinearLayout.LayoutParams(
                         0, LinearLayout.LayoutParams.WRAP_CONTENT,
                         1f
                     )
+                    setImageResource(R.drawable.deletebutton) // Replace with your drawable resource
+                    setPadding(8, 8, 8, 8) // Optional: Add padding for aesthetics
+                    setBackgroundResource(android.R.drawable.btn_default) // Optional: Add button-like background
+                    adjustViewBounds = true // Maintain aspect ratio
+                    scaleType = ImageView.ScaleType.CENTER_INSIDE // Scale the image inside the bounds
+                    isClickable = true // Make it clickable if needed
+                    isFocusable = true // Enable focus for accessibility
+                    setBackgroundColor(Color.TRANSPARENT) // Blend with the bar
                     setOnClickListener {
-                        //toast.makeText(requireContext(), "Deleting: ${pet.PetName}", Toast.LENGTH_SHORT).show()
                         AlertDialog.Builder(requireContext())
                             .setTitle("Delete Confirmation")
                             .setMessage("Are you sure you want to delete this Collar?")
@@ -145,10 +165,10 @@ class petsFragment : Fragment() {
                                 lifecycleScope.launch {
                                     databaseViewModel.deletePetUsingID(pet.UUID, pet.PetId)
                                 }
-                                dialog.dismiss() // Close the dialog
+                                dialog.dismiss()
                             }
                             .setNegativeButton("No") { dialog, _ ->
-                                dialog.dismiss() // Close the dialog without doing anything
+                                dialog.dismiss()
                             }
                             .create()
                             .show()
@@ -162,8 +182,9 @@ class petsFragment : Fragment() {
                         1f
                     )
                     gravity = Gravity.CENTER
-                    setPadding(16, 8, 16, 8) // Add some padding to make it look like a button
-                    setBackgroundResource(android.R.drawable.btn_default) // Use button-like background
+                    setPadding(8, 8, 8, 8) // Add some padding to make it look like a button
+                    setBackgroundColor(Color.TRANSPARENT)
+                    //setBackgroundResource(android.R.drawable.btn_default) // Use button-like background
                     setTextColor(
                        ContextCompat.getColor(
                             requireContext(),
@@ -198,13 +219,32 @@ class petsFragment : Fragment() {
                     isFocusable = false // Disable focus
                 }*/
                 // Add buttons to the row layout
-
+                val divider = View(requireContext()).apply {
+                    layoutParams = LinearLayout.LayoutParams(
+                        3, LinearLayout.LayoutParams.MATCH_PARENT
+                    ).apply {
+                        setMargins(4, 0, 4, 0) // Optional: Add margins for spacing
+                    }
+                    setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.black)) // Divider color
+                }
+                val divider2 = View(requireContext()).apply {
+                    layoutParams = LinearLayout.LayoutParams(
+                        3, LinearLayout.LayoutParams.MATCH_PARENT
+                    ).apply {
+                        setMargins(4, 0, 4, 0) // Optional: Add margins for spacing
+                    }
+                    setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.black)) // Divider color
+                }
                 buttonRowLayout.addView(nameButton)
+                buttonRowLayout.addView(divider)
                 buttonRowLayout.addView(deleteButton)
+                buttonRowLayout.addView(divider2)
                 buttonRowLayout.addView(batteryButton)
+
                 //buttonRowLayout.addView(dataLeftButton)
                 // Add the row to the container
-                petsContainer.addView(buttonRowLayout)
+                parentLayout.addView(buttonRowLayout)
+                petsContainer.addView(parentLayout)
             }
 
             // Add a "+" button at the end
@@ -214,6 +254,7 @@ class petsFragment : Fragment() {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
+                background = ContextCompat.getDrawable(requireContext(), R.drawable.background)
                 setOnClickListener {
                     showAddPetDialog()
                 }

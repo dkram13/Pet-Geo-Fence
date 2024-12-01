@@ -2,16 +2,20 @@ package com.example.pgfapp.ViewPager2MapsAct
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CompoundButton
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Switch
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -109,15 +113,18 @@ class bordersFragment : Fragment() {
                     layoutParams = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
-                    )
-                    setPadding(10, 10, 10, 10)
+                    ).apply {
+                        setMargins(0, 8, 0, 8) // Add vertical spacing between rows
+                    }
+                    background = ContextCompat.getDrawable(requireContext(), R.drawable.background) // Replace with your color
+                    setPadding(4, 4, 4, 4) // Padding for aesthetics
                 }
 
                 val buttonRowLayout = LinearLayout(requireContext()).apply {
                     orientation = LinearLayout.HORIZONTAL
                     layoutParams = LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
+                        110//LinearLayout.LayoutParams.WRAP_CONTENT
                     )
                 }
 
@@ -125,30 +132,31 @@ class bordersFragment : Fragment() {
                     text = bounds.BoundName
                     layoutParams = LinearLayout.LayoutParams(
                         0, LinearLayout.LayoutParams.WRAP_CONTENT,
-                        1f
+                        3f
                     )
+                    setBackgroundColor(Color.TRANSPARENT) // Makes the button blend in with the bar
+                    setTextColor(ContextCompat.getColor(requireContext(), R.color.black)) // Adjust text color
+                    gravity = Gravity.CENTER
+                    //textSize = 16f
                     setOnClickListener {
                         //Toast.makeText(requireContext(), "Editing: ${bounds.BoundName}", Toast.LENGTH_SHORT).show()
                     }
                 }
-                /*val deleteButton = ImageView(requireContext()).apply {
+                val deleteButton = ImageView(requireContext()).apply {
                     layoutParams = LinearLayout.LayoutParams(
                         0, LinearLayout.LayoutParams.WRAP_CONTENT,
                         1f
                     )
-                    setImageResource(R.drawable.delete_button) // Replace with your drawable resource
-                    setPadding(16, 8, 16, 8) // Optional: Add padding for aesthetics
+                    setImageResource(R.drawable.deletebutton) // Replace with your drawable resource
+                    setPadding(8, 8, 8, 8) // Optional: Add padding for aesthetics
                     setBackgroundResource(android.R.drawable.btn_default) // Optional: Add button-like background
                     adjustViewBounds = true // Maintain aspect ratio
                     scaleType = ImageView.ScaleType.CENTER_INSIDE // Scale the image inside the bounds
                     isClickable = true // Make it clickable if needed
-                    isFocusable = true // Enable focus for accessibility*/
-                val deleteButton = Button(requireContext()).apply {
-                    text = "delete"
-                    layoutParams = LinearLayout.LayoutParams(
-                        0, LinearLayout.LayoutParams.WRAP_CONTENT,
-                        1f
-                    )
+                    isFocusable = true // Enable focus for accessibility
+                    setBackgroundColor(Color.TRANSPARENT) // Blend with the bar
+                    //setTextColor(ContextCompat.getColor(requireContext(), R.color.black)) // Optional: Use a distinct color
+                    //gravity = Gravity.CENTER
                     setOnClickListener {
                         // Show a confirmation dialog before deleting
                         AlertDialog.Builder(requireContext())
@@ -157,7 +165,7 @@ class bordersFragment : Fragment() {
                             .setPositiveButton("Yes") { dialog, _ ->
                                 // Perform the delete operation
                                 lifecycleScope.launch {
-                                    Toast.makeText(requireContext(), "Deleting: ${bounds}", Toast.LENGTH_SHORT).show()
+                                    //Toast.makeText(requireContext(), "Deleting: ${bounds}", Toast.LENGTH_SHORT).show()
                                     databaseViewModel.deleteBoundUsingID(bounds.UUID, bounds.BoundId)
                                 }
                                 dialog.dismiss() // Close the dialog
@@ -184,20 +192,27 @@ class bordersFragment : Fragment() {
                         activeToggle = this
                     }
                 }
-                nameButton.measure(0, 0)
-                deleteButton.measure(0, 0)
-                toggleSwitch.measure(0, 0)
-
-                // Find the tallest height
-                val tallestHeight = maxOf(nameButton.measuredHeight, deleteButton.measuredHeight, toggleSwitch.measuredHeight)
-
-                // Apply the tallest height to all views
-                nameButton.layoutParams.height = tallestHeight
-                deleteButton.layoutParams.height = tallestHeight
-                toggleSwitch.layoutParams.height = tallestHeight
+                val divider = View(requireContext()).apply {
+                    layoutParams = LinearLayout.LayoutParams(
+                        3, LinearLayout.LayoutParams.MATCH_PARENT
+                    ).apply {
+                        setMargins(4, 0, 4, 0) // Optional: Add margins for spacing
+                    }
+                    setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.black)) // Divider color
+                }
+                val divider2 = View(requireContext()).apply {
+                    layoutParams = LinearLayout.LayoutParams(
+                        3, LinearLayout.LayoutParams.MATCH_PARENT
+                    ).apply {
+                        setMargins(4, 0, 4, 0) // Optional: Add margins for spacing
+                    }
+                    setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.black)) // Divider color
+                }
 
                 buttonRowLayout.addView(nameButton)
+                buttonRowLayout.addView(divider)
                 buttonRowLayout.addView(deleteButton)
+                buttonRowLayout.addView(divider2)
                 buttonRowLayout.addView(toggleSwitch)
 
                 parentLayout.addView(buttonRowLayout)
@@ -211,6 +226,7 @@ class bordersFragment : Fragment() {
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
                 )
+                background = ContextCompat.getDrawable(requireContext(), R.drawable.background)
                 setOnClickListener {
                     // Navigate to BordersActivity
                     val intent = Intent(requireContext(), BoundsActivity::class.java)
