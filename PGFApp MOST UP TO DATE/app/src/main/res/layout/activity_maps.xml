@@ -150,20 +150,6 @@
     <!--Edit Bounds Stuff Here-->
 
     <ImageButton
-        android:id="@+id/add_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="@null"
-        android:contentDescription="@string/Add_Button"
-        android:onClick="gotoDrawBounds"
-        android:padding="8dp"
-        android:src="@drawable/rectangle_1"
-        android:visibility="visible"
-        map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintTop_toTopOf="parent" />
-
-    <ImageButton
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -200,7 +186,7 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/pets_text" />
+            android:text="@string/collar" />
 
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
