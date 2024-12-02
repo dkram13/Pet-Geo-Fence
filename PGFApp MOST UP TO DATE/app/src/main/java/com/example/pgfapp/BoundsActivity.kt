@@ -30,6 +30,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.Polygon
 import com.google.android.gms.maps.model.PolygonOptions
@@ -47,7 +48,9 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityBoundsBinding //view binding object
     private var bounds = ArrayList<LatLng>() //array list of latitude longitude points
     private var polygon: Polygon? = null //polygon object
+    private var marker: Marker? = null
     private var index: Int = 1
+    private var markers = mutableListOf<Marker?>()
     private lateinit var databaseViewModel: DatabaseViewModel
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val locationPermissions = arrayOf(
@@ -115,28 +118,52 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
         //sample placement of the yard
         //just make sure the placement of the camera is consistent with its placement
         //in the maps activity
-        val sampleYard = LatLng(39.7625051, -75.9706618)
         //focuses the camera on a single area
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sampleYard, 20f))
 
+
+        mMap.setOnMarkerDragListener(object : GoogleMap.OnMarkerDragListener {
+            override fun onMarkerDragStart(marker: Marker) {
+            }
+
+            override fun onMarkerDrag(marker: Marker) {
+                updatePolygon()
+            }
+
+            override fun onMarkerDragEnd(marker: Marker) {
+                // Update location when drag ends
+                updatePolygon()
+                drawPolygon()
+            }
+        })
 
         //if there are no bounds present
         if(bounds == emptyList<LatLng>()) {
             //When the user "clicks" or "taps" the screen
             mMap.setOnMapClickListener { latLng ->
                 bounds.add(latLng)
-                mMap.addMarker(MarkerOptions()
-                    .position(latLng).
-                    title("Boundary Point: $index").
-                    icon(BitmapDescriptorFactory.
-                    fromResource(R.mipmap.cust_mark)))
-                index += 1
+                var count = 0
+                marker = mMap.addMarker(
+                        MarkerOptions().position(latLng).title("Point $count")
+                            .icon(BitmapDescriptorFactory.fromResource(R.mipmap.cust_mark))
+                            .draggable(true)
+                    )
+                markers.add(marker)
+                count += 1
                 if (bounds.size >= 3) {
                     drawPolygon()
                 }
             }
         }
+    }
 
+    fun updatePolygon(){
+        // Update polygon points with current marker positions
+        bounds.clear()
+        for(marker in markers){
+            if(marker != null){
+                bounds.add(marker.position)
+            }
+        }
     }
     // Function to calculate the centroid of the boundary points
     private fun calculateCentroid(points: ArrayList<LatLng>): LatLng {

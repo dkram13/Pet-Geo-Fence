@@ -9,29 +9,29 @@
         android:pathData="M0,0h50v50h-50z"/>
     <path
         android:pathData="M0,8C0,5.2 0,3.8 0.545,2.73C1.024,1.789 1.789,1.024 2.73,0.545C3.8,0 5.2,0 8,0H42C44.8,0 46.2,0 47.27,0.545C48.211,1.024 48.976,1.789 49.455,2.73C50,3.8 50,5.2 50,8V42C50,44.8 50,46.2 49.455,47.27C48.976,48.211 48.211,48.976 47.27,49.455C46.2,50 44.8,50 42,50H8C5.2,50 3.8,50 2.73,49.455C1.789,48.976 1.024,48.211 0.545,47.27C0,46.2 0,44.8 0,42V8Z"
-        android:fillColor="#ffffff"/>
+        android:fillColor="@color/lighter_blue"/>
     <path
         android:pathData="M37,16L37,40"
         android:strokeWidth="2"
-        android:fillColor="#00000000"
-        android:strokeColor="#000000"/>
+        android:fillColor="@color/Red40"
+        android:strokeColor="@color/Red40"/>
     <path
         android:pathData="M12,17L12,41"
         android:strokeWidth="2"
         android:fillColor="#00000000"
-        android:strokeColor="#000000"/>
+        android:strokeColor="@color/Red40"/>
     <path
         android:pathData="M20,18L11,18"
         android:strokeWidth="2"
         android:fillColor="#00000000"
-        android:strokeColor="#000000"/>
+        android:strokeColor="@color/Red40"/>
     <path
         android:pathData="M38,41L11,41"
         android:strokeWidth="2"
         android:fillColor="#00000000"
-        android:strokeColor="#000000"/>
+        android:strokeColor="@color/Red40"/>
     <path
         android:pathData="M21.293,16.293C20.902,16.683 20.902,17.317 21.293,17.707L27.657,24.071C28.047,24.462 28.681,24.462 29.071,24.071C29.462,23.681 29.462,23.047 29.071,22.657L23.414,17L29.071,11.343C29.462,10.953 29.462,10.319 29.071,9.929C28.681,9.538 28.047,9.538 27.657,9.929L21.293,16.293ZM37,16L22,16V18H37V16Z"
-        android:fillColor="#000000"/>
+        android:fillColor="@color/Red40"/>
   </group>
 </vector>
