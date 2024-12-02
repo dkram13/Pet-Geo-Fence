@@ -411,15 +411,13 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
                         val longitude = location.longitude
                         val userLoc = LatLng(latitude, longitude)
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLoc, 20f))
-                        Toast.makeText(this, "Location: $latitude, $longitude", Toast.LENGTH_SHORT)
-                            .show()
+                        Log.d("Pass","Latitude: $latitude, Longitude: $longitude")
                     } else {
-                        Toast.makeText(this, "Location is null", Toast.LENGTH_SHORT).show()
+                        Log.d("?","Location is NULL")
                     }
                 })
                 .addOnFailureListener { e ->
-                    Toast.makeText(this, "Failed to get location: ${e.message}", Toast.LENGTH_SHORT)
-                        .show()
+                    Log.d("Fail","Failed to get location! ${e.message}")
                 }
         }
         else{
