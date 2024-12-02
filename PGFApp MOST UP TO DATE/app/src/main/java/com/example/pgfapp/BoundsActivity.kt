@@ -333,6 +333,7 @@ class BoundsActivity : AppCompatActivity(), OnMapReadyCallback {
     fun onRedo(v: View?){
         mMap.clear()
         bounds.clear()
+        markers.clear()
         index = 1
     }
 

@@ -80,46 +80,25 @@
     <string name="title_activity_how_to_use">HowToUseActivity</string>
     <string name="how_to_use_text">
         "NAVIGATING THE BOTTOM MENU\n\n"
-        "To navigate the bottom menu, you can either\n"
-        "swipe or tap the tab you wish to view.\n"
+        "To navigate the bottom menu, you can either swipe or tap the tab you wish to view.\n"
         "\n\n"
-
-        "ADDING A PET:\n\n"
-        "To add a pet, tap the '+' button on the 'Pets' tab on the\n"
-        "bottom half of the screen. Then you need to enter\n"
-        "the collar's IMEI number in the first field and your pet's name\n"
-        "in the second field. Now you can monitor your pets location,\n"
-        "provided that the collar is active.\n"
+        "ADDING A PET TO THE COLLAR:\n\n"
+        "To add a pet to the collar, tap the '+' button on the 'Pets' tab on the bottom half of the screen. Then you need to enter the collar's IMEI number in the first field and your pet's name in the second field. Now you can monitor your pets location, provided that the collar is active.\n"
         "\n\n"
-
+        "DELETING A PET FROM THE COLLAR:\n\n"
+        "To delete a pet from the collar, tap the button marked with a garbage can found next to the pet's name in the 'Pets' tab\n"
+        "\n\n"
         "ADDING A BOUNDARY:\n\n"
-        "To add a boundary, tap the '+' button in the Borders tab\n"
-        "You will then be prompted to plot 3 or more\n"
-        "points on the map, and a boundary will be drawn\n"
-        "based off of those points. When you are finished, tap\n"
-        "If you wish to redo your boundary, You can tap the redo\n"
-        "button, located under the check button\n"
-        "If you wish to go back to the main page, tap the back button\n"
-        "located in the top left margin of the screen\n"
+        "To add a boundary, tap the '+' button in the Borders tab. You will then be prompted to plot 3 or more points on the map, and a boundary will be drawn based off of those points. If you wish to redo your boundary, you can tap the redo button, located under the check button. You can also drag and drop the positioning of the markers placed. If you wish to go back to the main page, tap the back button located in the top left margin of the screen."
+        "In order to save your boundary, you must tap the check button in the upper right margin of the screen. You will then be prompted to give the boundary a name. When you are finished naming your boundary, press OK, and your boundary is saved.\n"
         "\n\n"
-
         "ACTIVATING A BOUNDARY:\n\n"
-        "In order to activate a boundary, you need to toggle the\n"
-        "switch matching the boundary you want activated.\n"
-        "Please note that you can only have one boundary active\n"
-        "at a time.\n"
+        "In order to activate a boundary, you need to toggle the switch matching the boundary you want activated. Please note that you can only have one boundary active at a time.\n"
         "\n\n"
-
-        "EDITING A BOUNDARY:\n\n"
-        "[Not Sure If We'll have this]\n"
-        "\n\n"
-
         "DELETING A BOUNDARY:\n\n"
-        "In order to delete a boundary, tap the button marked\n"
-        "'DELETE' found next to the on/off switch. You will then\n"
-        "be prompted to ensure you truly do want to delete the\n"
-        "boundary.\n"
+        "In order to delete a boundary, tap the button marked with a garbage can found next to the on/off switch. You will then be prompted to ensure you truly do want to delete the boundary.\n"
         "\n\n"
+
 
     </string>
     <string name="privacy_policy_defined_part_1">
