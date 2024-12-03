@@ -14,7 +14,6 @@ import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Switch
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -90,7 +89,7 @@ class bordersFragment : Fragment() {
 
                 // Set the current switch as active and update the database for its boundId
                 activeToggle = buttonView as Switch
-                Toast.makeText(context, "Boundary ${buttonView.text} is now ON", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context, "Boundary ${buttonView.text} is now ON", Toast.LENGTH_SHORT).show()
             } else {
                 // When a switch is turned off, set activeToggle to null and update the database for this switch
                 if (activeToggle == buttonView) {
