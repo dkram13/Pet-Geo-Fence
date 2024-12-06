@@ -1,12 +1,12 @@
 # PGF CoAP Server
-Using the [aiocoap-client](https://aiocoap.readthedocs.io/en/latest/module/aiocoap.cli.client.html), we can interact with the CoAP server over the command line.
 
-## Observing Resources
+## Build CoAP Docker Container
 ```
-python -m aiocoap.cli.client --observe coap://[::1]/observe
+docker build -t coap-server:latest .
 ```
 
-## Putting Resources
+## Run Docker Container
 ```
-python -m aiocoap.cli.client -m put coap://[::1]/observe --payload "New content"
+docker run -d -p 5683:5683/udp coap-server:latest
+
 ```
