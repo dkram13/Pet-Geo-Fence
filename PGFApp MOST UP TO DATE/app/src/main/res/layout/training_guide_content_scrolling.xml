@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:textColor="@color/Red40"
-        android:text="INSERT TRAINING GUIDE HERE" />
+        android:text="@string/training_guide_text"
+        android:textColor="@color/Red40" />
 
 </androidx.core.widget.NestedScrollView>

@@ -57,8 +57,8 @@
     <string name="settings_text">Settings</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="privacy_policy_text">Privacy Policy</string>
+    <string name="training_guide"> Training Guide </string>
     <string name="how_to_use">How To Use</string>
-    <string name="training_guide">Training Guide</string>
     <string name="pets_text">Pets</string>
     <string name="borders">Borders</string>
     <string name="pgf_logo">PGF logo</string>
@@ -192,6 +192,28 @@
         "CONTACT US:\n"
         "If you have any questions about this Privacy Policy, You can contact us:\n"
         "-> By email: petgeofence@gmail.com\n\n\n\n"
+    </string>
+
+    <string name="training_guide_text">
+        Training Guide\n\n
+
+        Step 1: Set the Geofence\n
+        \u2022 Open the app and draw a safe boundary for your pet.\n
+        \u2022 Put the collar on your pet and test the beep function.\n\n
+
+        Step 2: Teach the Boundary\n
+        \u2022 Walk your pet on a leash along the boundary.\n
+        \u2022 When the collar beeps, stop, and guide your pet back inside the boundary.\n
+        \u2022 Reward your pet with treats or praise when they return.\n\n
+
+        Step 3: Practice\n
+        \u2022 Let your pet explore off-leash while you supervise.\n
+        \u2022 If the collar beeps, call them back and reward them.\n
+        \u2022 Practice a few minutes each day until your pet learns the boundary.\n\n
+
+        Tips:\n
+        \u2022 Be consistent with commands and rewards.\n
+        \u2022 Supervise your pet during training to keep them safe.\n
     </string>
 
 </resources>
