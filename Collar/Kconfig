@@ -1,0 +1,27 @@
+menu "Location sample"
+
+config DEVICE_IMEI
+    string "Device IMEI"
+    default "123451234512345"
+
+config COAP_PUT_RESOURCE
+	string "Resource the board is putting"
+	default "batch"
+
+config COAP_GET_RESOURCE
+	string "Resource the board is getting"
+	default "boundary"
+
+config COAP_SERVER_HOSTNAME
+	string "CoAP server hostname"
+	default "15.204.232.135"
+
+config COAP_SERVER_PORT
+	int "CoAP server port"
+	default 5683
+
+endmenu
+
+menu "Zephyr Kernel"
+source "Kconfig.zephyr"
+endmenu
